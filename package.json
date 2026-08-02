@@ -1,0 +1,22 @@
+{
+  "name": "wintervell",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WinterVell — AI Website Audit and Agency Sales Platform. Proprietary commercial software governed by the WinterVell Commercial Source License (WV-CSL) v1.0. NOT open source.",
+  "license": "SEE LICENSE",
+  "author": "WinterVell",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "db:push": "prisma db push --accept-data-loss",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "audit-worker": "bun --hot mini-services/audit-worker/index.ts",
+    "pdf-worker": "bun --hot mini-services/pdf-worker/index.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
