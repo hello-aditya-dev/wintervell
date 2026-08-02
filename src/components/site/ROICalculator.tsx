@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Calculator, DollarSign, TrendingUp, Clock, Info } from "lucide-react";
+import { Calculator, DollarSign, TrendingUp, Clock, Info, RotateCcw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { commercial } from "@/config/commercial";
 
 /* ─── Licence cost constant ─── */
@@ -49,9 +51,15 @@ const FIELDS: FieldConfig[] = [
 ];
 
 /* ─── Output definitions ─── */
+type OutputKind = "currency" | "months" | "text";
+
 interface OutputRow {
   label: string;
-  value: string;
+  kind: OutputKind;
+  /** Numeric target used to drive the animated counter. */
+  target: number;
+  /** Static display string used for `text` kind rows. */
+  display: string;
   icon: React.ElementType;
   note?: string;
 }
@@ -62,7 +70,7 @@ function calculateOutputs(values: Record<string, number>): OutputRow[] {
   const auditsPerMonth = values.auditsPerMonth ?? 0;
   const conversionRate = (values.conversionRate ?? 0) / 100;
   const alternativesCost = values.alternativesCost ?? 0;
-  const hoursPerAudit = values.hoursPerAudit ?? 0;
+  // hoursPerAudit is part of the input set but not currently part of a numeric output
 
   const monthlyAuditRevenue = auditPrice * auditsPerMonth;
   const annualAuditRevenue = monthlyAuditRevenue * 12;
@@ -75,54 +83,201 @@ function calculateOutputs(values: Record<string, number>): OutputRow[] {
     ? LICENCE_COST / monthlyAuditRevenue
     : 0;
 
-  const fmt = (n: number) =>
-    n >= 0
-      ? `$${n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
-      : `-$${Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-
-  const fmtMonth = (n: number) =>
-    n === Infinity || n <= 0
-      ? "N/A"
-      : n < 1
-        ? "< 1 month"
-        : `${Math.ceil(n)} month${Math.ceil(n) !== 1 ? "s" : ""}`;
+  const costComparisonText = costComparison > 0
+    ? `Alternatives cost $${alternativesCost.toLocaleString()}/mo more than licence amortization ($${licenceMonthlyAmortized.toFixed(0)}/mo)`
+    : alternativesCost > 0
+      ? `Licence amortized at $${licenceMonthlyAmortized.toFixed(0)}/mo vs alternatives at $${alternativesCost}/mo`
+      : `Licence amortized at $${licenceMonthlyAmortized.toFixed(0)}/mo`;
 
   return [
     {
       label: "Potential monthly audit revenue",
-      value: fmt(monthlyAuditRevenue),
+      kind: "currency",
+      target: monthlyAuditRevenue,
+      display: `$${monthlyAuditRevenue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
       icon: DollarSign,
       note: "Estimate based on inputs",
     },
     {
       label: "Potential annual audit revenue",
-      value: fmt(annualAuditRevenue),
+      kind: "currency",
+      target: annualAuditRevenue,
+      display: `$${annualAuditRevenue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
       icon: TrendingUp,
       note: "Estimate (monthly × 12)",
     },
     {
       label: "Potential associated project value",
-      value: fmt(associatedProjectValue),
+      kind: "currency",
+      target: associatedProjectValue,
+      display: `$${associatedProjectValue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
       icon: TrendingUp,
       note: "Estimate (project value × audits × conversion)",
     },
     {
       label: "Estimated monthly tool-cost comparison",
-      value: costComparison > 0
-        ? `Alternatives cost $${alternativesCost.toLocaleString()}/mo more than licence amortization ($${licenceMonthlyAmortized.toFixed(0)}/mo)`
-        : alternativesCost > 0
-          ? `Licence amortized at $${licenceMonthlyAmortized.toFixed(0)}/mo vs alternatives at $${alternativesCost}/mo`
-          : `Licence amortized at $${licenceMonthlyAmortized.toFixed(0)}/mo`,
+      kind: "text",
+      target: costComparison,
+      display: costComparisonText,
       icon: Calculator,
       note: "Estimate — annual licence amortized over 12 months",
     },
     {
       label: "Approximate licence payback",
-      value: fmtMonth(paybackMonths),
+      kind: "months",
+      target: paybackMonths,
+      display: formatMonthsLabel(paybackMonths),
       icon: Clock,
       note: "Estimate — actual payback depends on revenue realization",
     },
   ];
+}
+
+/* ─── Formatters ─── */
+function formatCurrency(value: number): string {
+  const rounded = Math.round(value);
+  return rounded >= 0
+    ? `$${rounded.toLocaleString("en-US")}`
+    : `-$${Math.abs(rounded).toLocaleString("en-US")}`;
+}
+
+function formatMonthsLabel(target: number): string {
+  if (!isFinite(target) || target <= 0) return "N/A";
+  if (target < 1) return "< 1 month";
+  const ceiled = Math.ceil(target);
+  return `${ceiled} month${ceiled !== 1 ? "s" : ""}`;
+}
+
+function formatMonthsAnimated(animated: number, target: number): string {
+  if (!isFinite(target) || target <= 0) return "N/A";
+  if (target < 1) return "< 1 month";
+  const ceiled = Math.max(1, Math.ceil(animated));
+  return `${ceiled} month${ceiled !== 1 ? "s" : ""}`;
+}
+
+/* ─── Animated counter hook ─── */
+function useAnimatedCounter(targetValue: number, duration = 500): number {
+  const prefersReducedMotion = useReducedMotion();
+  const [displayValue, setDisplayValue] = useState(0);
+  const fromValueRef = useRef(0);
+  const latestValueRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    // Reduced motion: skip the rAF animation entirely. The hook returns
+    // `targetValue` directly (see the return statement below); we only sync
+    // the refs here so a future transition out of reduced motion starts
+    // from the correct position.
+    if (prefersReducedMotion) {
+      fromValueRef.current = targetValue;
+      latestValueRef.current = targetValue;
+      return;
+    }
+
+    const from = fromValueRef.current;
+    const to = targetValue;
+
+    // Nothing to animate when source and target are identical.
+    if (from === to) {
+      latestValueRef.current = to;
+      return;
+    }
+
+    const start = performance.now();
+
+    function tick(now: number) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutCubic for a smooth deceleration
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = from + (to - from) * eased;
+      setDisplayValue(current);
+      latestValueRef.current = current;
+
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        setDisplayValue(to);
+        fromValueRef.current = to;
+        latestValueRef.current = to;
+        rafRef.current = null;
+      }
+    }
+
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      // Preserve the in-flight position so the next transition starts smoothly.
+      fromValueRef.current = latestValueRef.current;
+    };
+  }, [targetValue, duration, prefersReducedMotion]);
+
+  // For reduced motion, snap to the target value directly (no state-driven animation).
+  return prefersReducedMotion ? targetValue : displayValue;
+}
+
+/* ─── Animated output row ─── */
+function AnimatedOutput({ output }: { output: OutputRow }) {
+  const prefersReducedMotion = useReducedMotion();
+  const animated = useAnimatedCounter(output.target, 500);
+
+  let displayValue: string;
+  if (output.kind === "currency") {
+    displayValue = formatCurrency(animated);
+  } else if (output.kind === "months") {
+    displayValue = prefersReducedMotion
+      ? formatMonthsLabel(output.target)
+      : formatMonthsAnimated(animated, output.target);
+  } else {
+    displayValue = output.display;
+  }
+
+  const Icon = output.icon;
+
+  // A key change remounts the motion.div, replaying the background flash
+  // animation. This avoids setState-in-effect while still highlighting updates.
+  const flashKey = output.kind === "text" ? output.display : String(output.target);
+
+  return (
+    <motion.div
+      key={flashKey}
+      className="rounded-lg border border-[#DDE3E7] bg-[#F4F6F7] p-4"
+      initial={
+        prefersReducedMotion
+          ? false
+          : { backgroundColor: "rgba(37, 99, 235, 0.10)", borderColor: "rgba(37, 99, 235, 0.30)" }
+      }
+      animate={{ backgroundColor: "rgba(244, 246, 247, 1)", borderColor: "rgba(221, 227, 231, 1)" }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[#24584F]/10">
+          <Icon className="size-4 text-[#24584F]" aria-hidden="true" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-medium uppercase tracking-wider text-[#56616C]">
+            {output.label}
+          </p>
+          <p
+            className="mt-1 text-lg font-semibold tabular-nums text-[#111820]"
+            aria-live="polite"
+          >
+            {displayValue}
+          </p>
+          {output.note && (
+            <p className="mt-1 flex items-center gap-1 text-xs text-[#B7791F]">
+              <Info className="size-3 shrink-0" aria-hidden="true" />
+              {output.note}
+            </p>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
 }
 
 export default function ROICalculator() {
@@ -144,6 +299,14 @@ export default function ROICalculator() {
     } else if (raw === "") {
       setValues((prev) => ({ ...prev, [key]: 0 }));
     }
+  }
+
+  function handleReset() {
+    const reset: Record<string, number> = {};
+    FIELDS.forEach((f) => {
+      reset[f.key] = f.defaultValue;
+    });
+    setValues(reset);
   }
 
   const sectionMotionProps = prefersReducedMotion
@@ -171,9 +334,22 @@ export default function ROICalculator() {
           <motion.div variants={cardVariants}>
             <Card className="border-[#DDE3E7] bg-white shadow-sm">
               <CardContent className="p-6">
-                <div className="mb-5 flex items-center gap-2">
-                  <Calculator className="size-5 text-[#24584F]" aria-hidden="true" />
-                  <h3 className="text-lg font-semibold text-[#111820]">Your inputs</h3>
+                <div className="mb-5 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <Calculator className="size-5 text-[#24584F]" aria-hidden="true" />
+                    <h3 className="text-lg font-semibold text-[#111820]">Your inputs</h3>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleReset}
+                    aria-label="Reset all inputs to default values"
+                    className="border-[#DDE3E7] bg-white text-[#3F4A55] hover:bg-[#F4F6F7] hover:text-[#111820]"
+                  >
+                    <RotateCcw className="size-3.5" aria-hidden="true" />
+                    Reset to defaults
+                  </Button>
                 </div>
                 <div className="space-y-5">
                   {FIELDS.map((field) => (
@@ -222,39 +398,21 @@ export default function ROICalculator() {
                   <h3 className="text-lg font-semibold text-[#111820]">Estimated outputs</h3>
                 </div>
                 <div className="space-y-4">
-                  {outputs.map((output) => {
-                    const Icon = output.icon;
-                    return (
-                      <div
-                        key={output.label}
-                        className="rounded-lg border border-[#DDE3E7] bg-[#F4F6F7] p-4"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[#24584F]/10">
-                            <Icon className="size-4 text-[#24584F]" aria-hidden="true" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs font-medium uppercase tracking-wider text-[#56616C]">
-                              {output.label}
-                            </p>
-                            <p className="mt-1 text-lg font-semibold text-[#111820]">
-                              {output.value}
-                            </p>
-                            {output.note && (
-                              <p className="mt-1 flex items-center gap-1 text-xs text-[#B7791F]">
-                                <Info className="size-3 shrink-0" aria-hidden="true" />
-                                {output.note}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {outputs.map((output) => (
+                    <AnimatedOutput key={output.label} output={output} />
+                  ))}
                 </div>
 
-                {/* Disclaimer */}
-                <div className="mt-6 rounded-lg border border-[#DDE3E7] bg-[#142634]/5 p-4">
+                {/* "These are estimates" disclaimer */}
+                <div className="mt-5 flex items-center justify-center gap-2 rounded-lg border border-dashed border-[#DDE3E7] bg-[#F4F6F7] px-4 py-3">
+                  <Info className="size-4 shrink-0 text-[#56616C]" aria-hidden="true" />
+                  <p className="text-xs font-medium text-[#3F4A55]">
+                    These are estimates — not guarantees of revenue or payback.
+                  </p>
+                </div>
+
+                {/* Detailed disclaimer */}
+                <div className="mt-4 rounded-lg border border-[#DDE3E7] bg-[#142634]/5 p-4">
                   <div className="flex items-start gap-2">
                     <Info className="mt-0.5 size-4 shrink-0 text-[#56616C]" aria-hidden="true" />
                     <p className="text-xs leading-relaxed text-[#56616C]">

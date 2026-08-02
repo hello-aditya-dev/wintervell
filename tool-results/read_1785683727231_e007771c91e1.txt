@@ -1,0 +1,524 @@
+     1→     1→"use client";
+     2→     2→
+     3→     3→import { useState } from "react";
+     4→     4→import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+     5→     5→import {
+     6→     6→  Globe,
+     7→     7→  Loader2,
+     8→     8→  FileSearch,
+     9→     9→  FileBarChart,
+    10→    10→  FileText,
+    11→    11→  TrendingUp,
+    12→    12→  ArrowRight,
+    13→    13→  Shield,
+    14→    14→  Zap,
+    15→    15→  Search,
+    16→    16→  Smartphone,
+    17→    17→  Eye,
+    18→    18→  Target,
+    19→    19→  BookOpen,
+    20→    20→  Bot,
+    21→    21→  CheckCircle2,
+    22→    22→  Clock,
+    23→    23→  AlertTriangle,
+    24→    24→  ChevronRight,
+    25→    25→  ExternalLink,
+    26→    26→  DollarSign,
+    27→    27→  Users,
+    28→    28→  BarChart3,
+    29→    29→} from "lucide-react";
+    30→    30→import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+    31→    31→import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+    32→    32→import { Badge } from "@/components/ui/badge";
+    33→    33→import { Progress } from "@/components/ui/progress";
+    34→    34→
+    35→    35→const DEMO_STEPS = [
+    36→    36→  { id: "prospect", label: "Prospect", icon: Globe },
+    37→    37→  { id: "audit", label: "Audit", icon: Loader2 },
+    38→    38→  { id: "findings", label: "Findings", icon: FileSearch },
+    39→    39→  { id: "report", label: "Report", icon: FileBarChart },
+    40→    40→  { id: "proposal", label: "Proposal", icon: FileText },
+    41→    41→  { id: "pipeline", label: "Pipeline", icon: TrendingUp },
+    42→    42→] as const;
+    43→    43→
+    44→    44→const AUDIT_CATEGORIES = [
+    45→    45→  { name: "Technical Health", icon: Shield, progress: 78 },
+    46→    46→  { name: "SEO Foundations", icon: Search, progress: 45 },
+    47→    47→  { name: "Performance", icon: Zap, progress: 62 },
+    48→    48→  { name: "Mobile Experience", icon: Smartphone, progress: 54 },
+    49→    49→  { name: "Accessibility", icon: Eye, progress: 38 },
+    50→    50→  { name: "Conversion Clarity", icon: Target, progress: 41 },
+    51→    51→  { name: "Trust Signals", icon: CheckCircle2, progress: 33 },
+    52→    52→  { name: "Content Structure", icon: BookOpen, progress: 56 },
+    53→    53→  { name: "AI-Search Readiness", icon: Bot, progress: 22 },
+    54→    54→];
+    55→    55→
+    56→    56→const FINDINGS = [
+    57→    57→  {
+    58→    58→    severity: "Critical",
+    59→    59→    color: "#B43C3C",
+    60→    60→    title: "Missing HTTPS redirect on blog subdomain",
+    61→    61→    confidence: 98,
+    62→    62→    page: "blog.meridianhealth.example",
+    63→    63→    evidence: "HTTP request to http://blog.meridianhealth.example returns 200 OK without redirect to HTTPS. Sensitive health information transmitted over unencrypted connection.",
+    64→    64→    consequence: "Patient data transmitted in cleartext. Regulatory exposure under HIPAA §164.312.",
+    65→    65→    action: "Implement 301 redirect to HTTPS on all subdomains. Deploy HSTS headers.",
+    66→    66→    service: "Security Hardening",
+    67→    67→  },
+    68→    68→  {
+    69→    69→    severity: "High",
+    70→    70→    color: "#B7791F",
+    71→    71→    title: "Core Web Vitals: LCP exceeds 4.2s on mobile",
+    72→    72→    confidence: 95,
+    73→    73→    page: "meridianhealth.example/services",
+    74→    74→    evidence: "Largest Contentful Paint measured at 4,230ms via Lighthouse mobile simulation. Hero image unoptimized (2.1MB JPEG, no WebP fallback).",
+    75→    75→    consequence: "53% of mobile users abandon pages loading over 3 seconds. Estimated 340 lost consultations/month.",
+    76→    76→    action: "Convert hero images to WebP with responsive srcset. Implement lazy loading below fold.",
+    77→    77→    service: "Performance Optimization",
+    78→    78→  },
+    79→    79→  {
+    80→    80→    severity: "Medium",
+    81→    81→    color: "#2563EB",
+    82→    82→    title: "No structured data for medical services",
+    83→    83→    confidence: 91,
+    84→    84→    page: "meridianhealth.example/services/*",
+    85→    85→    evidence: "Schema.org MedicalBusiness markup absent across all 12 service pages. No LocalBusiness or Physician schema detected.",
+    86→    86→    consequence: "Missing rich snippets in search results. Reduced click-through rate by an estimated 15-25%.",
+    87→    87→    action: "Implement MedicalBusiness and Physician structured data templates across service pages.",
+    88→    88→    service: "SEO Foundations",
+    89→    89→  },
+    90→    90→  {
+    91→    91→    severity: "Low",
+    92→    92→    color: "#24584F",
+    93→    93→    title: "Contact form lacks autocomplete attributes",
+    94→    94→    confidence: 87,
+    95→    95→    page: "meridianhealth.example/contact",
+    96→    96→    evidence: "Input fields missing autocomplete='name', autocomplete='email', autocomplete='tel' attributes. WCAG 1.3.5 Identify Input Purpose.",
+    97→    97→    consequence: "Minor accessibility barrier. Reduced form completion speed for users with assistive technology.",
+    98→    98→    action: "Add appropriate autocomplete attributes to all form fields.",
+    99→    99→    service: "Accessibility Audit",
+   100→   100→  },
+   101→   101→];
+   102→   102→
+   103→   103→const PROPOSAL_ITEMS = [
+   104→   104→  { service: "Security Hardening", scope: "HTTPS enforcement, HSTS, CSP headers, subdomain audit", price: "$4,200" },
+   105→   105→  { service: "Performance Optimization", scope: "Image optimization, code splitting, CDN configuration", price: "$6,800" },
+   106→   106→  { service: "SEO Foundations Package", scope: "Structured data, meta optimization, sitemap restructuring", price: "$5,500" },
+   107→   107→  { service: "Accessibility Remediation", scope: "WCAG 2.1 AA compliance, form improvements, ARIA labels", price: "$3,200" },
+   108→   108→];
+   109→   109→
+   110→   110→const fadeVariants = {
+   111→   111→  hidden: { opacity: 0, y: 12 },
+   112→   112→  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+   113→   113→};
+   114→   114→
+   115→   115→export default function ProductProof() {
+   116→   116→  const prefersReducedMotion = useReducedMotion();
+   117→   117→  const [activeStep, setActiveStep] = useState("prospect");
+   118→   118→
+   119→   119→  const sectionMotionProps = prefersReducedMotion
+   120→   120→    ? { initial: false, animate: "visible" as const, variants: fadeVariants }
+   121→   121→    : { initial: "hidden" as const, whileInView: "visible" as const, viewport: { once: true, amount: 0.1 }, variants: fadeVariants };
+   122→   122→
+   123→   123→  return (
+   124→   124→    <section id="demo" className="bg-white">
+   125→   125→      <motion.div
+   126→   126→        className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-36"
+   127→   127→        {...sectionMotionProps}
+   128→   128→      >
+   129→   129→        {/* Heading */}
+   130→   130→        <div className="mx-auto max-w-3xl text-center">
+   131→   131→          <h2 className="text-3xl font-bold tracking-tight text-[#111820] sm:text-4xl">
+   132→   132→            See WinterVell in action
+   133→   133→          </h2>
+   134→   134→          <p className="mt-4 text-lg leading-relaxed text-[#56616C]">
+   135→   135→            Walk through a complete audit-to-proposal workflow with demonstration data.
+   136→   136→          </p>
+   137→   137→          <Badge
+   138→   138→            variant="outline"
+   139→   139→            className="mt-3 border-[#B7791F]/30 bg-[#B7791F]/5 text-[#B7791F] text-xs font-medium"
+   140→   140→          >
+   141→   141→            Demonstration data — no real company or audit
+   142→   142→          </Badge>
+   143→   143→        </div>
+   144→   144→
+   145→   145→        {/* Interactive Tabs */}
+   146→   146→        <div className="mt-12 sm:mt-16">
+   147→   147→          <Tabs value={activeStep} onValueChange={setActiveStep}>
+   148→   148→            {/* Step tabs */}
+   149→   149→            <div className="overflow-x-auto pb-2">
+   150→   150→              <TabsList className="mx-auto flex w-max min-w-full lg:w-full lg:grid lg:grid-cols-6 bg-[#F4F6F7] gap-1 p-1">
+   151→   151→                {DEMO_STEPS.map((step, i) => {
+   152→   152→                  const Icon = step.icon;
+   153→   153→                  return (
+   154→   154→                    <TabsTrigger
+   155→   155→                      key={step.id}
+   156→   156→                      value={step.id}
+   157→   157→                      className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-[#111820] text-[#56616C] rounded-md whitespace-nowrap"
+   158→   158→                    >
+   159→   159→                      <span className="flex size-5 items-center justify-center rounded-full bg-[#DDE3E7] text-[10px] font-bold text-[#56616C] data-[state=active]:bg-[#2563EB] data-[state=active]:text-white">
+   160→   160→                        {i + 1}
+   161→   161→                      </span>
+   162→   162→                      <Icon className="size-3.5" aria-hidden="true" />
+   163→   163→                      <span className="hidden sm:inline">{step.label}</span>
+   164→   164→                    </TabsTrigger>
+   165→   165→                  );
+   166→   166→                })}
+   167→   167→              </TabsList>
+   168→   168→            </div>
+   169→   169→
+   170→   170→            {/* Step 1: Prospect */}
+   171→   171→            <TabsContent value="prospect" className="mt-6">
+   172→   172→              <Card className="border-[#DDE3E7] shadow-sm">
+   173→   173→                <CardHeader className="pb-4">
+   174→   174→                  <CardTitle className="flex items-center gap-2 text-base text-[#111820]">
+   175→   175→                    <Globe className="size-4 text-[#2563EB]" aria-hidden="true" />
+   176→   176→                    Enter prospect URL
+   177→   177→                  </CardTitle>
+   178→   178→                  <CardDescription className="text-sm text-[#56616C]">
+   179→   179→                    Enter a company website to begin a new audit engagement.
+   180→   180→                  </CardDescription>
+   181→   181→                </CardHeader>
+   182→   182→                <CardContent>
+   183→   183→                  <div className="rounded-lg border border-[#DDE3E7] bg-[#F4F6F7] p-6">
+   184→   184→                    <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
+   185→   185→                      <div className="flex-1">
+   186→   186→                        <label className="mb-1.5 block text-xs font-medium text-[#56616C]">
+   187→   187→                          Website URL
+   188→   188→                        </label>
+   189→   189→                        <div className="flex items-center rounded-md border border-[#DDE3E7] bg-white px-3 py-2.5 text-sm">
+   190→   190→                          <Globe className="mr-2 size-4 text-[#56616C]" aria-hidden="true" />
+   191→   191→                          <span className="text-[#111820] font-medium">meridianhealth.example</span>
+   192→   192→                        </div>
+   193→   193→                      </div>
+   194→   194→                      <button className="flex items-center gap-2 rounded-md bg-[#2563EB] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#1d4ed8] transition-colors">
+   195→   195→                        Start audit
+   196→   196→                        <ArrowRight className="size-4" aria-hidden="true" />
+   197→   197→                      </button>
+   198→   198→                    </div>
+   199→   199→                    <div className="mt-6 rounded-md border border-[#B7DDEC] bg-[#EFF8FC] p-4">
+   200→   200→                      <div className="flex items-start gap-3">
+   201→   201→                        <Search className="mt-0.5 size-4 shrink-0 text-[#2563EB]" aria-hidden="true" />
+   202→   202→                        <div>
+   203→   203→                          <p className="text-sm font-medium text-[#111820]">Prospect identified</p>
+   204→   204→                          <p className="mt-1 text-sm text-[#56616C]">
+   205→   205→                            <strong>Meridian Health Group</strong> — Regional healthcare provider with 12 locations.
+   206→   206→                            Estimated 45K monthly visits. Primary domain: meridianhealth.example
+   207→   207→                          </p>
+   208→   208→                        </div>
+   209→   209→                      </div>
+   210→   210→                    </div>
+   211→   211→                  </div>
+   212→   212→                </CardContent>
+   213→   213→              </Card>
+   214→   214→            </TabsContent>
+   215→   215→
+   216→   216→            {/* Step 2: Audit */}
+   217→   217→            <TabsContent value="audit" className="mt-6">
+   218→   218→              <Card className="border-[#DDE3E7] shadow-sm">
+   219→   219→                <CardHeader className="pb-4">
+   220→   220→                  <CardTitle className="flex items-center gap-2 text-base text-[#111820]">
+   221→   221→                    <Loader2 className="size-4 text-[#2563EB] animate-spin" aria-hidden="true" />
+   222→   222→                    Audit in progress
+   223→   223→                  </CardTitle>
+   224→   224→                  <CardDescription className="text-sm text-[#56616C]">
+   225→   225→                    WinterVell is scanning meridianhealth.example across 9 audit categories.
+   226→   226→                  </CardDescription>
+   227→   227→                </CardHeader>
+   228→   228→                <CardContent>
+   229→   229→                  <div className="space-y-3">
+   230→   230→                    {AUDIT_CATEGORIES.map((cat, i) => {
+   231→   231→                      const Icon = cat.icon;
+   232→   232→                      const isComplete = i < 5;
+   233→   233→                      const isInProgress = i === 5;
+   234→   234→                      return (
+   235→   235→                        <div
+   236→   236→                          key={cat.name}
+   237→   237→                          className="flex items-center gap-3 rounded-lg border border-[#DDE3E7] bg-white p-3"
+   238→   238→                        >
+   239→   239→                          <div className={`flex size-8 shrink-0 items-center justify-center rounded-md ${isComplete ? "bg-[#EFF8FC]" : isInProgress ? "bg-[#B7791F]/10" : "bg-[#F4F6F7]"}`}>
+   240→   240→                            <Icon className={`size-4 ${isComplete ? "text-[#2563EB]" : isInProgress ? "text-[#B7791F]" : "text-[#56616C]"}`} aria-hidden="true" />
+   241→   241→                          </div>
+   242→   242→                          <div className="flex-1 min-w-0">
+   243→   243→                            <div className="flex items-center justify-between">
+   244→   244→                              <span className="text-sm font-medium text-[#111820]">{cat.name}</span>
+   245→   245→                              {isComplete ? (
+   246→   246→                                <CheckCircle2 className="size-4 text-[#24584F]" aria-hidden="true" />
+   247→   247→                              ) : isInProgress ? (
+   248→   248→                                <Loader2 className="size-4 text-[#B7791F] animate-spin" aria-hidden="true" />
+   249→   249→                              ) : (
+   250→   250→                                <Clock className="size-4 text-[#56616C]" aria-hidden="true" />
+   251→   251→                              )}
+   252→   252→                            </div>
+   253→   253→                            <Progress
+   254→   254→                              value={isComplete ? 100 : isInProgress ? 54 : 0}
+   255→   255→                              className="mt-1.5 h-1.5 bg-[#F4F6F7]"
+   256→   256→                            />
+   257→   257→                          </div>
+   258→   258→                        </div>
+   259→   259→                      );
+   260→   260→                    })}
+   261→   261→                  </div>
+   262→   262→                </CardContent>
+   263→   263→              </Card>
+   264→   264→            </TabsContent>
+   265→   265→
+   266→   266→            {/* Step 3: Findings */}
+   267→   267→            <TabsContent value="findings" className="mt-6">
+   268→   268→              <Card className="border-[#DDE3E7] shadow-sm">
+   269→   269→                <CardHeader className="pb-4">
+   270→   270→                  <CardTitle className="flex items-center gap-2 text-base text-[#111820]">
+   271→   271→                    <FileSearch className="size-4 text-[#2563EB]" aria-hidden="true" />
+   272→   272→                    Evidence-backed findings
+   273→   273→                  </CardTitle>
+   274→   274→                  <CardDescription className="text-sm text-[#56616C]">
+   275→   275→                    23 findings across 9 categories for meridianhealth.example
+   276→   276→                  </CardDescription>
+   277→   277→                </CardHeader>
+   278→   278→                <CardContent>
+   279→   279→                  <div className="max-h-96 space-y-3 overflow-y-auto pr-1 custom-scrollbar">
+   280→   280→                    {FINDINGS.map((finding) => (
+   281→   281→                      <div
+   282→   282→                        key={finding.title}
+   283→   283→                        className="rounded-lg border border-[#DDE3E7] bg-white p-4"
+   284→   284→                      >
+   285→   285→                        <div className="flex items-start gap-3">
+   286→   286→                          <div
+   287→   287→                            className="mt-0.5 size-2 shrink-0 rounded-full"
+   288→   288→                            style={{ backgroundColor: finding.color }}
+   289→   289→                            aria-hidden="true"
+   290→   290→                          />
+   291→   291→                          <div className="flex-1 min-w-0">
+   292→   292→                            <div className="flex flex-wrap items-center gap-2">
+   293→   293→                              <Badge
+   294→   294→                                className="border-0 text-[10px] font-bold uppercase tracking-wider text-white"
+   295→   295→                                style={{ backgroundColor: finding.color }}
+   296→   296→                              >
+   297→   297→                                {finding.severity}
+   298→   298→                              </Badge>
+   299→   299→                              <span className="text-sm font-semibold text-[#111820]">
+   300→   300→                                {finding.title}
+   301→   301→                              </span>
+   302→   302→                            </div>
+   303→   303→                            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#56616C]">
+   304→   304→                              <span className="flex items-center gap-1">
+   305→   305→                                <Shield className="size-3" aria-hidden="true" />
+   306→   306→                                Confidence: {finding.confidence}%
+   307→   307→                              </span>
+   308→   308→                              <span className="flex items-center gap-1">
+   309→   309→                                <ExternalLink className="size-3" aria-hidden="true" />
+   310→   310→                                {finding.page}
+   311→   311→                              </span>
+   312→   312→                            </div>
+   313→   313→                            <p className="mt-2 text-xs leading-relaxed text-[#56616C]">
+   314→   314→                              {finding.evidence}
+   315→   315→                            </p>
+   316→   316→                          </div>
+   317→   317→                        </div>
+   318→   318→                      </div>
+   319→   319→                    ))}
+   320→   320→                  </div>
+   321→   321→                </CardContent>
+   322→   322→              </Card>
+   323→   323→            </TabsContent>
+   324→   324→
+   325→   325→            {/* Step 4: Report */}
+   326→   326→            <TabsContent value="report" className="mt-6">
+   327→   327→              <Card className="border-[#DDE3E7] shadow-sm">
+   328→   328→                <CardHeader className="pb-4">
+   329→   329→                  <CardTitle className="flex items-center gap-2 text-base text-[#111820]">
+   330→   330→                    <FileBarChart className="size-4 text-[#2563EB]" aria-hidden="true" />
+   331→   331→                    Branded report generated
+   332→   332→                  </CardTitle>
+   333→   333→                  <CardDescription className="text-sm text-[#56616C]">
+   334→   334→                    White-label report ready for client delivery.
+   335→   335→                  </CardDescription>
+   336→   336→                </CardHeader>
+   337→   337→                <CardContent>
+   338→   338→                  <div className="rounded-lg border border-[#DDE3E7] bg-[#F4F6F7] p-6">
+   339→   339→                    {/* Report header mock */}
+   340→   340→                    <div className="rounded-md border border-[#DDE3E7] bg-white p-5">
+   341→   341→                      <div className="flex items-center justify-between border-b border-[#DDE3E7] pb-4">
+   342→   342→                        <div className="flex items-center gap-2">
+   343→   343→                          <div className="flex size-8 items-center justify-center rounded-md bg-[#142634]">
+   344→   344→                            <BarChart3 className="size-4 text-[#B7DDEC]" aria-hidden="true" />
+   345→   345→                          </div>
+   346→   346→                          <div>
+   347→   347→                            <p className="text-xs font-bold text-[#111820]">Northstar Digital</p>
+   348→   348→                            <p className="text-[10px] text-[#56616C]">Website Audit Report</p>
+   349→   349→                          </div>
+   350→   350→                        </div>
+   351→   351→                        <div className="text-right">
+   352→   352→                          <p className="text-xs font-semibold text-[#111820]">Meridian Health Group</p>
+   353→   353→                          <p className="text-[10px] text-[#56616C]">meridianhealth.example</p>
+   354→   354→                        </div>
+   355→   355→                      </div>
+   356→   356→                      {/* Score */}
+   357→   357→                      <div className="mt-4 flex items-center gap-6">
+   358→   358→                        <div className="flex flex-col items-center">
+   359→   359→                          <div className="flex size-16 items-center justify-center rounded-full border-4 border-[#B43C3C]">
+   360→   360→                            <span className="text-xl font-bold text-[#B43C3C]">47</span>
+   361→   361→                          </div>
+   362→   362→                          <span className="mt-1 text-[10px] font-medium text-[#56616C]">Overall Score</span>
+   363→   363→                        </div>
+   364→   364→                        <div className="flex-1 grid grid-cols-3 gap-2">
+   365→   365→                          {[
+   366→   366→                            { label: "Technical", score: 78, color: "#24584F" },
+   367→   367→                            { label: "SEO", score: 45, color: "#B7791F" },
+   368→   368→                            { label: "Performance", score: 62, color: "#2563EB" },
+   369→   369→                            { label: "Mobile", score: 54, color: "#B7791F" },
+   370→   370→                            { label: "Accessibility", score: 38, color: "#B43C3C" },
+   371→   371→                            { label: "Conversion", score: 41, color: "#B43C3C" },
+   372→   372→                          ].map((c) => (
+   373→   373→                            <div key={c.label} className="flex items-center gap-1.5">
+   374→   374→                              <div
+   375→   375→                                className="size-2 shrink-0 rounded-full"
+   376→   376→                                style={{ backgroundColor: c.color }}
+   377→   377→                                aria-hidden="true"
+   378→   378→                              />
+   379→   379→                              <span className="text-[10px] text-[#56616C]">{c.label}</span>
+   380→   380→                              <span className="text-[10px] font-bold" style={{ color: c.color }}>{c.score}</span>
+   381→   381→                            </div>
+   382→   382→                          ))}
+   383→   383→                        </div>
+   384→   384→                      </div>
+   385→   385→                      <div className="mt-4 flex items-center gap-2">
+   386→   386→                        <Badge variant="outline" className="border-[#DDE3E7] text-[10px] text-[#56616C]">
+   387→   387→                          PDF export
+   388→   388→                        </Badge>
+   389→   389→                        <Badge variant="outline" className="border-[#DDE3E7] text-[10px] text-[#56616C]">
+   390→   390→                          Secure share link
+   391→   391→                        </Badge>
+   392→   392→                      </div>
+   393→   393→                    </div>
+   394→   394→                  </div>
+   395→   395→                </CardContent>
+   396→   396→              </Card>
+   397→   397→            </TabsContent>
+   398→   398→
+   399→   399→            {/* Step 5: Proposal */}
+   400→   400→            <TabsContent value="proposal" className="mt-6">
+   401→   401→              <Card className="border-[#DDE3E7] shadow-sm">
+   402→   402→                <CardHeader className="pb-4">
+   403→   403→                  <CardTitle className="flex items-center gap-2 text-base text-[#111820]">
+   404→   404→                    <FileText className="size-4 text-[#2563EB]" aria-hidden="true" />
+   405→   405→                    Proposal generated
+   406→   406→                  </CardTitle>
+   407→   407→                  <CardDescription className="text-sm text-[#56616C]">
+   408→   408→                    Findings automatically converted into a scoped proposal.
+   409→   409→                  </CardDescription>
+   410→   410→                </CardHeader>
+   411→   411→                <CardContent>
+   412→   412→                  <div className="rounded-lg border border-[#DDE3E7] bg-[#F4F6F7] p-6">
+   413→   413→                    <div className="rounded-md border border-[#DDE3E7] bg-white p-5">
+   414→   414→                      <div className="flex items-center justify-between border-b border-[#DDE3E7] pb-3">
+   415→   415→                        <div>
+   416→   416→                          <p className="text-sm font-bold text-[#111820]">Website Improvement Proposal</p>
+   417→   417→                          <p className="text-xs text-[#56616C]">Prepared for Meridian Health Group by Northstar Digital</p>
+   418→   418→                        </div>
+   419→   419→                        <Badge className="bg-[#2563EB] text-white border-0 text-[10px]">Draft</Badge>
+   420→   420→                      </div>
+   421→   421→                      <div className="mt-4 space-y-3">
+   422→   422→                        {PROPOSAL_ITEMS.map((item) => (
+   423→   423→                          <div
+   424→   424→                            key={item.service}
+   425→   425→                            className="flex items-start justify-between gap-3 rounded-md border border-[#DDE3E7] p-3"
+   426→   426→                          >
+   427→   427→                            <div className="flex-1 min-w-0">
+   428→   428→                              <p className="text-sm font-semibold text-[#111820]">{item.service}</p>
+   429→   429→                              <p className="text-xs text-[#56616C]">{item.scope}</p>
+   430→   430→                            </div>
+   431→   431→                            <span className="shrink-0 text-sm font-bold text-[#111820]">{item.price}</span>
+   432→   432→                          </div>
+   433→   433→                        ))}
+   434→   434→                      </div>
+   435→   435→                      <div className="mt-4 flex items-center justify-between border-t border-[#DDE3E7] pt-3">
+   436→   436→                        <span className="text-sm font-bold text-[#111820]">Total investment</span>
+   437→   437→                        <span className="text-lg font-bold text-[#2563EB]">$19,700</span>
+   438→   438→                      </div>
+   439→   439→                    </div>
+   440→   440→                  </div>
+   441→   441→                </CardContent>
+   442→   442→              </Card>
+   443→   443→            </TabsContent>
+   444→   444→
+   445→   445→            {/* Step 6: Pipeline */}
+   446→   446→            <TabsContent value="pipeline" className="mt-6">
+   447→   447→              <Card className="border-[#DDE3E7] shadow-sm">
+   448→   448→                <CardHeader className="pb-4">
+   449→   449→                  <CardTitle className="flex items-center gap-2 text-base text-[#111820]">
+   450→   450→                    <TrendingUp className="size-4 text-[#2563EB]" aria-hidden="true" />
+   451→   451→                    Opportunity pipeline
+   452→   452→                  </CardTitle>
+   453→   453→                  <CardDescription className="text-sm text-[#56616C]">
+   454→   454→                    Track the opportunity from proposal to close.
+   455→   455→                  </CardDescription>
+   456→   456→                </CardHeader>
+   457→   457→                <CardContent>
+   458→   458→                  <div className="rounded-lg border border-[#DDE3E7] bg-[#F4F6F7] p-6">
+   459→   459→                    {/* Pipeline columns */}
+   460→   460→                    <div className="grid grid-cols-3 gap-3">
+   461→   461→                      {[
+   462→   462→                        { label: "Qualified", count: 1, active: true },
+   463→   463→                        { label: "Proposal Sent", count: 0, active: false },
+   464→   464→                        { label: "Closed Won", count: 0, active: false },
+   465→   465→                      ].map((col) => (
+   466→   466→                        <div
+   467→   467→                          key={col.label}
+   468→   468→                          className={`rounded-md border p-3 ${
+   469→   469→                            col.active
+   470→   470→                              ? "border-[#2563EB] bg-[#EFF8FC]"
+   471→   471→                              : "border-[#DDE3E7] bg-white"
+   472→   472→                          }`}
+   473→   473→                        >
+   474→   474→                          <div className="flex items-center justify-between">
+   475→   475→                            <span className="text-xs font-semibold text-[#56616C]">{col.label}</span>
+   476→   476→                            <span className="flex size-5 items-center justify-center rounded-full bg-[#DDE3E7] text-[10px] font-bold text-[#56616C]">
+   477→   477→                              {col.count}
+   478→   478→                            </span>
+   479→   479→                          </div>
+   480→   480→                        </div>
+   481→   481→                      ))}
+   482→   482→                    </div>
+   483→   483→                    {/* Opportunity card */}
+   484→   484→                    <div className="mt-4 rounded-md border border-[#DDE3E7] bg-white p-4">
+   485→   485→                      <div className="flex items-start justify-between gap-3">
+   486→   486→                        <div className="flex-1 min-w-0">
+   487→   487→                          <div className="flex items-center gap-2">
+   488→   488→                            <div className="flex size-8 items-center justify-center rounded-md bg-[#142634]">
+   489→   489→                              <Users className="size-4 text-[#B7DDEC]" aria-hidden="true" />
+   490→   490→                            </div>
+   491→   491→                            <div>
+   492→   492→                              <p className="text-sm font-semibold text-[#111820]">Meridian Health Group</p>
+   493→   493→                              <p className="text-xs text-[#56616C]">Website improvement engagement</p>
+   494→   494→                            </div>
+   495→   495→                          </div>
+   496→   496→                          <div className="mt-3 flex flex-wrap gap-2">
+   497→   497→                            <Badge variant="outline" className="border-[#B7DDEC] text-[#2563EB] text-[10px]">
+   498→   498→                              <DollarSign className="size-3 mr-0.5" aria-hidden="true" />
+   499→   499→                              $19,700
+   500→   500→                            </Badge>
+   501→   501→                            <Badge variant="outline" className="border-[#DDE3E7] text-[#56616C] text-[10px]">
+   502→   502→                              <AlertTriangle className="size-3 mr-0.5" aria-hidden="true" />
+   503→   503→                              23 findings
+   504→   504→                            </Badge>
+   505→   505→                            <Badge variant="outline" className="border-[#DDE3E7] text-[#56616C] text-[10px]">
+   506→   506→                              <Clock className="size-3 mr-0.5" aria-hidden="true" />
+   507→   507→                              4 services
+   508→   508→                            </Badge>
+   509→   509→                          </div>
+   510→   510→                        </div>
+   511→   511→                        <ChevronRight className="size-5 shrink-0 text-[#56616C]" aria-hidden="true" />
+   512→   512→                      </div>
+   513→   513→                    </div>
+   514→   514→                  </div>
+   515→   515→                </CardContent>
+   516→   516→              </Card>
+   517→   517→            </TabsContent>
+   518→   518→          </Tabs>
+   519→   519→        </div>
+   520→   520→      </motion.div>
+   521→   521→    </section>
+   522→   522→  );
+   523→   523→}
+   524→   524→

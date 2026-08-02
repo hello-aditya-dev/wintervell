@@ -1,6 +1,9 @@
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
+import ScrollProgress from "@/components/site/ScrollProgress";
+import BackToTop from "@/components/site/BackToTop";
 import HeroSection from "@/components/site/HeroSection";
+import ProductMetrics from "@/components/site/ProductMetrics";
 import OutcomeStrip from "@/components/site/OutcomeStrip";
 import ProblemTransformation from "@/components/site/ProblemTransformation";
 import ProductProof from "@/components/site/ProductProof";
@@ -25,9 +28,11 @@ import FinalCTA from "@/components/site/FinalCTA";
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-[#F4F6F7]">
+      <ScrollProgress />
       <Header />
       <main className="flex-1">
         <HeroSection />
+        <ProductMetrics />
         <OutcomeStrip />
         <ProblemTransformation />
         <ProductProof />
@@ -50,6 +55,7 @@ export default function Home() {
         <FinalCTA />
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }
