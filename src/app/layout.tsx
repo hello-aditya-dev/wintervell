@@ -101,7 +101,6 @@ export const metadata: Metadata = {
       "Turn any website into a sales-ready audit. White-label audit engine, report builder, proposal generator, and prospect pipeline.",
     images: ["/opengraph-image"],
   },
-  sitemap: "/sitemap.xml",
 };
 
 export default function RootLayout({

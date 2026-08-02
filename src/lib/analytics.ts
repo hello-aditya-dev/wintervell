@@ -90,14 +90,14 @@ export function trackEvent(
   if (process.env.NODE_ENV === "production") {
     // Plausible custom events
     if (typeof window !== "undefined" && (window as AnalyticsWindow).plausible) {
-      (window as AnalyticsWindow).plausible(eventName, {
+      (window as AnalyticsWindow).plausible!(eventName, {
         props: safeProps,
       });
     }
 
     // Umami custom events
     if (typeof window !== "undefined" && (window as AnalyticsWindow).umami) {
-      (window as AnalyticsWindow).umami.track(eventName, safeProps);
+      (window as AnalyticsWindow).umami!.track(eventName, safeProps);
     }
   }
 }

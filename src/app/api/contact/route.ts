@@ -21,7 +21,7 @@ const contactSchema = z.object({
     .min(1, "Email is required.")
     .email("Please enter a valid email address."),
   subject: z.enum(SUBJECT_OPTIONS, {
-    required_error: "Please select a subject.",
+    message: "Please select a subject.",
   }),
   message: z
     .string()

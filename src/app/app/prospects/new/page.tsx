@@ -86,7 +86,7 @@ export default function NewProspectPage() {
   const users = useDemoStore((s) => s.users);
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as any,
     defaultValues: {
       contactName: '',
       company: '',

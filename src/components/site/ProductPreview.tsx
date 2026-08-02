@@ -79,7 +79,7 @@ const PREVIEWS = [
 ] as const;
 
 function AuditDetailPreview({ mockData }: { mockData: typeof PREVIEWS[0]["mockData"] }) {
-  const data = mockData as { title: string; rows: { category: string; score: string; status: string }[] };
+  const data = mockData as unknown as { title: string; rows: { category: string; score: string; status: string }[] };
   return (
     <div className="space-y-2">
       <div className="text-sm font-medium text-foreground">{data.title}</div>
@@ -99,7 +99,7 @@ function AuditDetailPreview({ mockData }: { mockData: typeof PREVIEWS[0]["mockDa
 }
 
 function FindingEvidencePreview({ mockData }: { mockData: typeof PREVIEWS[0]["mockData"] }) {
-  const data = mockData as { title: string; severity: string; evidence: string[] };
+  const data = mockData as unknown as { title: string; severity: string; evidence: string[] };
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
@@ -121,7 +121,7 @@ function FindingEvidencePreview({ mockData }: { mockData: typeof PREVIEWS[0]["mo
 }
 
 function ClientReportPreview({ mockData }: { mockData: typeof PREVIEWS[0]["mockData"] }) {
-  const data = mockData as { title: string; detail: string; pages: string; status: string };
+  const data = mockData as unknown as { title: string; detail: string; pages: string; status: string };
   return (
     <div className="space-y-2">
       <div className="rounded-md border border-border bg-background p-3">
@@ -137,7 +137,7 @@ function ClientReportPreview({ mockData }: { mockData: typeof PREVIEWS[0]["mockD
 }
 
 function ProposalPreview({ mockData }: { mockData: typeof PREVIEWS[0]["mockData"] }) {
-  const data = mockData as { title: string; scope: string; value: string; status: string };
+  const data = mockData as unknown as { title: string; scope: string; value: string; status: string };
   return (
     <div className="space-y-2">
       <div className="rounded-md border border-border bg-background p-3">
@@ -155,7 +155,7 @@ function ProposalPreview({ mockData }: { mockData: typeof PREVIEWS[0]["mockData"
 }
 
 function PipelinePreview({ mockData }: { mockData: typeof PREVIEWS[0]["mockData"] }) {
-  const data = mockData as { title: string; stages: { name: string; count: number }[] };
+  const data = mockData as unknown as { title: string; stages: { name: string; count: number }[] };
   return (
     <div className="space-y-2">
       <div className="text-sm font-medium text-foreground">{data.title}</div>
@@ -212,7 +212,7 @@ export default function ProductPreview() {
                   {preview.description}
                 </p>
                 <div className="mt-3 rounded-md border border-border bg-surface-muted p-2.5">
-                  <PreviewComponent mockData={preview.mockData} />
+                  <PreviewComponent mockData={preview.mockData as any} />
                 </div>
               </Link>
             );

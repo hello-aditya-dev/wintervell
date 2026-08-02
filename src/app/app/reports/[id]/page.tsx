@@ -130,9 +130,9 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
   function getSectionContent(section: ReportSection): string {
     switch (section) {
       case 'cover':
-        return `${report.clientName}\nDigital Presence Audit Report\nPrepared by ${report.brand}`;
+        return `${report!.clientName}\nDigital Presence Audit Report\nPrepared by ${report!.brand}`;
       case 'executive_summary':
-        return `This report presents the findings of a digital audit conducted for ${report.clientName}. The audit identified ${reportFindings.length} key findings across ${audit?.categories.length ?? 0} categories, with an overall score of ${audit?.overallScore ?? 0}/100. Priority areas include ${reportFindings.filter((f) => f.severity === 'critical' || f.severity === 'high').length} high-severity findings that require immediate attention.`;
+        return `This report presents the findings of a digital audit conducted for ${report!.clientName}. The audit identified ${reportFindings.length} key findings across ${audit?.categories.length ?? 0} categories, with an overall score of ${audit?.overallScore ?? 0}/100. Priority areas include ${reportFindings.filter((f) => f.severity === 'critical' || f.severity === 'high').length} high-severity findings that require immediate attention.`;
       case 'score_overview':
         return audit ? `Overall Digital Score: ${audit.overallScore}/100` : '';
       case 'priority_findings':

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const TIERS = [
   {
     name: commercial.pricing.agency.name,
-    price: commercial.pricing.agency.foundingPrice,
+    price: commercial.pricing.agency.plannedPrice,
     description: commercial.pricing.agency.description,
     bestFor: commercial.pricing.agency.bestFor,
     includes: commercial.pricing.agency.includes,
@@ -24,7 +24,7 @@ const TIERS = [
   },
   {
     name: commercial.pricing.studio.name,
-    price: commercial.pricing.studio.foundingPrice,
+    price: commercial.pricing.studio.plannedPrice,
     description: commercial.pricing.studio.description,
     bestFor: commercial.pricing.studio.bestFor,
     includes: commercial.pricing.studio.includes,
