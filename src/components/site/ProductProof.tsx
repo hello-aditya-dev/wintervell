@@ -124,8 +124,60 @@ export default function ProductProof() {
   const [direction, setDirection] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
+  const [auditScanIdx, setAuditScanIdx] = useState(0);
+  const [auditSubProgress, setAuditSubProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, { amount: 0.3 });
+
+  // Reset scan state when leaving the audit step, or snap to the final state
+  // for reduced-motion users. Adjusting state during render (rather than in
+  // an effect) avoids cascading renders — see:
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  const [prevActiveStep, setPrevActiveStep] = useState(activeStep);
+  const [prevReducedMotion, setPrevReducedMotion] = useState(prefersReducedMotion);
+  if (activeStep !== prevActiveStep || prefersReducedMotion !== prevReducedMotion) {
+    setPrevActiveStep(activeStep);
+    setPrevReducedMotion(prefersReducedMotion);
+    if (activeStep !== "audit") {
+      // Reset scan state when leaving the audit step so re-entry replays.
+      setAuditScanIdx(0);
+      setAuditSubProgress(0);
+    } else if (prefersReducedMotion) {
+      // Skip the animation for reduced-motion users; snap to the final state.
+      setAuditScanIdx(AUDIT_CATEGORIES.length);
+      setAuditSubProgress(100);
+    }
+  }
+
+  // Sequential scan animation when the Audit step is active.
+  // Bars fill one-by-one, then move to the next category, giving the
+  // visual impression of a live scanning engine instead of static 100%.
+  useEffect(() => {
+    if (activeStep !== "audit" || prefersReducedMotion || !inView) {
+      return;
+    }
+
+    // Each category takes ~600ms to "scan", subdivided into ~60ms ticks.
+    const tickMs = 60;
+    const perCategoryTicks = 10;
+    const id = setInterval(() => {
+      setAuditSubProgress((prev) => {
+        const next = prev + 100 / perCategoryTicks;
+        if (next >= 100) {
+          setAuditScanIdx((idx) => Math.min(idx + 1, AUDIT_CATEGORIES.length));
+          return 0;
+        }
+        return next;
+      });
+    }, tickMs);
+
+    // Stop when all categories are fully scanned.
+    if (auditScanIdx >= AUDIT_CATEGORIES.length) {
+      clearInterval(id);
+    }
+
+    return () => clearInterval(id);
+  }, [activeStep, prefersReducedMotion, inView, auditScanIdx]);
 
   const activeStepIdx = DEMO_STEPS.findIndex((s) => s.id === activeStep);
 
@@ -259,12 +311,20 @@ export default function ProductProof() {
               <div className="space-y-3">
                 {AUDIT_CATEGORIES.map((cat, i) => {
                   const Icon = cat.icon;
-                  const isComplete = i < 5;
-                  const isInProgress = i === 5;
+                  // Derive state from the animated scan index.
+                  const isComplete = i < auditScanIdx;
+                  const isInProgress = i === auditScanIdx && auditScanIdx < AUDIT_CATEGORIES.length;
+                  // The in-progress bar uses the sub-progress value; complete
+                  // bars show 100%; pending bars show 0.
+                  const barValue = isComplete ? 100 : isInProgress ? auditSubProgress : 0;
                   return (
                     <div
                       key={cat.name}
-                      className="flex items-center gap-3 rounded-lg border border-[#DDE3E7] bg-white p-3"
+                      className={`flex items-center gap-3 rounded-lg border p-3 transition-colors ${
+                        isInProgress
+                          ? "border-[#B7791F]/40 bg-[#B7791F]/5 shadow-sm"
+                          : "border-[#DDE3E7] bg-white"
+                      }`}
                     >
                       <div className={`flex size-8 shrink-0 items-center justify-center rounded-md ${isComplete ? "bg-[#EFF8FC]" : isInProgress ? "bg-[#B7791F]/10" : "bg-[#F4F6F7]"}`}>
                         <Icon className={`size-4 ${isComplete ? "text-[#2563EB]" : isInProgress ? "text-[#B7791F]" : "text-[#56616C]"}`} aria-hidden="true" />
@@ -281,13 +341,23 @@ export default function ProductProof() {
                           )}
                         </div>
                         <Progress
-                          value={isComplete ? 100 : isInProgress ? 54 : 0}
+                          value={barValue}
                           className="mt-1.5 h-1.5 bg-[#F4F6F7]"
                         />
                       </div>
                     </div>
                   );
                 })}
+              </div>
+              {/* Live scan summary line — reinforces the "audit in progress" message. */}
+              <div className="mt-4 flex items-center justify-between rounded-md border border-[#B7DDEC] bg-[#EFF8FC] px-4 py-2.5">
+                <span className="flex items-center gap-2 text-xs font-medium text-[#142634]">
+                  <Loader2 className="size-3.5 animate-spin text-[#2563EB]" aria-hidden="true" />
+                  Scanning category {Math.min(auditScanIdx + 1, AUDIT_CATEGORIES.length)} of {AUDIT_CATEGORIES.length}
+                </span>
+                <span className="text-xs font-semibold text-[#2563EB]">
+                  {Math.round((auditScanIdx / AUDIT_CATEGORIES.length) * 100)}%
+                </span>
               </div>
             </CardContent>
           </Card>
@@ -728,13 +798,13 @@ export default function ProductProof() {
           </div>
 
           {/* Keyboard hint */}
-          <p className="mt-4 text-center text-[10px] text-[#56616C]/70">
-            Use{" "}
-            <kbd className="rounded border border-[#DDE3E7] bg-[#F4F6F7] px-1 py-0.5 font-mono text-[10px]">←</kbd>{" "}
-            <kbd className="rounded border border-[#DDE3E7] bg-[#F4F6F7] px-1 py-0.5 font-mono text-[10px]">→</kbd>{" "}
-            keys to navigate ·{" "}
-            <kbd className="rounded border border-[#DDE3E7] bg-[#F4F6F7] px-1 py-0.5 font-mono text-[10px]">Space</kbd>{" "}
-            to play/pause
+          <p className="mt-4 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-center text-xs text-[#3F4A55]">
+            <span className="font-medium">Keyboard:</span>
+            <kbd className="rounded border border-[#DDE3E7] bg-[#F4F6F7] px-1.5 py-0.5 font-mono text-[10px] font-semibold text-[#111820] shadow-sm">←</kbd>
+            <kbd className="rounded border border-[#DDE3E7] bg-[#F4F6F7] px-1.5 py-0.5 font-mono text-[10px] font-semibold text-[#111820] shadow-sm">→</kbd>
+            <span>navigate ·</span>
+            <kbd className="rounded border border-[#DDE3E7] bg-[#F4F6F7] px-1.5 py-0.5 font-mono text-[10px] font-semibold text-[#111820] shadow-sm">Space</kbd>
+            <span>play/pause</span>
           </p>
         </div>
       </motion.div>

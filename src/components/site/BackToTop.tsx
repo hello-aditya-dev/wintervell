@@ -64,8 +64,9 @@ export default function BackToTop() {
           type="button"
           onClick={handleClick}
           aria-label="Scroll back to top"
+          data-back-to-top
           {...entrance}
-          className="fixed bottom-6 right-6 z-50 inline-flex size-12 items-center justify-center rounded-full bg-[#142634] text-white shadow-lg shadow-[#142634]/20 transition-colors hover:bg-[#1E3A4F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F6F7]"
+          className="no-print fixed bottom-6 right-6 z-50 inline-flex size-12 items-center justify-center rounded-full bg-[#142634] text-white shadow-lg shadow-[#142634]/20 transition-colors hover:bg-[#1E3A4F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F6F7]"
         >
           <ArrowUp className="size-5" aria-hidden="true" />
         </motion.button>

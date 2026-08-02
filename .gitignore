@@ -51,4 +51,12 @@ prompt
 
 server.log
 # Skills directory
+/skills/qa-*.png
+tool-results/
+*.log
+
+# QA screenshots (root level)
+/qa-*.png
+
+# Skills directory (development environment, not part of project)
 /skills/

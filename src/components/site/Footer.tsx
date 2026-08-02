@@ -44,7 +44,7 @@ const COLUMNS = [
 export default function Footer() {
   return (
     <footer
-      className="mt-auto border-t border-[#DDE3E7] bg-[#142634]"
+      className="no-print mt-auto border-t border-[#DDE3E7] bg-[#142634]"
       role="contentinfo"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

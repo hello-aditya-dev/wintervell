@@ -171,3 +171,98 @@ html {
     scroll-behavior: auto !important;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Print-friendly utilities                                            */
+/* ------------------------------------------------------------------ */
+
+/*
+ * Elements marked `.no-print` are hidden when the page is printed.
+ * On screen they render normally — the rule below is a no-op marker
+ * so components can opt-out of printing without inline styles.
+ */
+.no-print {
+  /* hidden in print via @media print rule below */
+}
+
+/*
+ * Elements marked `.print-only` are invisible on screen and only
+ * revealed when printing (e.g. a print header showing the site URL).
+ */
+.print-only {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Print styles                                                        */
+/* ------------------------------------------------------------------ */
+@media print {
+  /* 1. Hide non-essential UI elements */
+  header[role="banner"],
+  footer[role="contentinfo"],
+  .no-print,
+  [data-back-to-top],
+  [data-scroll-progress],
+  [data-cookie-consent],
+  [data-keyboard-shortcuts] {
+    display: none !important;
+  }
+
+  /* 2. White background, black text for legibility */
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* 3. Expand constrained content to full width */
+  .max-w-7xl {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* 4. Force all text to black for print legibility */
+  * {
+    color: #000000 !important;
+  }
+
+  /* 5. Remove shadows and rounded corners (they don't print well) */
+  * {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* 6. Show external link URLs in parentheses after the link text */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555555 !important;
+  }
+
+  /* 7. Page break control for major sections */
+  section {
+    page-break-inside: avoid;
+  }
+  h2 {
+    page-break-after: avoid;
+  }
+
+  /* 8. Reveal print-only header (e.g. site URL) */
+  .print-only {
+    display: block !important;
+  }
+
+  /* 9. Expand collapsed accordions / tabs for print.
+     NOTE: Forcing `[data-state="collapsed"]` to behave as
+     `[data-state="open"]` is not possible in pure CSS — `data-state`
+     is an HTML attribute, not a CSS property, and Radix UI typically
+     unmounts collapsed content from the DOM rather than just hiding
+     it. The rule below reveals any descendants of a collapsed container
+     that DO remain in the DOM, but fully unmounted content will still
+     be condensed in the printed output. */
+  [data-state="collapsed"] > * {
+    display: block !important;
+  }
+}

@@ -31,7 +31,8 @@ export default function ScrollProgress() {
     return (
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 right-0 top-16 z-40 h-[2px] bg-gradient-to-r from-[#2563EB] to-[#142634] opacity-40"
+        data-scroll-progress
+        className="no-print pointer-events-none fixed left-0 right-0 top-16 z-40 h-[2px] bg-gradient-to-r from-[#2563EB] to-[#142634] opacity-40"
       />
     );
   }
@@ -39,8 +40,9 @@ export default function ScrollProgress() {
   return (
     <motion.div
       aria-hidden="true"
+      data-scroll-progress
       style={{ scaleX }}
-      className="pointer-events-none fixed left-0 right-0 top-16 z-40 h-[3px] origin-left bg-gradient-to-r from-[#2563EB] to-[#142634]"
+      className="no-print pointer-events-none fixed left-0 right-0 top-16 z-40 h-[3px] origin-left bg-gradient-to-r from-[#2563EB] to-[#142634]"
     />
   );
 }

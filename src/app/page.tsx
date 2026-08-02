@@ -3,6 +3,9 @@ import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import ScrollProgress from "@/components/site/ScrollProgress";
 import BackToTop from "@/components/site/BackToTop";
+import CookieConsent from "@/components/site/CookieConsent";
+import KeyboardShortcuts from "@/components/site/KeyboardShortcuts";
+import SectionDivider from "@/components/site/SectionDivider";
 import HeroSection from "@/components/site/HeroSection";
 import ProductMetrics from "@/components/site/ProductMetrics";
 import OutcomeStrip from "@/components/site/OutcomeStrip";
@@ -37,7 +40,11 @@ export default function Home() {
       <main className="flex-1">
         <HeroSection />
         <ProductMetrics />
+        {/* ProductMetrics (white) -> OutcomeStrip (navy) */}
+        <SectionDivider variant="light-to-dark" />
         <OutcomeStrip />
+        {/* OutcomeStrip (navy) -> ProblemTransformation (paper) */}
+        <SectionDivider variant="dark-to-light" />
         <ProblemTransformation />
         <ProductProof />
         <AuditIntelligence />
@@ -47,21 +54,37 @@ export default function Home() {
         <SalesPipeline />
         <CommercialUseCases />
         <OwnershipDeployment />
+        {/* OwnershipDeployment (paper) -> TechnicalCredibility (navy) */}
+        <SectionDivider variant="light-to-dark" />
         <TechnicalCredibility />
+        {/* TechnicalCredibility (navy) -> ChangelogSection (paper) */}
+        <SectionDivider variant="dark-to-light" />
         <ChangelogSection />
         <RoadmapSection />
         <ROICalculator />
         <PricingSection />
         <LicenceComparison />
         <BuyerRiskReduction />
+        {/* BuyerRiskReduction (paper) -> DueDiligence (navy) */}
+        <SectionDivider variant="light-to-dark" />
         <DueDiligence />
+        {/* DueDiligence (navy) -> FAQSection (paper) */}
+        <SectionDivider variant="dark-to-light" />
         <FAQSection />
+        {/* FAQSection (paper) -> SecuritySection (navy) */}
+        <SectionDivider variant="light-to-dark" />
         <SecuritySection />
+        {/* SecuritySection (navy) -> ContactSection (paper) */}
+        <SectionDivider variant="dark-to-light" />
         <ContactSection />
+        {/* ContactSection (paper) -> FinalCTA (navy) */}
+        <SectionDivider variant="light-to-dark" />
         <FinalCTA />
       </main>
       <Footer />
       <BackToTop />
+      <KeyboardShortcuts />
+      <CookieConsent />
     </div>
   );
 }

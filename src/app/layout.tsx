@@ -322,7 +322,7 @@ export const metadata: Metadata = {
     siteName: "WinterVell",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "WinterVell — AI Website Audit and Agency Sales Platform",
@@ -334,7 +334,7 @@ export const metadata: Metadata = {
     title: "WinterVell — AI Website Audit and Agency Sales Platform",
     description:
       "Turn any website into a sales-ready audit. White-label audit engine, report builder, proposal generator and prospect pipeline.",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
   },
   sitemap: "/sitemap.xml",
 };
