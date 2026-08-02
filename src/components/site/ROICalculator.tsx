@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Calculator, DollarSign, TrendingUp, Clock, Info, RotateCcw } from "lucide-react";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { Calculator, DollarSign, TrendingUp, Clock, Info, RotateCcw, BarChart3, ArrowUpRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -52,16 +52,17 @@ const FIELDS: FieldConfig[] = [
 
 /* ─── Output definitions ─── */
 type OutputKind = "currency" | "months" | "text";
+type OutputSentiment = "positive" | "neutral" | "info";
 
 interface OutputRow {
   label: string;
   kind: OutputKind;
-  /** Numeric target used to drive the animated counter. */
   target: number;
-  /** Static display string used for `text` kind rows. */
   display: string;
   icon: React.ElementType;
   note?: string;
+  sentiment: OutputSentiment;
+  maxForBar?: number;
 }
 
 function calculateOutputs(values: Record<string, number>): OutputRow[] {
@@ -70,7 +71,6 @@ function calculateOutputs(values: Record<string, number>): OutputRow[] {
   const auditsPerMonth = values.auditsPerMonth ?? 0;
   const conversionRate = (values.conversionRate ?? 0) / 100;
   const alternativesCost = values.alternativesCost ?? 0;
-  // hoursPerAudit is part of the input set but not currently part of a numeric output
 
   const monthlyAuditRevenue = auditPrice * auditsPerMonth;
   const annualAuditRevenue = monthlyAuditRevenue * 12;
@@ -89,6 +89,13 @@ function calculateOutputs(values: Record<string, number>): OutputRow[] {
       ? `Licence amortized at $${licenceMonthlyAmortized.toFixed(0)}/mo vs alternatives at $${alternativesCost}/mo`
       : `Licence amortized at $${licenceMonthlyAmortized.toFixed(0)}/mo`;
 
+  // Determine sentiment for color coding
+  const revenueSentiment: OutputSentiment = monthlyAuditRevenue > 0 ? "positive" : "neutral";
+  const annualSentiment: OutputSentiment = annualAuditRevenue > 0 ? "positive" : "neutral";
+  const projectSentiment: OutputSentiment = associatedProjectValue > 0 ? "positive" : "neutral";
+  const costSentiment: OutputSentiment = costComparison > 0 ? "positive" : "info";
+  const paybackSentiment: OutputSentiment = paybackMonths > 0 && paybackMonths <= 6 ? "positive" : paybackMonths > 0 && paybackMonths <= 12 ? "neutral" : "info";
+
   return [
     {
       label: "Potential monthly audit revenue",
@@ -97,6 +104,8 @@ function calculateOutputs(values: Record<string, number>): OutputRow[] {
       display: `$${monthlyAuditRevenue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
       icon: DollarSign,
       note: "Estimate based on inputs",
+      sentiment: revenueSentiment,
+      maxForBar: annualAuditRevenue > 0 ? annualAuditRevenue : undefined,
     },
     {
       label: "Potential annual audit revenue",
@@ -105,14 +114,18 @@ function calculateOutputs(values: Record<string, number>): OutputRow[] {
       display: `$${annualAuditRevenue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
       icon: TrendingUp,
       note: "Estimate (monthly × 12)",
+      sentiment: annualSentiment,
+      maxForBar: annualAuditRevenue > 0 ? annualAuditRevenue : undefined,
     },
     {
       label: "Potential associated project value",
       kind: "currency",
       target: associatedProjectValue,
       display: `$${associatedProjectValue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
-      icon: TrendingUp,
+      icon: ArrowUpRight,
       note: "Estimate (project value × audits × conversion)",
+      sentiment: projectSentiment,
+      maxForBar: associatedProjectValue > 0 ? associatedProjectValue * 1.5 : undefined,
     },
     {
       label: "Estimated monthly tool-cost comparison",
@@ -121,6 +134,8 @@ function calculateOutputs(values: Record<string, number>): OutputRow[] {
       display: costComparisonText,
       icon: Calculator,
       note: "Estimate — annual licence amortized over 12 months",
+      sentiment: costSentiment,
+      maxForBar: alternativesCost > 0 ? alternativesCost * 2 : undefined,
     },
     {
       label: "Approximate licence payback",
@@ -129,6 +144,8 @@ function calculateOutputs(values: Record<string, number>): OutputRow[] {
       display: formatMonthsLabel(paybackMonths),
       icon: Clock,
       note: "Estimate — actual payback depends on revenue realization",
+      sentiment: paybackSentiment,
+      maxForBar: 24, // Max 24 months for the bar
     },
   ];
 }
@@ -164,10 +181,6 @@ function useAnimatedCounter(targetValue: number, duration = 500): number {
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Reduced motion: skip the rAF animation entirely. The hook returns
-    // `targetValue` directly (see the return statement below); we only sync
-    // the refs here so a future transition out of reduced motion starts
-    // from the correct position.
     if (prefersReducedMotion) {
       fromValueRef.current = targetValue;
       latestValueRef.current = targetValue;
@@ -177,7 +190,6 @@ function useAnimatedCounter(targetValue: number, duration = 500): number {
     const from = fromValueRef.current;
     const to = targetValue;
 
-    // Nothing to animate when source and target are identical.
     if (from === to) {
       latestValueRef.current = to;
       return;
@@ -188,7 +200,6 @@ function useAnimatedCounter(targetValue: number, duration = 500): number {
     function tick(now: number) {
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
-      // easeOutCubic for a smooth deceleration
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = from + (to - from) * eased;
       setDisplayValue(current);
@@ -211,13 +222,51 @@ function useAnimatedCounter(targetValue: number, duration = 500): number {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
       }
-      // Preserve the in-flight position so the next transition starts smoothly.
       fromValueRef.current = latestValueRef.current;
     };
   }, [targetValue, duration, prefersReducedMotion]);
 
-  // For reduced motion, snap to the target value directly (no state-driven animation).
   return prefersReducedMotion ? targetValue : displayValue;
+}
+
+/* ─── Sentiment color mapping ─── */
+function getSentimentColors(sentiment: OutputSentiment) {
+  switch (sentiment) {
+    case "positive":
+      return {
+        bg: "bg-[#24584F]/8",
+        border: "border-[#24584F]/20",
+        iconBg: "bg-[#24584F]/10",
+        iconColor: "text-[#24584F]",
+        barColor: "bg-gradient-to-r from-[#24584F] to-[#24584F]/60",
+        glowColor: "rgba(36, 88, 79, 0.12)",
+        flashColor: "rgba(36, 88, 79, 0.10)",
+        flashBorder: "rgba(36, 88, 79, 0.30)",
+      };
+    case "neutral":
+      return {
+        bg: "bg-[#B7791F]/8",
+        border: "border-[#B7791F]/20",
+        iconBg: "bg-[#B7791F]/10",
+        iconColor: "text-[#B7791F]",
+        barColor: "bg-gradient-to-r from-[#B7791F] to-[#B7791F]/60",
+        glowColor: "rgba(183, 121, 31, 0.12)",
+        flashColor: "rgba(183, 121, 31, 0.10)",
+        flashBorder: "rgba(183, 121, 31, 0.30)",
+      };
+    case "info":
+    default:
+      return {
+        bg: "bg-[#F4F6F7]",
+        border: "border-[#DDE3E7]",
+        iconBg: "bg-[#24584F]/10",
+        iconColor: "text-[#24584F]",
+        barColor: "bg-gradient-to-r from-[#2563EB] to-[#2563EB]/60",
+        glowColor: "rgba(37, 99, 235, 0.12)",
+        flashColor: "rgba(37, 99, 235, 0.10)",
+        flashBorder: "rgba(37, 99, 235, 0.30)",
+      };
+  }
 }
 
 /* ─── Animated output row ─── */
@@ -237,26 +286,30 @@ function AnimatedOutput({ output }: { output: OutputRow }) {
   }
 
   const Icon = output.icon;
+  const colors = getSentimentColors(output.sentiment);
 
-  // A key change remounts the motion.div, replaying the background flash
-  // animation. This avoids setState-in-effect while still highlighting updates.
   const flashKey = output.kind === "text" ? output.display : String(output.target);
+
+  // Calculate bar width percentage
+  const barWidth = output.maxForBar && output.target > 0
+    ? Math.min((output.target / output.maxForBar) * 100, 100)
+    : 0;
 
   return (
     <motion.div
       key={flashKey}
-      className="rounded-lg border border-[#DDE3E7] bg-[#F4F6F7] p-4"
+      className={cn("rounded-lg border p-4", colors.bg, colors.border)}
       initial={
         prefersReducedMotion
           ? false
-          : { backgroundColor: "rgba(37, 99, 235, 0.10)", borderColor: "rgba(37, 99, 235, 0.30)" }
+          : { backgroundColor: colors.flashColor, borderColor: colors.flashBorder }
       }
-      animate={{ backgroundColor: "rgba(244, 246, 247, 1)", borderColor: "rgba(221, 227, 231, 1)" }}
+      animate={{ backgroundColor: "rgba(0,0,0,0)", borderColor: "rgba(0,0,0,0)" }}
       transition={{ duration: 0.7, ease: "easeOut" }}
     >
       <div className="flex items-start gap-3">
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[#24584F]/10">
-          <Icon className="size-4 text-[#24584F]" aria-hidden="true" />
+        <div className={cn("flex size-8 shrink-0 items-center justify-center rounded-md", colors.iconBg)}>
+          <Icon className={cn("size-4", colors.iconColor)} aria-hidden="true" />
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-medium uppercase tracking-wider text-[#56616C]">
@@ -274,9 +327,191 @@ function AnimatedOutput({ output }: { output: OutputRow }) {
               {output.note}
             </p>
           )}
+
+          {/* Progress bar visualization */}
+          {output.kind === "months" && output.target > 0 && (
+            <div className="mt-2">
+              <div className="mb-1 flex items-center justify-between text-[10px] text-[#56616C]">
+                <span>Payback timeline</span>
+                <span>{Math.min(Math.ceil(output.target), 24)} of 24 months</span>
+              </div>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#DDE3E7]">
+                <motion.div
+                  className={cn("h-full rounded-full", colors.barColor)}
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${Math.min(barWidth, 100)}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Mini bar chart for currency outputs */}
+          {(output.kind === "currency" || output.kind === "text") && output.maxForBar && output.target > 0 && (
+            <div className="mt-2 flex items-end gap-1">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#DDE3E7]">
+                <motion.div
+                  className={cn("h-full rounded-full", colors.barColor)}
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${Math.min(barWidth, 100)}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
+  );
+}
+
+/* ─── Cost Comparison Bar Chart ─── */
+function CostComparisonChart({ values }: { values: Record<string, number> }) {
+  const prefersReducedMotion = useReducedMotion();
+  const alternativesCost = values.alternativesCost ?? 0;
+  const licenceMonthlyAmortized = LICENCE_COST / 12;
+  const maxVal = Math.max(alternativesCost, licenceMonthlyAmortized, 1);
+
+  const altPct = (alternativesCost / maxVal) * 100;
+  const licPct = (licenceMonthlyAmortized / maxVal) * 100;
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <BarChart3 className="size-4 text-[#24584F]" aria-hidden="true" />
+        <h4 className="text-sm font-semibold text-[#111820]">Monthly cost comparison</h4>
+      </div>
+
+      <div className="space-y-2.5">
+        {/* Alternatives bar */}
+        <div>
+          <div className="mb-1 flex items-center justify-between text-xs">
+            <span className="text-[#56616C]">Alternatives</span>
+            <span className="font-medium tabular-nums text-[#111820]">
+              ${alternativesCost.toLocaleString()}/mo
+            </span>
+          </div>
+          <div className="h-3 w-full overflow-hidden rounded-full bg-[#DDE3E7]">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-[#B43C3C] to-[#B43C3C]/70"
+              initial={{ width: 0 }}
+              whileInView={{ width: `${Math.max(altPct, 2)}%` }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+          </div>
+        </div>
+
+        {/* Licence amortized bar */}
+        <div>
+          <div className="mb-1 flex items-center justify-between text-xs">
+            <span className="text-[#56616C]">WinterVell (amortized)</span>
+            <span className="font-medium tabular-nums text-[#111820]">
+              ${licenceMonthlyAmortized.toFixed(0)}/mo
+            </span>
+          </div>
+          <div className="h-3 w-full overflow-hidden rounded-full bg-[#DDE3E7]">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-[#24584F] to-[#24584F]/70"
+              initial={{ width: 0 }}
+              whileInView={{ width: `${Math.max(licPct, 2)}%` }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Savings indicator */}
+      {alternativesCost > licenceMonthlyAmortized && alternativesCost > 0 && (
+        <motion.div
+          className="flex items-center gap-1.5 rounded-md bg-[#24584F]/10 px-2.5 py-1.5"
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 4 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
+          <TrendingUp className="size-3.5 text-[#24584F]" aria-hidden="true" />
+          <span className="text-xs font-medium text-[#24584F]">
+            You save ${(alternativesCost - licenceMonthlyAmortized).toFixed(0)}/mo vs alternatives
+          </span>
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Focus-aware input with glow ─── */
+function GlowInput({
+  field,
+  value,
+  onChange,
+}: {
+  field: FieldConfig;
+  value: number;
+  onChange: (key: string, raw: string) => void;
+}) {
+  const [focused, setFocused] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <div className="space-y-1.5">
+      <Label
+        htmlFor={field.key}
+        className="text-sm font-medium text-[#56616C]"
+      >
+        {field.label}
+      </Label>
+      <div className="relative">
+        {field.prefix && (
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#56616C]">
+            {field.prefix}
+          </span>
+        )}
+        {/* Glow ring on focus */}
+        <motion.div
+          className="pointer-events-none absolute -inset-1 rounded-lg"
+          animate={
+            prefersReducedMotion
+              ? undefined
+              : focused
+                ? { opacity: 1, scale: 1 }
+                : { opacity: 0, scale: 0.98 }
+          }
+          transition={{ duration: 0.2 }}
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(37,99,235,0.15) 0%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
+        <Input
+          id={field.key}
+          type="number"
+          min={field.min}
+          max={field.max}
+          step={field.step}
+          value={value}
+          onChange={(e) => onChange(field.key, e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          className={cn(
+            "relative border-[#DDE3E7] bg-[#F4F6F7] text-[#111820] transition-all duration-200",
+            field.prefix ? "pl-7" : "",
+            field.suffix ? "pr-12" : "",
+            focused
+              ? "border-[#2563EB] ring-2 ring-[#2563EB]/20 shadow-[0_0_0_3px_rgba(37,99,235,0.08)]"
+              : "focus-visible:border-[#2563EB] focus-visible:ring-[#2563EB]/20",
+          )}
+        />
+        {field.suffix && (
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#56616C]">
+            {field.suffix}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -289,6 +524,7 @@ export default function ROICalculator() {
   });
 
   const [values, setValues] = useState<Record<string, number>>(initialValues);
+  const [resetKey, setResetKey] = useState(0);
 
   const outputs = useMemo(() => calculateOutputs(values), [values]);
 
@@ -307,6 +543,7 @@ export default function ROICalculator() {
       reset[f.key] = f.defaultValue;
     });
     setValues(reset);
+    setResetKey((prev) => prev + 1);
   }
 
   const sectionMotionProps = prefersReducedMotion
@@ -339,50 +576,32 @@ export default function ROICalculator() {
                     <Calculator className="size-5 text-[#24584F]" aria-hidden="true" />
                     <h3 className="text-lg font-semibold text-[#111820]">Your inputs</h3>
                   </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleReset}
-                    aria-label="Reset all inputs to default values"
-                    className="border-[#DDE3E7] bg-white text-[#3F4A55] hover:bg-[#F4F6F7] hover:text-[#111820]"
+                  <motion.div
+                    key={resetKey}
+                    whileTap={prefersReducedMotion ? undefined : { rotate: -360 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
                   >
-                    <RotateCcw className="size-3.5" aria-hidden="true" />
-                    Reset to defaults
-                  </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleReset}
+                      aria-label="Reset all inputs to default values"
+                      className="border-[#DDE3E7] bg-white text-[#3F4A55] hover:bg-[#F4F6F7] hover:text-[#111820] active:scale-95 transition-transform"
+                    >
+                      <RotateCcw className="size-3.5" aria-hidden="true" />
+                      Reset to defaults
+                    </Button>
+                  </motion.div>
                 </div>
-                <div className="space-y-5">
+                <div key={resetKey} className="space-y-5">
                   {FIELDS.map((field) => (
-                    <div key={field.key} className="space-y-1.5">
-                      <Label
-                        htmlFor={field.key}
-                        className="text-sm font-medium text-[#56616C]"
-                      >
-                        {field.label}
-                      </Label>
-                      <div className="relative">
-                        {field.prefix && (
-                          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#56616C]">
-                            {field.prefix}
-                          </span>
-                        )}
-                        <Input
-                          id={field.key}
-                          type="number"
-                          min={field.min}
-                          max={field.max}
-                          step={field.step}
-                          value={values[field.key]}
-                          onChange={(e) => handleChange(field.key, e.target.value)}
-                          className={`${field.prefix ? "pl-7" : ""} ${field.suffix ? "pr-12" : ""} border-[#DDE3E7] bg-[#F4F6F7] text-[#111820] focus-visible:border-[#2563EB] focus-visible:ring-[#2563EB]/20`}
-                        />
-                        {field.suffix && (
-                          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#56616C]">
-                            {field.suffix}
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                    <GlowInput
+                      key={field.key}
+                      field={field}
+                      value={values[field.key]}
+                      onChange={handleChange}
+                    />
                   ))}
                 </div>
               </CardContent>
@@ -401,6 +620,11 @@ export default function ROICalculator() {
                   {outputs.map((output) => (
                     <AnimatedOutput key={output.label} output={output} />
                   ))}
+                </div>
+
+                {/* Cost Comparison Chart */}
+                <div className="mt-5 rounded-lg border border-[#DDE3E7] bg-[#F4F6F7] p-4">
+                  <CostComparisonChart values={values} />
                 </div>
 
                 {/* "These are estimates" disclaimer */}

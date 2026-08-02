@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import SkipLink from "@/components/site/SkipLink";
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
@@ -6,30 +7,34 @@ import BackToTop from "@/components/site/BackToTop";
 import CookieConsent from "@/components/site/CookieConsent";
 import KeyboardShortcuts from "@/components/site/KeyboardShortcuts";
 import SectionDivider from "@/components/site/SectionDivider";
-import HeroSection from "@/components/site/HeroSection";
-import ProductMetrics from "@/components/site/ProductMetrics";
-import OutcomeStrip from "@/components/site/OutcomeStrip";
-import ProblemTransformation from "@/components/site/ProblemTransformation";
-import ProductProof from "@/components/site/ProductProof";
-import AuditIntelligence from "@/components/site/AuditIntelligence";
-import ReportExperience from "@/components/site/ReportExperience";
-import WhiteLabelSection from "@/components/site/WhiteLabelSection";
-import AuditToProposal from "@/components/site/AuditToProposal";
-import SalesPipeline from "@/components/site/SalesPipeline";
-import CommercialUseCases from "@/components/site/CommercialUseCases";
-import OwnershipDeployment from "@/components/site/OwnershipDeployment";
-import TechnicalCredibility from "@/components/site/TechnicalCredibility";
-import ROICalculator from "@/components/site/ROICalculator";
-import PricingSection from "@/components/site/PricingSection";
-import LicenceComparison from "@/components/site/LicenceComparison";
-import BuyerRiskReduction from "@/components/site/BuyerRiskReduction";
-import DueDiligence from "@/components/site/DueDiligence";
-import FAQSection from "@/components/site/FAQSection";
-import ChangelogSection from "@/components/site/ChangelogSection";
-import RoadmapSection from "@/components/site/RoadmapSection";
-import SecuritySection from "@/components/site/SecuritySection";
-import ContactSection from "@/components/site/ContactSection";
-import FinalCTA from "@/components/site/FinalCTA";
+
+/* ─── Dynamic imports to reduce initial compilation memory ─── */
+const HeroSection = dynamic(() => import("@/components/site/HeroSection"));
+const ProductMetrics = dynamic(() => import("@/components/site/ProductMetrics"));
+const OutcomeStrip = dynamic(() => import("@/components/site/OutcomeStrip"));
+const ProblemTransformation = dynamic(() => import("@/components/site/ProblemTransformation"));
+const ProductProof = dynamic(() => import("@/components/site/ProductProof"));
+const InteractiveAuditDemo = dynamic(() => import("@/components/site/InteractiveAuditDemo"));
+const AuditIntelligence = dynamic(() => import("@/components/site/AuditIntelligence"));
+const ReportExperience = dynamic(() => import("@/components/site/ReportExperience"));
+const WhiteLabelSection = dynamic(() => import("@/components/site/WhiteLabelSection"));
+const AuditToProposal = dynamic(() => import("@/components/site/AuditToProposal"));
+const SalesPipeline = dynamic(() => import("@/components/site/SalesPipeline"));
+const CommercialUseCases = dynamic(() => import("@/components/site/CommercialUseCases"));
+const TestimonialsSection = dynamic(() => import("@/components/site/TestimonialsSection"));
+const OwnershipDeployment = dynamic(() => import("@/components/site/OwnershipDeployment"));
+const TechnicalCredibility = dynamic(() => import("@/components/site/TechnicalCredibility"));
+const ChangelogSection = dynamic(() => import("@/components/site/ChangelogSection"));
+const RoadmapSection = dynamic(() => import("@/components/site/RoadmapSection"));
+const ROICalculator = dynamic(() => import("@/components/site/ROICalculator"));
+const PricingSection = dynamic(() => import("@/components/site/PricingSection"));
+const LicenceComparison = dynamic(() => import("@/components/site/LicenceComparison"));
+const BuyerRiskReduction = dynamic(() => import("@/components/site/BuyerRiskReduction"));
+const DueDiligence = dynamic(() => import("@/components/site/DueDiligence"));
+const FAQSection = dynamic(() => import("@/components/site/FAQSection"));
+const SecuritySection = dynamic(() => import("@/components/site/SecuritySection"));
+const ContactSection = dynamic(() => import("@/components/site/ContactSection"));
+const FinalCTA = dynamic(() => import("@/components/site/FinalCTA"));
 
 export default function Home() {
   return (
@@ -40,24 +45,24 @@ export default function Home() {
       <main className="flex-1">
         <HeroSection />
         <ProductMetrics />
-        {/* ProductMetrics (white) -> OutcomeStrip (navy) */}
         <SectionDivider variant="light-to-dark" />
         <OutcomeStrip />
-        {/* OutcomeStrip (navy) -> ProblemTransformation (paper) */}
         <SectionDivider variant="dark-to-light" />
         <ProblemTransformation />
         <ProductProof />
+        <InteractiveAuditDemo />
         <AuditIntelligence />
         <ReportExperience />
         <WhiteLabelSection />
         <AuditToProposal />
         <SalesPipeline />
         <CommercialUseCases />
+        <SectionDivider variant="light-to-dark" />
+        <TestimonialsSection />
+        <SectionDivider variant="dark-to-light" />
         <OwnershipDeployment />
-        {/* OwnershipDeployment (paper) -> TechnicalCredibility (navy) */}
         <SectionDivider variant="light-to-dark" />
         <TechnicalCredibility />
-        {/* TechnicalCredibility (navy) -> ChangelogSection (paper) */}
         <SectionDivider variant="dark-to-light" />
         <ChangelogSection />
         <RoadmapSection />
@@ -65,19 +70,14 @@ export default function Home() {
         <PricingSection />
         <LicenceComparison />
         <BuyerRiskReduction />
-        {/* BuyerRiskReduction (paper) -> DueDiligence (navy) */}
         <SectionDivider variant="light-to-dark" />
         <DueDiligence />
-        {/* DueDiligence (navy) -> FAQSection (paper) */}
         <SectionDivider variant="dark-to-light" />
         <FAQSection />
-        {/* FAQSection (paper) -> SecuritySection (navy) */}
         <SectionDivider variant="light-to-dark" />
         <SecuritySection />
-        {/* SecuritySection (navy) -> ContactSection (paper) */}
         <SectionDivider variant="dark-to-light" />
         <ContactSection />
-        {/* ContactSection (paper) -> FinalCTA (navy) */}
         <SectionDivider variant="light-to-dark" />
         <FinalCTA />
       </main>

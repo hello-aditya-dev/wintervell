@@ -20,6 +20,13 @@ import {
   ChevronDown,
   Info,
   XCircle,
+  TrendingUp,
+  TrendingDown,
+  AlertCircle,
+  Activity,
+  BarChart3,
+  FileWarning,
+  Scale,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -42,13 +49,17 @@ const CATEGORIES = [
     description: "Server configuration, security headers, HTTPS, crawlability, and infrastructure reliability.",
     score: 72,
     color: "#2563EB",
+    findings: { critical: 0, high: 1, medium: 2, low: 3 },
+    trend: "up" as const,
   },
   {
     name: "SEO Foundations",
     icon: Search,
     description: "Meta tags, structured data, canonical URLs, sitemap integrity, and indexation coverage.",
     score: 58,
-    color: "#2563EB",
+    color: "#B7791F",
+    findings: { critical: 0, high: 2, medium: 3, low: 1 },
+    trend: "down" as const,
   },
   {
     name: "Performance",
@@ -56,6 +67,8 @@ const CATEGORIES = [
     description: "Core Web Vitals, load times, asset optimization, caching, and rendering efficiency.",
     score: 64,
     color: "#B7791F",
+    findings: { critical: 1, high: 1, medium: 2, low: 0 },
+    trend: "up" as const,
   },
   {
     name: "Mobile Experience",
@@ -63,6 +76,8 @@ const CATEGORIES = [
     description: "Responsive design, touch targets, viewport configuration, and mobile-specific performance.",
     score: 81,
     color: "#24584F",
+    findings: { critical: 0, high: 0, medium: 1, low: 2 },
+    trend: "up" as const,
   },
   {
     name: "Accessibility Indicators",
@@ -70,6 +85,8 @@ const CATEGORIES = [
     description: "WCAG compliance signals, ARIA usage, colour contrast, and keyboard navigation support.",
     score: 43,
     color: "#B43C3C",
+    findings: { critical: 2, high: 3, medium: 1, low: 0 },
+    trend: "down" as const,
   },
   {
     name: "Conversion Clarity",
@@ -77,6 +94,8 @@ const CATEGORIES = [
     description: "Call-to-action visibility, form usability, trust flow, and user journey friction points.",
     score: 67,
     color: "#2563EB",
+    findings: { critical: 0, high: 1, medium: 3, low: 1 },
+    trend: "up" as const,
   },
   {
     name: "Trust Signals",
@@ -84,6 +103,8 @@ const CATEGORIES = [
     description: "Privacy policy presence, SSL status, contact information, and regulatory compliance indicators.",
     score: 89,
     color: "#24584F",
+    findings: { critical: 0, high: 0, medium: 0, low: 1 },
+    trend: "up" as const,
   },
   {
     name: "Content Structure",
@@ -91,6 +112,8 @@ const CATEGORIES = [
     description: "Heading hierarchy, content freshness, internal linking, and information architecture quality.",
     score: 55,
     color: "#B7791F",
+    findings: { critical: 0, high: 1, medium: 2, low: 2 },
+    trend: "down" as const,
   },
   {
     name: "AI-Search Readiness",
@@ -98,6 +121,8 @@ const CATEGORIES = [
     description: "Schema markup for AI, featured snippet eligibility, entity clarity, and knowledge graph signals.",
     score: 31,
     color: "#B43C3C",
+    findings: { critical: 1, high: 2, medium: 1, low: 0 },
+    trend: "down" as const,
   },
 ] as const;
 
@@ -130,6 +155,14 @@ const SEVERITY_COLORS = {
   Medium: "#2563EB",
   Low: "#24584F",
   Info: "#56616C",
+} as const;
+
+const SEVERITY_ICONS = {
+  Critical: AlertCircle,
+  High: AlertTriangle,
+  Medium: Info,
+  Low: CheckCircle2,
+  Info: Info,
 } as const;
 
 const EVIDENCE_PANEL = {
@@ -178,28 +211,76 @@ function getScoreColor(score: number): string {
   return "#B43C3C";
 }
 
-function ScoreBar({ score, delay }: { score: number; delay: number }) {
+function getScoreLabel(score: number): string {
+  if (score >= 80) return "Good";
+  if (score >= 60) return "Fair";
+  if (score >= 40) return "Needs Work";
+  return "Critical";
+}
+
+function getSeverityBadge(severity: "critical" | "high" | "medium" | "low", count: number) {
+  if (count === 0) return null;
+  const colors: Record<string, string> = {
+    critical: "#B43C3C",
+    high: "#B7791F",
+    medium: "#2563EB",
+    low: "#24584F",
+  };
+  return (
+    <span
+      className="inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold text-white"
+      style={{ backgroundColor: colors[severity] }}
+    >
+      {count}
+    </span>
+  );
+}
+
+// Enhanced ScoreBar with animated fill and glow
+function ScoreBar({ score, delay, color }: { score: number; delay: number; color: string }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const prefersReducedMotion = useReducedMotion();
-  const color = getScoreColor(score);
+  const barColor = color || getScoreColor(score);
 
   return (
     <div ref={ref} className="mt-2.5 w-full">
       <div className="flex items-center justify-between mb-1">
         <span className="text-[9px] font-semibold uppercase tracking-wider text-[#56616C]">Score</span>
-        <span className="text-[10px] font-bold" style={{ color }}>
-          {score}/100
-        </span>
+        <div className="flex items-center gap-1.5">
+          <span
+            className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full text-white"
+            style={{ backgroundColor: barColor }}
+          >
+            {getScoreLabel(score)}
+          </span>
+          <span className="text-[10px] font-bold" style={{ color: barColor }}>
+            {score}/100
+          </span>
+        </div>
       </div>
-      <div className="h-1.5 w-full rounded-full bg-[#DDE3E7]/60 overflow-hidden">
+      <div className="relative h-2 w-full rounded-full bg-[#DDE3E7]/60 overflow-hidden">
         <motion.div
-          className="h-full rounded-full"
-          style={{ backgroundColor: color }}
+          className="h-full rounded-full relative"
+          style={{ backgroundColor: barColor }}
           initial={{ width: prefersReducedMotion ? `${score}%` : 0 }}
           animate={isInView || prefersReducedMotion ? { width: `${score}%` } : { width: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay }}
-        />
+          transition={{ duration: 0.9, ease: "easeOut", delay }}
+        >
+          {/* Glow effect at the tip of the bar */}
+          {!prefersReducedMotion && isInView && (
+            <motion.div
+              className="absolute right-0 top-0 h-full w-4 rounded-full"
+              style={{
+                background: `radial-gradient(circle, ${barColor}40 0%, transparent 70%)`,
+                filter: "blur(2px)",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: delay + 0.5, duration: 0.3 }}
+            />
+          )}
+        </motion.div>
       </div>
     </div>
   );
@@ -208,12 +289,14 @@ function ScoreBar({ score, delay }: { score: number; delay: number }) {
 export default function AuditIntelligence() {
   const prefersReducedMotion = useReducedMotion();
   const [evidenceOpen, setEvidenceOpen] = useState(false);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   const sectionMotionProps = prefersReducedMotion
     ? { initial: false, animate: "visible" as const, variants: containerVariants }
     : { initial: "hidden" as const, whileInView: "visible" as const, viewport: { once: true, amount: 0.1 }, variants: containerVariants };
 
   const severityColor = SEVERITY_COLORS[EVIDENCE_PANEL.severity];
+  const SeverityIcon = SEVERITY_ICONS[EVIDENCE_PANEL.severity];
 
   return (
     <section id="audit-intelligence" className="bg-gradient-to-b from-[#F4F6F7] to-white">
@@ -239,31 +322,103 @@ export default function AuditIntelligence() {
           >
             {CATEGORIES.map((cat, i) => {
               const Icon = cat.icon;
+              const TrendIcon = cat.trend === "up" ? TrendingUp : TrendingDown;
+              const isHovered = hoveredCategory === cat.name;
+              const hasCriticalFindings = cat.findings.critical > 0;
+              const scoreColor = getScoreColor(cat.score);
+
               return (
                 <motion.div
                   key={cat.name}
                   variants={cardVariants}
                   whileHover={prefersReducedMotion ? {} : { y: -4, transition: { duration: 0.2 } }}
-                  className="group rounded-xl border border-[#DDE3E7] bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                  onHoverStart={() => setHoveredCategory(cat.name)}
+                  onHoverEnd={() => setHoveredCategory(null)}
+                  className="group relative rounded-xl border border-[#DDE3E7] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-default overflow-hidden"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex size-10 items-center justify-center rounded-lg bg-[#EFF8FC] transition-colors group-hover:bg-[#2563EB]/10">
-                      <Icon className="size-5 text-[#2563EB]" aria-hidden="true" />
+                  {/* Pulse animation on critical findings */}
+                  {hasCriticalFindings && !prefersReducedMotion && (
+                    <motion.div
+                      className="absolute top-3 right-3 size-2.5 rounded-full"
+                      style={{ backgroundColor: "#B43C3C" }}
+                      animate={{
+                        scale: [1, 1.4, 1],
+                        opacity: [1, 0.5, 1],
+                      }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      aria-hidden="true"
+                    />
+                  )}
+
+                  {/* Subtle hover glow effect */}
+                  {!prefersReducedMotion && (
+                    <motion.div
+                      className="absolute inset-0 rounded-xl pointer-events-none"
+                      style={{
+                        background: `radial-gradient(ellipse at 50% 0%, ${scoreColor}08 0%, transparent 70%)`,
+                      }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: isHovered ? 1 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
+
+                  <div className="relative">
+                    <div className="flex items-start justify-between">
+                      <div className="flex size-10 items-center justify-center rounded-lg bg-[#EFF8FC] transition-colors duration-200 group-hover:bg-[#2563EB]/10">
+                        <Icon className="size-5 text-[#2563EB]" aria-hidden="true" />
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        {/* Trend indicator */}
+                        <motion.div
+                          initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: i * 0.05 + 0.3, duration: 0.3 }}
+                        >
+                          <TrendIcon
+                            className={`size-3.5 ${cat.trend === "up" ? "text-[#24584F]" : "text-[#B43C3C]"}`}
+                            aria-hidden="true"
+                          />
+                        </motion.div>
+                        {/* Score badge */}
+                        <span
+                          className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
+                          style={{ backgroundColor: scoreColor }}
+                        >
+                          {cat.score}
+                        </span>
+                      </div>
                     </div>
-                    <span
-                      className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-                      style={{ backgroundColor: getScoreColor(cat.score) }}
-                    >
-                      {cat.score}
-                    </span>
+                    <h3 className="mt-3 text-sm font-semibold text-[#111820]">
+                      {cat.name}
+                    </h3>
+                    <p className="mt-1.5 text-xs leading-relaxed text-[#3F4A55]">
+                      {cat.description}
+                    </p>
+
+                    {/* Hover-reveal: finding severity breakdown */}
+                    <AnimatePresence>
+                      {isHovered && (
+                        <motion.div
+                          initial={prefersReducedMotion ? { opacity: 1, height: "auto" } : { opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2, ease: "easeOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+                            <span className="text-[9px] font-semibold uppercase tracking-wider text-[#56616C] mr-1">Findings:</span>
+                            {getSeverityBadge("critical", cat.findings.critical)}
+                            {getSeverityBadge("high", cat.findings.high)}
+                            {getSeverityBadge("medium", cat.findings.medium)}
+                            {getSeverityBadge("low", cat.findings.low)}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <ScoreBar score={cat.score} delay={i * 0.08} color={scoreColor} />
                   </div>
-                  <h3 className="mt-3 text-sm font-semibold text-[#111820]">
-                    {cat.name}
-                  </h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-[#3F4A55]">
-                    {cat.description}
-                  </p>
-                  <ScoreBar score={cat.score} delay={i * 0.08} />
                 </motion.div>
               );
             })}
@@ -281,7 +436,8 @@ export default function AuditIntelligence() {
                   <TooltipTrigger asChild>
                     <motion.div
                       variants={cardVariants}
-                      className="group flex items-start gap-2.5 rounded-lg border border-[#DDE3E7] bg-white p-4 cursor-help transition-shadow hover:shadow-md"
+                      whileHover={prefersReducedMotion ? {} : { scale: 1.02, transition: { duration: 0.15 } }}
+                      className="group flex items-start gap-2.5 rounded-lg border border-[#DDE3E7] bg-white p-4 cursor-help transition-all duration-200 hover:shadow-md hover:border-[#B7DDEC]/50"
                     >
                       <Icon className="mt-0.5 size-4 shrink-0 text-[#24584F]" aria-hidden="true" />
                       <span className="text-sm font-medium text-[#111820]">{p.text}</span>
@@ -302,7 +458,11 @@ export default function AuditIntelligence() {
             className="mt-14 flex items-center justify-center gap-3"
           >
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#B7DDEC]" />
-            <div className="size-2 rounded-full bg-[#B7DDEC]" />
+            <motion.div
+              className="size-2 rounded-full bg-[#B7DDEC]"
+              animate={prefersReducedMotion ? {} : { scale: [1, 1.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#B7DDEC]" />
           </motion.div>
 
@@ -325,25 +485,40 @@ export default function AuditIntelligence() {
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
                 <Card className="mt-6 border-[#DDE3E7] shadow-sm overflow-hidden">
-                  {/* Critical severity banner */}
-                  <div className="h-1 w-full" style={{ backgroundColor: severityColor }} />
+                  {/* Critical severity banner with gradient */}
+                  <div className="h-1.5 w-full relative" style={{ backgroundColor: severityColor }}>
+                    <motion.div
+                      className="absolute inset-0"
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${severityColor}80, transparent)`,
+                      }}
+                      animate={prefersReducedMotion ? {} : { x: ["-100%", "100%"] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                  </div>
 
                   <CardContent className="p-6">
                     {/* Severity + Title */}
                     <div className="flex items-start gap-3">
-                      <div
-                        className="mt-1 size-3 shrink-0 rounded-full animate-pulse"
+                      {/* Animated severity indicator with pulse */}
+                      <motion.div
+                        className="mt-1 size-3 shrink-0 rounded-full"
                         style={{ backgroundColor: severityColor }}
+                        animate={prefersReducedMotion ? {} : {
+                          scale: [1, 1.3, 1],
+                          opacity: [1, 0.7, 1],
+                        }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                         aria-hidden="true"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          {/* Colored pill badge */}
+                          {/* Colored pill badge with icon */}
                           <span
                             className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
                             style={{ backgroundColor: severityColor }}
                           >
-                            <AlertTriangle className="size-3" aria-hidden="true" />
+                            <SeverityIcon className="size-3" aria-hidden="true" />
                             {EVIDENCE_PANEL.severity}
                           </span>
                           <h4 className="text-sm font-semibold text-[#111820]">
@@ -360,7 +535,7 @@ export default function AuditIntelligence() {
                           )}
                         </div>
 
-                        {/* Confidence + Page URL */}
+                        {/* Confidence + Page URL with icons */}
                         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-[#3F4A55]">
                           <span className="flex items-center gap-1">
                             <Shield className="size-3" aria-hidden="true" />
@@ -370,18 +545,35 @@ export default function AuditIntelligence() {
                             <ExternalLink className="size-3" aria-hidden="true" />
                             {EVIDENCE_PANEL.pageUrl}
                           </span>
+                          <span className="flex items-center gap-1">
+                            <FileWarning className="size-3" aria-hidden="true" />
+                            {EVIDENCE_PANEL.affectedPages} pages affected
+                          </span>
                         </div>
 
-                        {/* Confidence bar */}
+                        {/* Confidence bar with glow */}
                         <div className="mt-2 w-full max-w-xs">
-                          <div className="h-1 w-full rounded-full bg-[#DDE3E7]/60 overflow-hidden">
+                          <div className="relative h-1.5 w-full rounded-full bg-[#DDE3E7]/60 overflow-hidden">
                             <motion.div
-                              className="h-full rounded-full"
+                              className="h-full rounded-full relative"
                               style={{ backgroundColor: severityColor }}
                               initial={{ width: prefersReducedMotion ? "98%" : 0 }}
                               animate={{ width: "98%" }}
                               transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-                            />
+                            >
+                              {!prefersReducedMotion && (
+                                <motion.div
+                                  className="absolute right-0 top-0 h-full w-3 rounded-full"
+                                  style={{
+                                    background: `radial-gradient(circle, ${severityColor}60 0%, transparent 70%)`,
+                                    filter: "blur(2px)",
+                                  }}
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ delay: 1.3, duration: 0.3 }}
+                                />
+                              )}
+                            </motion.div>
                           </div>
                         </div>
 
@@ -397,9 +589,12 @@ export default function AuditIntelligence() {
 
                         {/* Business consequence */}
                         <div className="mt-3">
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#56616C] mb-1">
-                            Business consequence
-                          </p>
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <AlertCircle className="size-3 text-[#B43C3C]" aria-hidden="true" />
+                            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#B43C3C]">
+                              Business consequence
+                            </p>
+                          </div>
                           <p className="text-sm leading-relaxed text-[#111820]">
                             {EVIDENCE_PANEL.consequence}
                           </p>
@@ -407,9 +602,12 @@ export default function AuditIntelligence() {
 
                         {/* Recommended action */}
                         <div className="mt-3">
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#56616C] mb-1">
-                            Recommended action
-                          </p>
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <Lightbulb className="size-3 text-[#24584F]" aria-hidden="true" />
+                            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#24584F]">
+                              Recommended action
+                            </p>
+                          </div>
                           <p className="text-sm leading-relaxed text-[#111820]">
                             {EVIDENCE_PANEL.recommendedAction}
                           </p>
@@ -417,7 +615,7 @@ export default function AuditIntelligence() {
 
                         {/* Suggested service */}
                         <div className="mt-3 flex items-center gap-2">
-                          <Lightbulb className="size-3.5 text-[#B7791F]" aria-hidden="true" />
+                          <ArrowRight className="size-3.5 text-[#2563EB]" aria-hidden="true" />
                           <span className="text-xs text-[#3F4A55]">Suggested service:</span>
                           <Badge
                             variant="outline"

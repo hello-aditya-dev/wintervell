@@ -2,36 +2,44 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useInView } from "framer-motion";
-import { Search, MessageSquare, Palette, TrendingUp } from "lucide-react";
+import { Search, MessageSquare, Palette, TrendingUp, ArrowRight } from "lucide-react";
 
 const OUTCOMES = [
   {
     icon: Search,
     text: "Discover work clients cannot see",
     metric: "9 audit categories",
+    detail: "Technical, SEO, Performance, Mobile, Accessibility, Conversion, Trust, Content, AI-readiness",
     target: 9,
     suffix: "",
+    accentColor: "#2563EB",
   },
   {
     icon: MessageSquare,
     text: "Explain problems in commercial language",
     metric: "Plain-language findings",
+    detail: "Every finding includes evidence, impact, and a plain-language explanation for non-technical stakeholders",
     target: 200,
     suffix: "+",
+    accentColor: "#B7DDEC",
   },
   {
     icon: Palette,
     text: "Deliver reports under the agency's brand",
     metric: "White-label PDF",
+    detail: "Custom logo, colours, domain, and sender — client-facing branding is fully configurable",
     target: 3,
     suffix: " formats",
+    accentColor: "#24584F",
   },
   {
     icon: TrendingUp,
     text: "Convert findings into proposals and pipeline value",
     metric: "6-stage pipeline",
+    detail: "From prospect to won — with audit-to-proposal transformation and pipeline tracking",
     target: 6,
     suffix: " stages",
+    accentColor: "#B7791F",
   },
 ] as const;
 
@@ -69,16 +77,26 @@ function CounterDisplay({
   target,
   suffix,
   inView,
+  prefersReducedMotion,
 }: {
   target: number;
   suffix: string;
   inView: boolean;
+  prefersReducedMotion: boolean;
 }) {
   const count = useAnimatedCounter(target, inView);
+
+  if (prefersReducedMotion) {
+    return (
+      <span className="text-2xl font-bold tabular-nums text-[#B7DDEC] sm:text-3xl">
+        {target}{suffix}
+      </span>
+    );
+  }
+
   return (
     <span className="text-2xl font-bold tabular-nums text-[#B7DDEC] sm:text-3xl">
-      {count}
-      {suffix}
+      {count}{suffix}
     </span>
   );
 }
@@ -93,11 +111,12 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 24, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
+    scale: 1,
+    transition: { duration: 0.55, ease: "easeOut" },
   },
 };
 
@@ -146,6 +165,18 @@ export default function OutcomeStrip() {
         }}
       />
 
+      {/* Decorative floating orbs */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div
+          className="absolute -left-20 top-1/4 size-60 rounded-full opacity-[0.03]"
+          style={{ background: "radial-gradient(circle, #B7DDEC, transparent 70%)" }}
+        />
+        <div
+          className="absolute -right-20 bottom-1/4 size-80 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, #2563EB, transparent 70%)" }}
+        />
+      </div>
+
       <motion.div
         className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
         {...motionProps}
@@ -155,6 +186,10 @@ export default function OutcomeStrip() {
           variants={itemVariants}
           className="mx-auto mb-12 max-w-2xl text-center sm:mb-16"
         >
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#B7DDEC]/20 bg-[#B7DDEC]/10 px-3 py-1">
+            <TrendingUp className="size-3.5 text-[#B7DDEC]" aria-hidden="true" />
+            <span className="text-xs font-medium text-[#B7DDEC]">Core outcomes</span>
+          </div>
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
             What WinterVell delivers
           </h2>
@@ -166,8 +201,9 @@ export default function OutcomeStrip() {
 
         {/* Desktop: horizontal 4-col */}
         <div className="grid grid-cols-2 gap-6 lg:grid-cols-4 lg:gap-8">
-          {OUTCOMES.map((outcome) => {
+          {OUTCOMES.map((outcome, index) => {
             const Icon = outcome.icon;
+            const accentColor = outcome.accentColor;
             return (
               <motion.div
                 key={outcome.text}
@@ -175,21 +211,41 @@ export default function OutcomeStrip() {
                 whileHover={
                   prefersReducedMotion
                     ? {}
-                    : { y: -4, transition: { duration: 0.2 } }
+                    : { y: -6, transition: { duration: 0.25, ease: "easeOut" } }
                 }
-                className="group relative flex flex-col items-center rounded-xl border-l-[3px] border-[#B7DDEC] bg-[#1A3044]/60 px-4 py-6 text-center backdrop-blur-sm transition-shadow duration-200 hover:shadow-lg sm:px-6 sm:py-8"
+                className="group relative flex flex-col items-center rounded-xl border border-[#1E3A4F] bg-[#1A3044]/60 px-4 py-6 text-center backdrop-blur-sm transition-all duration-300 hover:border-[#B7DDEC]/30 hover:shadow-lg sm:px-6 sm:py-8"
               >
+                {/* Top accent line */}
+                <div
+                  className="absolute inset-x-0 top-0 h-0.5 rounded-t-xl transition-opacity duration-300"
+                  style={{ backgroundColor: accentColor, opacity: 0.5 }}
+                  aria-hidden="true"
+                />
+
+                {/* Hover glow effect */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    boxShadow: `0 0 30px ${accentColor}15, 0 0 60px ${accentColor}08`,
+                  }}
+                  aria-hidden="true"
+                />
+
                 {/* Icon with pulse on hover */}
-                <div className="flex size-14 items-center justify-center rounded-xl bg-[#1E3A4F] transition-transform duration-300 group-hover:scale-110">
+                <div
+                  className="relative flex size-14 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${accentColor}15` }}
+                >
                   <Icon
-                    className="size-7 text-[#B7DDEC] transition-transform duration-300 group-hover:scale-105"
+                    className="size-7 transition-transform duration-300 group-hover:scale-105"
+                    style={{ color: accentColor }}
                     aria-hidden="true"
                   />
                   {/* Subtle pulse ring on hover */}
                   <div
                     className="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                     style={{
-                      boxShadow: "0 0 20px rgba(183, 221, 236, 0.15)",
+                      boxShadow: `0 0 20px ${accentColor}25`,
                     }}
                     aria-hidden="true"
                   />
@@ -201,6 +257,7 @@ export default function OutcomeStrip() {
                     target={outcome.target}
                     suffix={outcome.suffix}
                     inView={isInView}
+                    prefersReducedMotion={prefersReducedMotion}
                   />
                 </div>
 
@@ -213,10 +270,36 @@ export default function OutcomeStrip() {
                 <p className="mt-1.5 text-xs leading-relaxed text-[#8899A6]">
                   {outcome.metric}
                 </p>
+
+                {/* Detail text on hover */}
+                <div className="mt-3 h-0 overflow-hidden transition-all duration-300 group-hover:h-auto group-hover:opacity-100 opacity-0">
+                  <p className="text-[11px] leading-relaxed text-[#8899A6]">
+                    {outcome.detail}
+                  </p>
+                </div>
+
+                {/* Connector arrow to next card (visible on desktop) */}
+                {index < OUTCOMES.length - 1 && (
+                  <div className="absolute -right-4 top-1/2 z-10 hidden lg:block" aria-hidden="true">
+                    <ArrowRight className="size-4 text-[#B7DDEC]/30" />
+                  </div>
+                )}
               </motion.div>
             );
           })}
         </div>
+
+        {/* Bottom CTA line */}
+        <motion.div
+          variants={itemVariants}
+          className="mt-12 flex flex-col items-center gap-3 sm:mt-16"
+        >
+          <div className="flex items-center gap-2 text-sm text-[#B7DDEC]/60">
+            <div className="h-px w-8 bg-[#B7DDEC]/20" aria-hidden="true" />
+            <span>Each outcome is verifiable in the source code</span>
+            <div className="h-px w-8 bg-[#B7DDEC]/20" aria-hidden="true" />
+          </div>
+        </motion.div>
       </motion.div>
     </section>
   );
