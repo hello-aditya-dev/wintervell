@@ -16,6 +16,7 @@ import {
   FileText,
   TrendingUp,
   ArrowRight,
+  ArrowDown,
 } from "lucide-react";
 
 const BEFORE_STEPS = [
@@ -56,6 +57,23 @@ const headingVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
+const arrowVariants = {
+  hidden: { opacity: 0, scale: 0.5 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: "easeOut", delay: 0.3 },
+  },
+};
+
+const dividerVariants = {
+  hidden: { scaleY: 0 },
+  visible: {
+    scaleY: 1,
+    transition: { duration: 0.6, ease: "easeOut", delay: 0.2 },
+  },
+};
+
 export default function ProblemTransformation() {
   const prefersReducedMotion = useReducedMotion();
 
@@ -81,42 +99,74 @@ export default function ProblemTransformation() {
             Most audit tools stop at a list of problems. WinterVell continues to
             the sale.
           </h2>
+          <motion.p
+            variants={headingVariants}
+            className="mt-4 text-lg font-medium text-[#3F4A55]"
+          >
+            The transformation
+          </motion.p>
+          <p className="mt-1 text-sm text-[#56616C]">
+            From 7 manual steps to 6 automated ones — and every step produces
+            commercial value.
+          </p>
         </motion.div>
 
         {/* Split layout */}
-        <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:gap-12 sm:mt-20">
+        <div className="relative mt-14 grid gap-8 lg:grid-cols-2 lg:gap-0 sm:mt-20">
+          {/* Vertical divider line — desktop only */}
+          <motion.div
+            variants={dividerVariants}
+            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 lg:block"
+            aria-hidden="true"
+            style={{ transformOrigin: "top" }}
+          >
+            <div className="h-full w-full bg-gradient-to-b from-transparent via-[#B7DDEC] to-transparent" />
+          </motion.div>
+
           {/* Before column */}
           <motion.div
             variants={containerVariants}
-            className="rounded-xl border border-[#DDE3E7] bg-white p-6 sm:p-8"
+            className="relative rounded-xl border border-[#DDE3E7] bg-white p-6 sm:p-8 lg:rounded-r-none lg:border-r-0"
           >
-            <div className="mb-6 flex items-center gap-3">
-              <span className="inline-flex items-center rounded-md bg-[#E8EAED] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[#56616C]">
+            {/* Desaturated overlay for visual tone */}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-xl bg-[#F4F6F7]/30 lg:rounded-r-none"
+              aria-hidden="true"
+            />
+
+            <div className="relative mb-6 flex items-center gap-3">
+              <span className="inline-flex items-center rounded-md bg-[#E8EAED] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[#8899A6]">
                 Before
               </span>
-              <span className="text-sm text-[#56616C]">
+              <span className="text-sm text-[#8899A6]">
                 Manual workflow
               </span>
             </div>
 
-            <ol className="space-y-4" role="list">
+            <ol className="relative space-y-3" role="list">
               {BEFORE_STEPS.map((step, i) => {
                 const Icon = step.icon;
                 return (
                   <motion.li
                     key={step.label}
                     variants={stepVariants}
-                    className="flex items-start gap-3"
+                    className="group relative flex items-start gap-3 rounded-lg p-2 transition-colors duration-200 hover:bg-[#F4F6F7]/80"
                   >
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[#F4F6F7] text-xs font-semibold text-[#56616C]">
+                    {/* Numbered badge with strikethrough */}
+                    <span className="relative flex size-8 shrink-0 items-center justify-center rounded-md bg-[#E8EAED] text-xs font-semibold text-[#8899A6]">
                       {i + 1}
+                      {/* Strikethrough line on the number */}
+                      <span
+                        className="absolute left-1 right-1 top-1/2 h-px -translate-y-1/2 bg-[#8899A6]/50"
+                        aria-hidden="true"
+                      />
                     </span>
                     <div className="flex items-center gap-2.5 pt-1">
                       <Icon
-                        className="size-4 shrink-0 text-[#8899A6]"
+                        className="size-4 shrink-0 text-[#B0B8C1] transition-colors duration-200 group-hover:text-[#8899A6]"
                         aria-hidden="true"
                       />
-                      <span className="text-sm text-[#56616C]">
+                      <span className="text-sm text-[#8899A6] transition-colors duration-200 group-hover:text-[#56616C]">
                         {step.label}
                       </span>
                     </div>
@@ -126,29 +176,66 @@ export default function ProblemTransformation() {
             </ol>
           </motion.div>
 
-          {/* Transition arrow — visible between columns on desktop */}
-          <div className="hidden lg:flex absolute-pointer" aria-hidden="true" />
+          {/* Animated transition indicator — desktop */}
+          <motion.div
+            variants={arrowVariants}
+            className="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:flex"
+            aria-hidden="true"
+          >
+            <div className="relative flex size-16 items-center justify-center">
+              {/* Outer glow ring */}
+              <div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  boxShadow:
+                    "0 0 24px rgba(183, 221, 236, 0.4), 0 0 48px rgba(37, 99, 235, 0.15)",
+                }}
+              />
+              {/* White circle */}
+              <div className="flex size-16 items-center justify-center rounded-full border-2 border-[#B7DDEC] bg-white shadow-md">
+                <ArrowRight className="size-6 text-[#2563EB]" />
+              </div>
+              {/* Pulsing outer ring */}
+              <div className="absolute inset-0 animate-ping rounded-full border border-[#B7DDEC]/30" />
+            </div>
+          </motion.div>
+
+          {/* Mobile transition indicator */}
+          <motion.div
+            variants={arrowVariants}
+            className="flex items-center justify-center lg:hidden"
+            aria-hidden="true"
+          >
+            <div className="relative flex size-12 items-center justify-center">
+              <div
+                className="absolute inset-0 rounded-full"
+                style={{
+                  boxShadow:
+                    "0 0 16px rgba(183, 221, 236, 0.3), 0 0 32px rgba(37, 99, 235, 0.1)",
+                }}
+              />
+              <div className="flex size-12 items-center justify-center rounded-full border-2 border-[#B7DDEC] bg-white shadow-md">
+                <ArrowDown className="size-5 text-[#2563EB]" />
+              </div>
+            </div>
+          </motion.div>
 
           {/* After column */}
           <motion.div
             variants={containerVariants}
-            className="relative rounded-xl border border-[#B7DDEC] bg-white p-6 shadow-sm sm:p-8"
+            className="relative overflow-hidden rounded-xl border border-[#B7DDEC] bg-white p-6 shadow-sm sm:p-8 lg:rounded-l-none lg:border-l-0"
           >
-            {/* Transition badge centered between columns on desktop */}
-            <div className="absolute -left-7 top-1/2 z-10 hidden -translate-y-1/2 lg:flex">
-              <div className="flex size-14 items-center justify-center rounded-full border-2 border-[#B7DDEC] bg-white shadow-sm">
-                <ArrowRight className="size-5 text-[#2563EB]" aria-hidden="true" />
-              </div>
-            </div>
+            {/* Subtle glacier accent gradient */}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-xl lg:rounded-l-none"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(183, 221, 236, 0.06) 0%, transparent 60%)",
+              }}
+              aria-hidden="true"
+            />
 
-            {/* Mobile transition indicator */}
-            <div className="mb-4 flex items-center justify-center lg:hidden" aria-hidden="true">
-              <div className="flex size-10 items-center justify-center rounded-full border-2 border-[#B7DDEC] bg-white shadow-sm">
-                <ArrowRight className="size-4 text-[#2563EB] rotate-90" />
-              </div>
-            </div>
-
-            <div className="mb-6 flex items-center gap-3">
+            <div className="relative mb-6 flex items-center gap-3">
               <span className="inline-flex items-center rounded-md bg-[#EFF8FC] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[#2563EB]">
                 After
               </span>
@@ -157,21 +244,31 @@ export default function ProblemTransformation() {
               </span>
             </div>
 
-            <ol className="space-y-4" role="list">
+            <ol className="relative space-y-3" role="list">
               {AFTER_STEPS.map((step, i) => {
                 const Icon = step.icon;
                 return (
                   <motion.li
                     key={step.label}
                     variants={stepVariants}
-                    className="flex items-start gap-3"
+                    className="group relative flex items-start gap-3 rounded-lg p-2 transition-colors duration-200 hover:bg-[#EFF8FC]/70"
                   >
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[#EFF8FC] text-xs font-semibold text-[#2563EB]">
+                    {/* Numbered badge with glow */}
+                    <span className="relative flex size-8 shrink-0 items-center justify-center rounded-md bg-[#EFF8FC] text-xs font-semibold text-[#2563EB] transition-all duration-200 group-hover:bg-[#2563EB] group-hover:text-white">
                       {i + 1}
+                      {/* Subtle glow on hover */}
+                      <span
+                        className="absolute inset-0 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                        style={{
+                          boxShadow:
+                            "0 0 12px rgba(37, 99, 235, 0.3)",
+                        }}
+                        aria-hidden="true"
+                      />
                     </span>
                     <div className="flex items-center gap-2.5 pt-1">
                       <Icon
-                        className="size-4 shrink-0 text-[#2563EB]"
+                        className="size-4 shrink-0 text-[#2563EB] transition-transform duration-200 group-hover:scale-110"
                         aria-hidden="true"
                       />
                       <span className="text-sm font-medium text-[#111820]">
@@ -182,6 +279,16 @@ export default function ProblemTransformation() {
                 );
               })}
             </ol>
+
+            {/* Bottom accent line */}
+            <div
+              className="mt-6 h-1 w-16 rounded-full"
+              style={{
+                background:
+                  "linear-gradient(90deg, #2563EB, #B7DDEC)",
+              }}
+              aria-hidden="true"
+            />
           </motion.div>
         </div>
       </motion.div>

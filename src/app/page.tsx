@@ -1,3 +1,4 @@
+import SkipLink from "@/components/site/SkipLink";
 import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import ScrollProgress from "@/components/site/ScrollProgress";
@@ -21,6 +22,8 @@ import LicenceComparison from "@/components/site/LicenceComparison";
 import BuyerRiskReduction from "@/components/site/BuyerRiskReduction";
 import DueDiligence from "@/components/site/DueDiligence";
 import FAQSection from "@/components/site/FAQSection";
+import ChangelogSection from "@/components/site/ChangelogSection";
+import RoadmapSection from "@/components/site/RoadmapSection";
 import SecuritySection from "@/components/site/SecuritySection";
 import ContactSection from "@/components/site/ContactSection";
 import FinalCTA from "@/components/site/FinalCTA";
@@ -28,6 +31,7 @@ import FinalCTA from "@/components/site/FinalCTA";
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-[#F4F6F7]">
+      <SkipLink />
       <ScrollProgress />
       <Header />
       <main className="flex-1">
@@ -44,6 +48,8 @@ export default function Home() {
         <CommercialUseCases />
         <OwnershipDeployment />
         <TechnicalCredibility />
+        <ChangelogSection />
+        <RoadmapSection />
         <ROICalculator />
         <PricingSection />
         <LicenceComparison />
