@@ -925,3 +925,48 @@ Unresolved Issues:
 - Server OOM: requires memory limit flag; page is very large (29+ dynamic components)
 - Agent-browser can only connect after first curl request (server needs pre-compilation)
 - Next step: Consider adding more interactive features, improving dark mode support
+
+---
+Task ID: 5
+Agent: Main Agent (Frontend Rebuild)
+Task: Complete WinterVell Frontend Rebuild per specification
+
+Work Log:
+- Read and analyzed the complete WinterVell Frontend Rebuild Specification document
+- Created agent/frontend-rebuild branch (not working on main)
+- Created demo data architecture (src/demo/): types, fixtures, repositories, Zustand store
+- Cleaned up visual system (globals.css): semantic CSS variables, calm/technical design
+- Updated layout.tsx: removed dishonest JSON-LD schemas, honest metadata
+- Built app shell: Sidebar, TopBar, AppShell, CommandMenu, DemoBanner
+- Built shared product components: PageHeader, StatCard, FilterBar, StatusBadge, SeverityBadge, ScoreBadge, etc.
+- Rebuilt public homepage with exactly 10 sections per spec
+- Built dedicated public routes: /product, /demo, /pricing, /white-label, /due-diligence, /license, /contact, /sample-report
+- Built complete /app product frontend: 17 routes including dashboard, prospects, audits, reports, proposals, pipeline, tasks, services, settings
+- Removed all old components: TestimonialsSection, ChangelogSection, RoadmapSection, CompetitorComparison, etc.
+- Removed all decorative motion: FloatingParticles, shimmer, glow, typing animations, etc.
+- Removed fake scarcity: "Only 10 left", urgency indicators, remainingCount
+- Removed fictional testimonials: star ratings, invented customer names, fake reviews
+- Updated commercial.ts: honest product status, planned pricing labels, removed anchor pricing
+- Created docs/commercial/product-claims-register.md
+- Created docs/frontend/current-frontend-audit.md
+- Fixed all TypeScript errors (0 errors in src/)
+- Lint passes (0 errors, 8 harmless warnings from React Compiler)
+- Production build passes cleanly
+- Pushed to agent/frontend-rebuild branch on GitHub
+
+Stage Summary:
+- Branch: agent/frontend-rebuild
+- Homepage: 10 sections (Header, Hero, CoreWorkflow, ProductPreview, Differentiators, WhiteLabelPreview, OwnershipDeployment, PricingPreview, DueDiligencePreview, FinalCTA)
+- Public routes: 8 (/product, /demo, /pricing, /white-label, /due-diligence, /license, /contact, /sample-report)
+- App routes: 17 (/app, /app/prospects, /app/prospects/new, /app/prospects/[id], /app/audits, /app/audits/new, /app/audits/[id], /app/reports, /app/reports/[id], /app/proposals, /app/proposals/[id], /app/pipeline, /app/tasks, /app/services, /app/settings/branding, /app/settings/team, /app/settings/integrations)
+- Demo data: 8 types, 8 fixtures, 5 repositories, Zustand store
+- All claims are honest: planned pricing, no fake scarcity, no fake testimonials
+- All demo actions are clearly labelled
+- Type check: 0 errors
+- Lint: 0 errors
+- Build: passes
+
+Unresolved Issues:
+- Some React Compiler warnings for TanStack Table (harmless)
+- Backend integration points documented in product-claims-register.md
+- Need to merge branch and open draft PR on GitHub
