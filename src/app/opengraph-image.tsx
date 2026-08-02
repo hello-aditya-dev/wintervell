@@ -124,7 +124,7 @@ export default async function WinterVellOGImage() {
           >
             <span
               style={{
-                display: "inline-block",
+                display: "block",
                 width: "8px",
                 height: "8px",
                 borderRadius: "999px",
