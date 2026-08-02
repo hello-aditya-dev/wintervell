@@ -500,3 +500,9 @@ Unresolved issues / next phase priorities:
 - Could add cursor-following micro-interactions
 - Could add a "Compare licences" interactive tool
 - Could add testimonial submission form (when real testimonials exist)
+
+GitHub Push Status:
+- Local commit successful: bf142da "Round 4: QA-driven fixes, new features, visual polish"
+- Push to GitHub FAILED: token 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- has been revoked (as user warned)
+- Remote configured: https://github.com/witejackel-eng/wintervell.git (clean URL, no embedded credentials)
+- Next session: push with a valid token using `git push -u origin main`
