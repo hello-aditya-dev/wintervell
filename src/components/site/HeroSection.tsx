@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useSyncExternalStore } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import {
   Globe,
@@ -64,8 +64,16 @@ function seededRandom(seed: number) {
 
 /* ── Floating particles ─────────────────────────────────────────── */
 function FloatingParticles({ prefersReducedMotion }: { prefersReducedMotion: boolean }) {
+  // Only render on client to avoid hydration mismatch
+  // (useReducedMotion returns null on server, false on client)
+  const isClient = useSyncExternalStore(
+    () => () => {}, // subscribe (noop)
+    () => true,     // getSnapshot (client)
+    () => false,    // getServerSnapshot (server)
+  );
+
   const particles = useMemo(() => {
-    if (prefersReducedMotion) return [];
+    if (prefersReducedMotion || !isClient) return [];
     return Array.from({ length: 18 }, (_, i) => ({
       id: i,
       x: seededRandom(i * 7 + 1) * 100,
@@ -75,9 +83,9 @@ function FloatingParticles({ prefersReducedMotion }: { prefersReducedMotion: boo
       delay: seededRandom(i * 5 + 2) * 5,
       opacity: seededRandom(i * 9 + 4) * 0.3 + 0.1,
     }));
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, isClient]);
 
-  if (prefersReducedMotion) return null;
+  if (prefersReducedMotion || !isClient) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
