@@ -3,24 +3,30 @@
  *
  * Single source of truth for brand identity, pricing, checkout URLs,
  * demo links, documentation, and all commercial references.
+ *
+ * Claims are separated into:
+ * - availableNow: Currently implemented and verified
+ * - frontendDemo: Available in the interactive frontend demonstration
+ * - inDevelopment: Currently being built
+ * - planned: Intended but not yet started
  */
 
 export const commercial = {
   // Brand identity
   name: "WinterVell",
-  tagline: "Turn any website into a sales-ready audit.",
-  descriptor: "AI Website Audit and Agency Sales Platform",
+  tagline: "Turn website evidence into agency work.",
+  descriptor: "Website Audit and Agency Sales Platform",
   ownershipLine: "Own the code. Use your domain. Keep the client revenue.",
   positioning: "Find the work. Prove the value. Win the client.",
   supportingMessage:
-    "WinterVell gives agencies a white-label audit engine, report builder, proposal generator and prospect pipeline they can deploy under their own brand.",
+    "WinterVell is a white-label workspace for reviewing websites, organizing findings, producing client reports, preparing proposals and tracking the resulting opportunity.",
 
   // Contact
   contact: {
-    supportEmail: "support@wintervell.example",
-    salesEmail: "sales@wintervell.example",
-    securityEmail: "security@wintervell.example",
-    legalEmail: "legal@wintervell.example",
+    supportEmail: "support@wintervell.com",
+    salesEmail: "sales@wintervell.com",
+    securityEmail: "security@wintervell.com",
+    legalEmail: "legal@wintervell.com",
   },
 
   // Checkout URLs — provider-agnostic, configurable via env vars
@@ -36,15 +42,15 @@ export const commercial = {
     docsUrl: process.env.NEXT_PUBLIC_DOCS_URL || "",
   },
 
-  // Pricing
+  // Pricing — clearly labelled as planned
   pricing: {
+    label: "Planned founding pricing. Purchasing is not yet open.",
     agency: {
       name: "Agency Source Licence",
-      foundingPrice: 799,
-      anchorPrice: 1199,
+      plannedPrice: 799,
       description: "One legal business, one production deployment, complete source code.",
       bestFor: "Single-agency operators",
-      cta: "Buy Agency Licence",
+      cta: "Join the founding release",
       includes: [
         "One legal business",
         "One production deployment",
@@ -55,7 +61,7 @@ export const commercial = {
         "Bring-your-own AI keys",
         "Deployment documentation",
         "Purchased-version access",
-        "Thirty days of installation support",
+        "Installation support",
         "Security and due-diligence documents",
       ],
       clarifications: [
@@ -67,12 +73,10 @@ export const commercial = {
     },
     studio: {
       name: "Studio Source Licence",
-      foundingPrice: 1499,
-      anchorPrice: 2199,
+      plannedPrice: 1499,
       description: "Everything in Agency, plus five deployments and multiple brands.",
       bestFor: "Multi-brand operators",
-      badge: "Best for multi-brand operators",
-      cta: "Buy Studio Licence",
+      cta: "Join the founding release",
       includes: [
         "Everything in Agency",
         "Up to five production deployments",
@@ -85,7 +89,7 @@ export const commercial = {
       ],
     },
     enterprise: {
-      name: "Exclusive or Enterprise",
+      name: "Enterprise",
       fromPrice: 4000,
       description: "Extended deployment rights, custom implementation, and structured handover.",
       cta: "Discuss an enterprise arrangement",
@@ -93,19 +97,10 @@ export const commercial = {
         "Extended deployment rights",
         "Custom implementation",
         "Private feature work",
-        "Brand or asset acquisition",
-        "IP assignment subject to agreement",
-        "Deployment assistance",
         "Structured handover",
+        "Deployment assistance",
       ],
     },
-  },
-
-  // Founding pricing
-  founding: {
-    label: "Founding pricing for the first 10 source-code customers.",
-    isLimited: true,
-    remainingCount: 10, // Configurable — set to 0 when sold out
   },
 
   // Licence comparison fields
@@ -136,17 +131,15 @@ export const commercial = {
     { id: "conversion", label: "Conversion Clarity", icon: "Target" },
     { id: "trust", label: "Trust Signals", icon: "Shield" },
     { id: "content", label: "Content Structure", icon: "FileText" },
-    { id: "ai_visibility", label: "AI-Search Readiness", icon: "Brain" },
+    { id: "ai_search_readiness", label: "AI-Search Readiness", icon: "Brain" },
   ],
 
   // Pipeline stages
   pipelineStages: [
     "New prospect",
     "Audit planned",
-    "Audit running",
     "Audit review",
     "Report sent",
-    "Report viewed",
     "Follow-up due",
     "Proposal sent",
     "Negotiation",
@@ -154,63 +147,55 @@ export const commercial = {
     "Lost",
   ],
 
-  // Demo agency
-  demoAgency: {
-    name: "Northstar Digital",
-    isFictional: true,
-    label: "Demonstration data — fictional",
-    prospects: [
-      "Meridian Health Group",
-      "Cedarline Property",
-      "HarborDesk Software",
-      "Alder & Row Commerce",
-      "Parkfield Advisory",
+  // Product status — honest claims
+  productStatus: {
+    availableNow: [
+      "Interactive frontend demonstration",
+      "Prospect management interface",
+      "Audit workflow interface",
+      "Finding review workspace",
+      "Report builder interface",
+      "Proposal builder interface",
+      "Pipeline kanban interface",
+      "White-label branding settings",
+      "Service catalogue",
+      "Task management",
+    ],
+    frontendDemo: [
+      "Deterministic demo data",
+      "Simulated audit creation",
+      "Simulated finding review",
+      "Simulated report publishing",
+      "Simulated proposal sending",
+      "Simulated pipeline movement",
+      "Simulated branding preview",
+    ],
+    inDevelopment: [
+      "Backend API implementation",
+      "Database architecture",
+      "Authentication service",
+      "Real audit crawler",
+      "PDF rendering",
+    ],
+    planned: [
+      "Payment processing",
+      "Email integration",
+      "Live licence validation",
+      "Real report analytics",
+      "CI/CD pipeline",
+      "E2E test suites",
     ],
   },
 
-  // Use cases
-  useCases: [
-    {
-      title: "Web-design agency",
-      description: "Use audits to identify redesign and conversion opportunities.",
-      icon: "Layout",
-    },
-    {
-      title: "SEO agency",
-      description: "Turn technical findings into prioritized SEO projects.",
-      icon: "Search",
-    },
-    {
-      title: "Freelance developer",
-      description: "Create structured evidence before quoting remediation work.",
-      icon: "Code",
-    },
-    {
-      title: "Maintenance provider",
-      description: "Use recurring audits to identify ongoing work.",
-      icon: "RefreshCw",
-    },
-    {
-      title: "Multi-brand studio",
-      description: "Operate separate report brands and deployments under the Studio Licence.",
-      icon: "Layers",
-    },
-  ],
-
-  // Technical stack
+  // Technical stack — honest status
   techStack: [
-    { label: "Framework", value: "Next.js 16 (App Router) + React 19 + TypeScript 5" },
-    { label: "Database", value: "PostgreSQL (Prisma ORM); SQLite for local development" },
-    { label: "Authentication", value: "NextAuth.js v4 with role-based access control" },
-    { label: "Multi-tenant architecture", value: "Organisation-scoped data isolation" },
-    { label: "Audit workers", value: "Isolated audit execution with SSRF protection" },
-    { label: "Storage", value: "Configurable file storage (local, S3-compatible)" },
-    { label: "PDF rendering", value: "Server-side with selectable text and page numbers" },
-    { label: "AI-provider abstraction", value: "OpenAI-compatible, Anthropic, mock providers" },
-    { label: "Bring-your-own-key", value: "Use your own AI provider keys" },
-    { label: "Security controls", value: "SSRF protection, IDOR prevention, rate limiting" },
-    { label: "Testing", value: "Unit, integration, and E2E test suites" },
-    { label: "CI/CD", value: "GitHub Actions with lint, type-check, build, security" },
+    { label: "Framework", value: "Next.js 16 (App Router) + React 19 + TypeScript 5", status: "available" as const },
+    { label: "Database", value: "PostgreSQL (Prisma ORM) — planned", status: "planned" as const },
+    { label: "Authentication", value: "NextAuth.js v4 — planned", status: "planned" as const },
+    { label: "Audit workers", value: "Isolated audit execution — in development", status: "inDevelopment" as const },
+    { label: "AI-provider abstraction", value: "OpenAI-compatible, Anthropic — planned", status: "planned" as const },
+    { label: "PDF rendering", value: "Server-side with selectable text — planned", status: "planned" as const },
+    { label: "Self-hosting", value: "Deploy on your own infrastructure", status: "available" as const },
   ],
 
   // FAQ
@@ -218,6 +203,10 @@ export const commercial = {
     {
       q: "Is this a hosted SaaS or source-code product?",
       a: "WinterVell is sold as source-code software. You receive the complete source code and deploy it on your own infrastructure. A hosted option may be available in the future.",
+    },
+    {
+      q: "What is the current state of the product?",
+      a: "WinterVell is in development. The interactive frontend demonstration shows the planned product interface using fictional data. The backend implementation is in progress. Purchasing is not yet open.",
     },
     {
       q: "Can I use my own brand?",
@@ -244,10 +233,6 @@ export const commercial = {
       a: "No. WinterVell uses a bring-your-own-key model. You provide your own AI provider API keys, and you pay your AI provider directly for usage.",
     },
     {
-      q: "Which AI providers are supported?",
-      a: "WinterVell supports OpenAI-compatible providers, Anthropic, and includes a mock provider for demonstration. The provider abstraction is designed to be extensible.",
-    },
-    {
       q: "Is the audit fully automated?",
       a: "WinterVell performs automated website analysis, but findings are indicative, not definitive. Users can edit, reject, or mark findings as false positives. AI explains evidence but does not invent it.",
     },
@@ -264,36 +249,16 @@ export const commercial = {
       a: "No. WinterVell provides accessibility indicators, but it does not certify WCAG compliance. Accessibility findings are a prompt for human review, not a final verdict.",
     },
     {
-      q: "Is installation included?",
-      a: "Installation is self-service with comprehensive deployment documentation. The Agency licence includes thirty days of installation support. The Studio licence includes priority installation support.",
-    },
-    {
-      q: "What support is included?",
-      a: "The Agency licence includes thirty days of installation support via email. The Studio licence includes priority installation support and one year of updates. Enterprise arrangements include custom support terms.",
-    },
-    {
-      q: "Are future updates included?",
-      a: "The Agency licence includes access to the purchased version. Future major versions are not automatically included. The Studio licence includes one year of updates from the date of purchase.",
-    },
-    {
-      q: "What happens after purchase?",
-      a: "After verified payment, you receive source-code delivery instructions, deployment documentation, a buyer handover checklist, and access to the support channel. The full process is documented in the deployment guide.",
-    },
-    {
       q: "Can I inspect the product first?",
-      a: "Yes. You can explore the live demo, view a sample report, review the documentation preview, and examine the architecture and security overview before purchasing.",
+      a: "Yes. You can explore the interactive frontend demo, view a sample report, and examine the product interface before purchasing.",
     },
     {
       q: "Can WinterVell be deployed outside Vercel?",
-      a: "Yes. WinterVell is a standard Next.js application and can be deployed on any platform that supports Node.js, including Docker-based hosting, VPS, and other cloud providers. Deployment documentation covers multiple options.",
-    },
-    {
-      q: "What database is required?",
-      a: "PostgreSQL is required for production. SQLite is supported for local development only. Production deployments must not use SQLite.",
+      a: "Yes. WinterVell is a standard Next.js application and can be deployed on any platform that supports Node.js, including Docker-based hosting, VPS, and other cloud providers.",
     },
     {
       q: "How is customer data handled?",
-      a: "WinterVell is self-hosted. Customer data remains on your infrastructure. The licence validation system never transmits client or audit data — only a licence identifier and deployment fingerprint. See the data-processing overview for details.",
+      a: "WinterVell is self-hosted. Customer data remains on your infrastructure. No client or audit data is transmitted externally.",
     },
   ],
 } as const;
