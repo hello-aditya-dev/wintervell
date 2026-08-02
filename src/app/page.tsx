@@ -23,11 +23,13 @@ const SalesPipeline = dynamic(() => import("@/components/site/SalesPipeline"));
 const CommercialUseCases = dynamic(() => import("@/components/site/CommercialUseCases"));
 const TestimonialsSection = dynamic(() => import("@/components/site/TestimonialsSection"));
 const OwnershipDeployment = dynamic(() => import("@/components/site/OwnershipDeployment"));
+const ProcessTimeline = dynamic(() => import("@/components/site/ProcessTimeline"));
 const TechnicalCredibility = dynamic(() => import("@/components/site/TechnicalCredibility"));
 const ChangelogSection = dynamic(() => import("@/components/site/ChangelogSection"));
 const RoadmapSection = dynamic(() => import("@/components/site/RoadmapSection"));
 const ROICalculator = dynamic(() => import("@/components/site/ROICalculator"));
 const PricingSection = dynamic(() => import("@/components/site/PricingSection"));
+const CompetitorComparison = dynamic(() => import("@/components/site/CompetitorComparison"));
 const LicenceComparison = dynamic(() => import("@/components/site/LicenceComparison"));
 const BuyerRiskReduction = dynamic(() => import("@/components/site/BuyerRiskReduction"));
 const DueDiligence = dynamic(() => import("@/components/site/DueDiligence"));
@@ -61,6 +63,7 @@ export default function Home() {
         <TestimonialsSection />
         <SectionDivider variant="dark-to-light" />
         <OwnershipDeployment />
+        <ProcessTimeline />
         <SectionDivider variant="light-to-dark" />
         <TechnicalCredibility />
         <SectionDivider variant="dark-to-light" />
@@ -68,6 +71,9 @@ export default function Home() {
         <RoadmapSection />
         <ROICalculator />
         <PricingSection />
+        <SectionDivider variant="light-to-dark" />
+        <CompetitorComparison />
+        <SectionDivider variant="dark-to-light" />
         <LicenceComparison />
         <BuyerRiskReduction />
         <SectionDivider variant="light-to-dark" />

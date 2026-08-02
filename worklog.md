@@ -699,3 +699,198 @@ Unresolved Issues:
 - Server OOM: requires memory limit flag; page is very large (27+ dynamic components)
 - Agent-browser can only connect after first curl request (server needs pre-compilation)
 - Next step: Consider lazy loading below-fold sections, or reducing component count
+
+---
+Task ID: 3-a
+Agent: Feature Agent
+Task: Add CompetitorComparison and ProcessTimeline components
+
+Work Log:
+- Read worklog.md to understand project context (23+ existing components, WinterVell design system)
+- Studied existing component patterns: LicenceComparison, OwnershipDeployment, TechnicalCredibility, PricingSection
+- Reviewed SectionDivider variants and commercial config for consistency
+
+Components Created:
+1. **CompetitorComparison.tsx** (`/src/components/site/CompetitorComparison.tsx`)
+   - "Why source code beats SaaS" comparison section with navy (#142634) background
+   - 9 comparison rows: Source code included, Self-hosted, White-label, One-time payment, Custom AI keys, No monthly fees, Full data ownership, Unlimited audits, Custom modifications
+   - WinterVell column: green checkmarks (pine #24584F), SaaS column: red X marks (critical #B43C3C)
+   - Desktop: full table with hover-highlighted rows and info-tooltip explanations per row
+   - Mobile: card-based layout with expandable explanations via AnimatePresence
+   - Score summary badges: WinterVell 9/9 vs Typical SaaS 0/9
+   - Subtle dot grid background pattern, "Source code vs SaaS" badge
+   - framer-motion animations with useReducedMotion support
+   - CTA link to #pricing
+
+2. **ProcessTimeline.tsx** (`/src/components/site/ProcessTimeline.tsx`)
+   - Animated 6-step buyer journey timeline on paper (#F4F6F7) background
+   - Steps: Evaluate the demo → Review the code → Purchase a licence → Deploy to your infrastructure → Configure your brand → Start selling audits
+   - Desktop (lg+): alternating left/right card layout with animated center connecting line
+   - Tablet (md-lg): 3-column grid with horizontal connecting line
+   - Mobile (<md): vertical timeline with animated connecting lines
+   - Each step has a numbered badge (1-6) with accent color, icon, title, and description
+   - Paper background with subtle dot grid pattern
+   - Step cards have hover effects with subtle glow and lift
+   - Animated connecting line fills as section comes into view
+   - framer-motion animations with useReducedMotion support
+   - CTA button to #pricing
+
+3. **page.tsx Updates** (`/src/app/page.tsx`)
+   - Added dynamic imports for CompetitorComparison and ProcessTimeline
+   - CompetitorComparison placed after PricingSection with SectionDivider transitions (light-to-dark, dark-to-light)
+   - ProcessTimeline placed after OwnershipDeployment, before TechnicalCredibility section divider
+   - All existing SectionDivider components preserved
+
+4. **Lint Fix** (`/src/components/site/CommercialUseCases.tsx`)
+   - Fixed pre-existing lint error: react-hooks/set-state-in-effect in useAnimatedCounter hook
+   - Changed from synchronous setState in effect to ref-based animation with cleanup
+   - Added useRef for RAF tracking, proper cleanup on unmount
+   - PrefersReducedMotion now handled via conditional return instead of setState
+
+Verification:
+- ESLint passes cleanly (0 errors, 0 warnings)
+- Dev server compiles successfully (GET / 200)
+- New components follow existing patterns: containerVariants, headingVariants, sectionMotionProps
+- All colors from design system: Navy, Paper, Glacier, Pine, Action Blue, Critical, Amber, Border
+- Commercial config imported for brand name consistency
+
+---
+Task ID: 2-a
+Agent: Style Enhancement Agent
+Task: Improve styling of ProblemTransformation, CommercialUseCases, and OwnershipDeployment with visual details, micro-interactions, and polish
+
+Work Log:
+- Read worklog.md to understand full project context (23+ components, WinterVell design system)
+- Read all three target components to understand existing functionality before enhancement
+
+Components Enhanced:
+
+1. **ProblemTransformation.tsx** (`/src/components/site/ProblemTransformation.tsx`)
+   - Color-coded before steps: amber/warm tones (#B7791F) for "old way" vs green/blue tones (#2563EB, #24584F) for "new way"
+   - Animated step number circles (1-7 before, 1-6 after) with rounded-full badges replacing square badges
+   - Connecting lines between steps within each column (animated scaleY on scroll into view)
+   - Hover effects: step number glow on hover (box-shadow glow in amber for before, blue for after)
+   - Detail text under each step label (e.g., "Hours of manual work", "One input field")
+   - "VS" divider label between before/after columns (desktop + mobile)
+   - Enhanced transition arrow: larger circle with gradient border ring, pulsing outer ring animation
+   - Before column: warm overlay gradient, amber badge with live dot indicator, "7 steps" counter
+   - After column: glacier accent gradient, pine/teal badge with Zap icon, "6 steps" counter
+   - Bottom progress bars: before column shows "Hours of manual work" with amber bar, after shows "Minutes, not hours" with blue-to-green gradient bar
+   - Scroll-triggered blur→clear reveal animations for each step (filter: blur(4px) → blur(0px))
+   - Before steps slide from left, after steps slide from right
+   - useReducedMotion support throughout
+
+2. **CommercialUseCases.tsx** (`/src/components/site/CommercialUseCases.tsx`)
+   - Per-use-case accent colors: blue, pine, amber, blue-gradient, navy
+   - Animated icon backgrounds with gradient fills per accent color
+   - Secondary floating icons (Sparkles, Target, Wrench, Repeat, Building2) that animate in on scroll
+   - Pulse ring animation around icon containers
+   - Card hover effects: y:-4 lift, scale:1.01, border glow overlay, shadow-lg
+   - Top accent line on hover (gradient fade)
+   - Expandable/collapsible example sections with AnimatePresence slide animation
+   - "See example" / "Hide example" toggle buttons with chevron icons
+   - Connector dots between cards (bottom-center, animated on scroll)
+   - Bottom CTA link to pricing section
+   - Removed unused useAnimatedCounter hook (was causing lint error)
+   - Cleaned up unused imports (useEffect, BarChart3, FileCheck, Globe)
+   - useReducedMotion support throughout
+
+3. **OwnershipDeployment.tsx** (`/src/components/site/OwnershipDeployment.tsx`)
+   - Enhanced animated checkmarks: SVG circle path-drawing animation + checkmark path animation
+   - Verified items: filled blue circle (#2563EB) with white checkmark, blue background card
+   - Unverified items: outline circle with green checkmark path animation
+   - Progress bar at top of checklist: gradient fill from pine to blue, animated width on scroll
+   - "15/15 included" counter badge
+   - Deployment flow: step number badges on each icon (top-right corner)
+   - Colored connecting lines between deployment steps (gradient from step color to next step color)
+   - Step icon containers with hover scale effect and gradient background overlay
+   - Deployment path cards with hover glow effects (per-path color)
+   - "Self-hosted only" note redesigned with Lock icon and structured layout
+   - Section headers with icon containers (Package for checklist, Rocket for deployment)
+   - Checklist items with whileHover scale + y-lift animations
+   - Better visual distinction between verified and unverified items (blue tint vs white bg, blue border vs gray border)
+   - useReducedMotion support throughout
+
+Verification:
+- ESLint passes cleanly (0 errors, 0 warnings)
+- Dev server compiles successfully (GET / 200)
+- All existing functionality preserved
+- All components remain "use client"
+- Design system colors used consistently: Paper, Ink, Navy, Glacier, Action Blue, Pine, Amber, Border
+
+---
+Task ID: 2-b
+Agent: Styling Agent
+Task: Improve visual styling of three components with micro-interactions, animations, and polish
+
+Work Log:
+
+### ReportExperience.tsx Enhancements
+- Added animated SVG score circle with gradient stroke, glow filter, and decorative end dot that fills up when scrolled into view
+- Added outer glow ring around the overall score that fades in on scroll
+- Added "out of 100" label below the score number for better visual hierarchy
+- Added `ShimmerOverlay` component — subtle shimmer effect that sweeps across the report card on load
+- Added `AnimatedProgressBar` component — category score bars with gradient fills and shine sweep animations that trigger on scroll
+- Added `PriorityIssueCard` component — each priority issue card now has:
+  - Animated pulse on critical severity indicators (expanding ring animation)
+  - Expandable detail section with chevron toggle (animated height/opacity)
+  - Impact statement shown in expanded detail
+  - Gradient accent bar on hover
+  - Staggered entrance animations
+- Added gradient accent bar at the top of the report header
+- Enhanced executive summary with subtle gradient background overlay
+- Added gradient accent bars to implementation phase cards (color-coded)
+- Enhanced export/share buttons with scale hover/tap animations and icon micro-animations
+- Added animated icon swap (copy → check) with scale/rotate transitions
+- Enhanced CTA button with hover glow sweep and decorative sparkle
+- Added slide-in animations for quick wins and recommended services
+- Enhanced total investment row with gradient background
+- All animations respect `useReducedMotion`
+
+### WhiteLabelSection.tsx Enhancements
+- Added `BackgroundPattern` component — SVG pattern overlay that changes per agency (dots, leaves, waves)
+- Added `ColorSwatches` component — animated color swatches showing brand colors with staggered entrance and hover tooltips
+- Added `AnimatedFeatureList` component — feature items that animate in when switching brands
+- Added `primaryDark` and `accentGradient` fields to agency themes for better visual distinction
+- Added gradient accent bar at the top of the report card preview
+- Enhanced agency selector buttons with:
+  - Animated glow effect (`layoutId` for smooth transitions)
+  - Animated border with gradient color
+  - CheckCircle2 icon with scale entrance animation
+  - Scale hover/tap animations
+- Enhanced progress bars with gradient fills and shine sweep animation
+- Enhanced CTA button with hover glow sweep
+- Added decorative gradient behind CTA section
+- Smoother crossfade transition with scale effect
+- All animations respect `useReducedMotion`
+
+### AuditToProposal.tsx Enhancements
+- Added `TransformationArrow` component — animated arrow with:
+  - Animated connecting lines (scale in from center)
+  - Pulsing glow behind the arrow icon
+  - Bouncing arrow animation (directional movement)
+  - Direction-aware (right for desktop, down for mobile)
+- Added `StepNumber` component — animated step number badges with spring entrance
+- Added `TransformationCard` component — each transformation card now has:
+  - Step numbers (1, 2, 3) with color-coded badges
+  - Gradient accent bar at top of each card (critical = red, high = amber)
+  - Background gradient accents per section (Finding, Service, Proposal)
+  - Hover expandable detail showing finding and proposal details side-by-side
+  - Pulse indicator on critical severity
+  - Animated connecting line that appears on hover
+  - Y-shift and shadow hover effects
+- Added visual flow indicator above transformation cards (Finding → Service → Proposal)
+- Added animated "Convert findings to proposals" button with:
+  - Animated glow pulse (box-shadow)
+  - Hover sweep effect
+  - Scale hover/tap animations
+- Enhanced proposal components grid with hover gradient accent bar
+- Added `findingDetail` and `proposalDetail` to transformation data
+- All animations respect `useReducedMotion`
+
+Results:
+- ESLint passes cleanly (0 errors, 0 warnings)
+- Dev server compiles successfully
+- All existing functionality preserved
+- All components remain "use client"
+- Design system colors used consistently
