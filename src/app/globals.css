@@ -3,142 +3,416 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ================================================================== */
+/* WinterVell Design System                                           */
+/* ================================================================== */
+/*                                                                    */
+/* Colour:  Cold off-white backgrounds, ink-dark text, restrained    */
+/*          accent palette. No decorative glow effects.               */
+/* Type:    Geist Sans / Geist Mono. Tabular numbers for data.       */
+/* Radius:  6-8px inputs/buttons, 8-12px cards/panels. No pills.     */
+/* Shadow:  Sparingly. Structure from borders, spacing, contrast.     */
+/* Density: Comfortable (default) and compact. Persisted in localStorage. */
+/*                                                                    */
+/* ================================================================== */
+
+
+/* ------------------------------------------------------------------ */
+/* 1. Tailwind theme bridge                                           */
+/* ------------------------------------------------------------------ */
+/* Maps our semantic CSS variables into Tailwind's theme tokens so    */
+/* every shadcn/ui component continues to work unchanged.             */
+
 @theme inline {
+  /* Colour tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Chart palette */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar tokens */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Font families */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
+
+  /* Radius scale — base 8px, deriving 4/6/8/12 */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
-  /* WinterVell design tokens */
-  --color-paper: #F4F6F7;
-  --color-surface: #FFFFFF;
-  --color-ink: #111820;
-  --color-ink-secondary: #56616C;
-  --color-navy: #142634;
-  --color-glacier: #B7DDEC;
-  --color-action: #2563EB;
-  --color-pine: #24584F;
-  --color-amber: #B7791F;
-  --color-critical: #B43C3C;
-  --color-border-wv: #DDE3E7;
 }
+
+
+/* ------------------------------------------------------------------ */
+/* 2. Light mode (default)                                            */
+/* ------------------------------------------------------------------ */
 
 :root {
-  --radius: 0.625rem;
-  --background: #F4F6F7;
-  --foreground: #111820;
-  --card: #FFFFFF;
-  --card-foreground: #111820;
-  --popover: #FFFFFF;
-  --popover-foreground: #111820;
-  --primary: #142634;
-  --primary-foreground: #F4F6F7;
-  --secondary: #F4F6F7;
-  --secondary-foreground: #142634;
-  --muted: #F4F6F7;
-  --muted-foreground: #56616C;
-  --accent: #B7DDEC;
-  --accent-foreground: #142634;
-  --destructive: #B43C3C;
-  --border: #DDE3E7;
-  --input: #DDE3E7;
-  --ring: #2563EB;
-  --chart-1: #142634;
+  /* ---- Radius ---- */
+  --radius: 0.5rem; /* 8px base → sm 4px, md 6px, lg 8px, xl 12px */
+
+  /* ---- Surface hierarchy ---- */
+  --background:          #F4F6F7;  /* cold off-white — page background */
+  --surface:             #FFFFFF;  /* white — cards, panels */
+  --surface-elevated:    #FFFFFF;  /* white with subtle shadow — popovers, dropdowns */
+  --surface-muted:       #EDF0F2;  /* cool grey — muted containers, code blocks */
+
+  /* ---- Text hierarchy ---- */
+  --foreground:          #111820;  /* deep ink — primary text */
+  --text-muted:          #56616C;  /* neutral slate — secondary text */
+  --text-tertiary:       #8899A6;  /* cool slate — placeholder, disabled */
+
+  /* ---- Borders ---- */
+  --border:              #DDE3E7;  /* cool grey — default border */
+  --input:               #DDE3E7;  /* cool grey — input border */
+  --border-strong:       #B8C2CA;  /* stronger border for emphasis */
+
+  /* ---- Cards & popovers ---- */
+  --card:                #FFFFFF;
+  --card-foreground:     #111820;
+  --popover:             #FFFFFF;
+  --popover-foreground:  #111820;
+
+  /* ---- Primary action ---- */
+  --primary:             #1E4D8C;  /* restrained blue — primary buttons, links */
+  --primary-foreground:  #FFFFFF;
+  --primary-hover:       #163A6B;  /* darker blue — hover state */
+  --primary-subtle:      #E8EFF7;  /* very light blue — primary tint backgrounds */
+
+  /* ---- Secondary ---- */
+  --secondary:           #F4F6F7;
+  --secondary-foreground:#111820;
+
+  /* ---- Muted ---- */
+  --muted:               #EDF0F2;
+  --muted-foreground:    #56616C;
+
+  /* ---- Accent ---- */
+  --accent:              #E8EFF7;
+  --accent-foreground:   #1E4D8C;
+
+  /* ---- Destructive ---- */
+  --destructive:         #B43C3C;  /* muted red */
+  --destructive-foreground: #FFFFFF;
+  --destructive-subtle:  #FDF0F0;  /* light red tint background */
+
+  /* ---- Success ---- */
+  --success:             #24584F;  /* pine green */
+  --success-foreground:  #FFFFFF;
+  --success-subtle:      #EDF5F3;  /* light green tint background */
+
+  /* ---- Warning ---- */
+  --warning:             #B7791F;  /* amber */
+  --warning-foreground:  #FFFFFF;
+  --warning-subtle:      #FDF8ED;  /* light amber tint background */
+
+  /* ---- Information ---- */
+  --info:                #1E4D8C;  /* restrained blue */
+  --info-foreground:     #FFFFFF;
+  --info-subtle:         #E8EFF7;  /* light blue tint background */
+
+  /* ---- Focus ring ---- */
+  --ring:                #1E4D8C;
+  --ring-offset:         #F4F6F7;
+
+  /* ---- Severity levels (technical findings) ---- */
+  --severity-critical:        #B43C3C;
+  --severity-critical-text:   #7A1F1F;
+  --severity-critical-bg:     #FDF0F0;
+  --severity-critical-border: #E8B0B0;
+
+  --severity-high:            #C2622A;
+  --severity-high-text:       #7A3A15;
+  --severity-high-bg:         #FDF3ED;
+  --severity-high-border:     #E8C4A8;
+
+  --severity-medium:          #B7791F;
+  --severity-medium-text:     #6B4A0A;
+  --severity-medium-bg:       #FDF8ED;
+  --severity-medium-border:   #E8D8A8;
+
+  --severity-low:             #3A7A6B;
+  --severity-low-text:        #1A4A3F;
+  --severity-low-bg:          #EDF5F3;
+  --severity-low-border:      #A8D4C8;
+
+  --severity-informational:   #56616C;
+  --severity-informational-text: #3A424A;
+  --severity-informational-bg:   #EDF0F2;
+  --severity-informational-border:#B8C2CA;
+
+  /* ---- Chart palette ---- */
+  --chart-1: #1E4D8C;
   --chart-2: #24584F;
-  --chart-3: #2563EB;
+  --chart-3: #4B8FE5;
   --chart-4: #B7791F;
   --chart-5: #B43C3C;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #111820;
-  --sidebar-primary: #142634;
-  --sidebar-primary-foreground: #F4F6F7;
-  --sidebar-accent: #B7DDEC;
-  --sidebar-accent-foreground: #142634;
-  --sidebar-border: #DDE3E7;
-  --sidebar-ring: #2563EB;
+
+  /* ---- Sidebar ---- */
+  --sidebar:                 #FFFFFF;
+  --sidebar-foreground:      #111820;
+  --sidebar-primary:         #1E4D8C;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent:          #E8EFF7;
+  --sidebar-accent-foreground: #1E4D8C;
+  --sidebar-border:          #DDE3E7;
+  --sidebar-ring:            #1E4D8C;
+
+  /* ---- Shadows (used sparingly) ---- */
+  --shadow-xs:   0 1px 2px 0 rgba(17, 24, 32, 0.04);
+  --shadow-sm:   0 1px 3px 0 rgba(17, 24, 32, 0.06), 0 1px 2px -1px rgba(17, 24, 32, 0.06);
+  --shadow-md:   0 4px 6px -1px rgba(17, 24, 32, 0.06), 0 2px 4px -2px rgba(17, 24, 32, 0.06);
+  --shadow-lg:   0 10px 15px -3px rgba(17, 24, 32, 0.06), 0 4px 6px -4px rgba(17, 24, 32, 0.06);
+
+  /* ---- Typography scales ---- */
+  --font-size-display:    2.25rem;   /* 36px */
+  --line-height-display:  1.2;
+  --font-weight-display:  600;
+
+  --font-size-h1:         1.875rem;  /* 30px */
+  --line-height-h1:       1.25;
+  --font-weight-h1:       600;
+
+  --font-size-h2:         1.5rem;    /* 24px */
+  --line-height-h2:       1.3;
+  --font-weight-h2:       600;
+
+  --font-size-h3:         1.25rem;   /* 20px */
+  --line-height-h3:       1.4;
+  --font-weight-h3:       600;
+
+  --font-size-h4:         1.125rem;  /* 18px */
+  --line-height-h4:       1.4;
+  --font-weight-h4:       500;
+
+  --font-size-body:       0.875rem;  /* 14px */
+  --line-height-body:     1.5;
+  --font-weight-body:     400;
+
+  --font-size-small:      0.8125rem; /* 13px */
+  --line-height-small:    1.5;
+  --font-weight-small:    400;
+
+  --font-size-label:      0.75rem;   /* 12px */
+  --line-height-label:    1.5;
+  --font-weight-label:    500;
+
+  --font-size-caption:    0.6875rem; /* 11px */
+  --line-height-caption:  1.5;
+  --font-weight-caption:  500;
+
+  /* ---- Density: comfortable (default) ---- */
+  --spacing-density-unit: 1;         /* multiplier */
+  --density-gap:          1rem;      /* 16px */
+  --density-padding:      1rem;      /* 16px */
+  --density-row-height:   2.5rem;    /* 40px */
+  --density-input-py:     0.5rem;    /* 8px */
+  --density-input-px:     0.75rem;   /* 12px */
+  --density-card-p:       1.5rem;    /* 24px */
+  --density-stack:        1.5rem;    /* 24px */
 }
 
+
+/* ------------------------------------------------------------------ */
+/* 3. Dark mode                                                       */
+/* ------------------------------------------------------------------ */
+
 .dark {
-  --background: #0F1923;
-  --foreground: #F4F6F7;
-  --card: #1A2530;
-  --card-foreground: #F4F6F7;
-  --popover: #1A2530;
-  --popover-foreground: #F4F6F7;
-  --primary: #B7DDEC;
-  --primary-foreground: #142634;
-  --secondary: #1A2530;
-  --secondary-foreground: #F4F6F7;
-  --muted: #1A2530;
-  --muted-foreground: #8899A6;
-  --accent: #1A3A4A;
-  --accent-foreground: #B7DDEC;
-  --destructive: #E05555;
-  --border: #2A3A4A;
-  --input: #2A3A4A;
-  --ring: #2563EB;
-  --chart-1: #B7DDEC;
+  /* ---- Surface hierarchy ---- */
+  --background:          #0F1923;
+  --surface:             #1A2530;
+  --surface-elevated:    #1F2D3A;
+  --surface-muted:       #1A2530;
+
+  /* ---- Text hierarchy ---- */
+  --foreground:          #E8ECF0;
+  --text-muted:          #8899A6;
+  --text-tertiary:       #56616C;
+
+  /* ---- Borders ---- */
+  --border:              #2A3A4A;
+  --input:               #2A3A4A;
+  --border-strong:       #3A4D5E;
+
+  /* ---- Cards & popovers ---- */
+  --card:                #1A2530;
+  --card-foreground:     #E8ECF0;
+  --popover:             #1F2D3A;
+  --popover-foreground:  #E8ECF0;
+
+  /* ---- Primary action ---- */
+  --primary:             #5B9BD5;
+  --primary-foreground:  #0F1923;
+  --primary-hover:       #7AB3E5;
+  --primary-subtle:      #1A3048;
+
+  /* ---- Secondary ---- */
+  --secondary:           #1A2530;
+  --secondary-foreground:#E8ECF0;
+
+  /* ---- Muted ---- */
+  --muted:               #1A2530;
+  --muted-foreground:    #8899A6;
+
+  /* ---- Accent ---- */
+  --accent:              #1A3048;
+  --accent-foreground:   #5B9BD5;
+
+  /* ---- Destructive ---- */
+  --destructive:         #E05555;
+  --destructive-foreground: #FFFFFF;
+  --destructive-subtle:  #2A1A1A;
+
+  /* ---- Success ---- */
+  --success:             #3AAFA9;
+  --success-foreground:  #0F1923;
+  --success-subtle:      #1A2A28;
+
+  /* ---- Warning ---- */
+  --warning:             #D4A843;
+  --warning-foreground:  #0F1923;
+  --warning-subtle:      #2A2518;
+
+  /* ---- Information ---- */
+  --info:                #5B9BD5;
+  --info-foreground:     #0F1923;
+  --info-subtle:         #1A3048;
+
+  /* ---- Focus ring ---- */
+  --ring:                #5B9BD5;
+  --ring-offset:         #0F1923;
+
+  /* ---- Severity levels (dark) ---- */
+  --severity-critical:        #E05555;
+  --severity-critical-text:   #F0A0A0;
+  --severity-critical-bg:     #2A1A1A;
+  --severity-critical-border: #5A2A2A;
+
+  --severity-high:            #E08050;
+  --severity-high-text:       #F0B898;
+  --severity-high-bg:         #2A2018;
+  --severity-high-border:     #5A3A2A;
+
+  --severity-medium:          #D4A843;
+  --severity-medium-text:     #E8D090;
+  --severity-medium-bg:       #2A2518;
+  --severity-medium-border:   #5A4A2A;
+
+  --severity-low:             #3AAFA9;
+  --severity-low-text:        #90D8D2;
+  --severity-low-bg:          #1A2A28;
+  --severity-low-border:      #2A5A52;
+
+  --severity-informational:   #8899A6;
+  --severity-informational-text:   #B8C8D2;
+  --severity-informational-bg:     #1A2530;
+  --severity-informational-border: #3A4D5E;
+
+  /* ---- Chart palette ---- */
+  --chart-1: #5B9BD5;
   --chart-2: #3AAFA9;
   --chart-3: #4B8FE5;
   --chart-4: #D4A843;
   --chart-5: #E05555;
-  --sidebar: #1A2530;
-  --sidebar-foreground: #F4F6F7;
-  --sidebar-primary: #B7DDEC;
-  --sidebar-primary-foreground: #142634;
-  --sidebar-accent: #1A3A4A;
-  --sidebar-accent-foreground: #B7DDEC;
-  --sidebar-border: #2A3A4A;
-  --sidebar-ring: #2563EB;
+
+  /* ---- Sidebar ---- */
+  --sidebar:                 #1A2530;
+  --sidebar-foreground:      #E8ECF0;
+  --sidebar-primary:         #5B9BD5;
+  --sidebar-primary-foreground: #0F1923;
+  --sidebar-accent:          #1A3048;
+  --sidebar-accent-foreground: #5B9BD5;
+  --sidebar-border:          #2A3A4A;
+  --sidebar-ring:            #5B9BD5;
+
+  /* ---- Shadows (dark) ---- */
+  --shadow-xs:   0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-sm:   0 1px 3px 0 rgba(0, 0, 0, 0.24), 0 1px 2px -1px rgba(0, 0, 0, 0.2);
+  --shadow-md:   0 4px 6px -1px rgba(0, 0, 0, 0.24), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --shadow-lg:   0 10px 15px -3px rgba(0, 0, 0, 0.24), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
 }
+
+
+/* ------------------------------------------------------------------ */
+/* 4. Density mode overrides                                          */
+/* ------------------------------------------------------------------ */
+/* Apply `.density-compact` to <html> or a container to switch to    */
+/* compact density. Selection is persisted in localStorage.           */
+
+.density-compact {
+  --density-gap:        0.5rem;    /* 8px */
+  --density-padding:    0.625rem;  /* 10px */
+  --density-row-height: 2rem;      /* 32px */
+  --density-input-py:   0.375rem;  /* 6px */
+  --density-input-px:   0.625rem;  /* 10px */
+  --density-card-p:     1rem;      /* 16px */
+  --density-stack:      1rem;      /* 16px */
+}
+
+
+/* ------------------------------------------------------------------ */
+/* 5. Base layer                                                      */
+/* ------------------------------------------------------------------ */
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Custom scrollbar */
+
+/* ------------------------------------------------------------------ */
+/* 6. Utility classes                                                 */
+/* ------------------------------------------------------------------ */
+
 @layer utilities {
+  /* Tabular (monospaced) numbers for data tables, metrics, etc. */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Custom scrollbar */
   .scrollbar-wv {
     scrollbar-width: thin;
-    scrollbar-color: #DDE3E7 transparent;
+    scrollbar-color: var(--border) transparent;
   }
   .scrollbar-wv::-webkit-scrollbar {
     width: 6px;
@@ -147,12 +421,138 @@
     background: transparent;
   }
   .scrollbar-wv::-webkit-scrollbar-thumb {
-    background-color: #DDE3E7;
+    background-color: var(--border);
     border-radius: 3px;
   }
+
+  /* Surface utilities */
+  .bg-surface {
+    background-color: var(--surface);
+  }
+  .bg-surface-elevated {
+    background-color: var(--surface-elevated);
+    box-shadow: var(--shadow-sm);
+  }
+  .bg-surface-muted {
+    background-color: var(--surface-muted);
+  }
+
+  /* Text utilities */
+  .text-muted {
+    color: var(--text-muted);
+  }
+  .text-tertiary {
+    color: var(--text-tertiary);
+  }
+
+  /* Severity utilities */
+  .severity-critical {
+    color: var(--severity-critical-text);
+    background-color: var(--severity-critical-bg);
+    border-color: var(--severity-critical-border);
+  }
+  .severity-high {
+    color: var(--severity-high-text);
+    background-color: var(--severity-high-bg);
+    border-color: var(--severity-high-border);
+  }
+  .severity-medium {
+    color: var(--severity-medium-text);
+    background-color: var(--severity-medium-bg);
+    border-color: var(--severity-medium-border);
+  }
+  .severity-low {
+    color: var(--severity-low-text);
+    background-color: var(--severity-low-bg);
+    border-color: var(--severity-low-border);
+  }
+  .severity-informational {
+    color: var(--severity-informational-text);
+    background-color: var(--severity-informational-bg);
+    border-color: var(--severity-informational-border);
+  }
+
+  /* Status dot utilities */
+  .dot-critical   { background-color: var(--severity-critical); }
+  .dot-high       { background-color: var(--severity-high); }
+  .dot-medium     { background-color: var(--severity-medium); }
+  .dot-low        { background-color: var(--severity-low); }
+  .dot-informational { background-color: var(--severity-informational); }
+
+  /* Density-aware spacing */
+  .gap-density   { gap: var(--density-gap); }
+  .p-density     { padding: var(--density-padding); }
+  .px-density    { padding-left: var(--density-input-px); padding-right: var(--density-input-px); }
+  .py-density    { padding-top: var(--density-input-py); padding-bottom: var(--density-input-py); }
+  .p-card-density { padding: var(--density-card-p); }
+  .space-y-density > * + * { margin-top: var(--density-stack); }
+
+  /* Typography scale utilities */
+  .text-display {
+    font-size: var(--font-size-display);
+    line-height: var(--line-height-display);
+    font-weight: var(--font-weight-display);
+    letter-spacing: -0.025em;
+  }
+  .text-h1 {
+    font-size: var(--font-size-h1);
+    line-height: var(--line-height-h1);
+    font-weight: var(--font-weight-h1);
+    letter-spacing: -0.02em;
+  }
+  .text-h2 {
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-h2);
+    font-weight: var(--font-weight-h2);
+    letter-spacing: -0.015em;
+  }
+  .text-h3 {
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-h3);
+    font-weight: var(--font-weight-h3);
+  }
+  .text-h4 {
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-h4);
+    font-weight: var(--font-weight-h4);
+  }
+  .text-body {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    font-weight: var(--font-weight-body);
+  }
+  .text-small {
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    font-weight: var(--font-weight-small);
+  }
+  .text-label {
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+    font-weight: var(--font-weight-label);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .text-caption {
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+    font-weight: var(--font-weight-caption);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  /* Shadow utilities */
+  .shadow-xs { box-shadow: var(--shadow-xs); }
+  .shadow-sm-wv { box-shadow: var(--shadow-sm); }
+  .shadow-md-wv { box-shadow: var(--shadow-md); }
+  .shadow-lg-wv { box-shadow: var(--shadow-lg); }
 }
 
-/* Smooth scroll */
+
+/* ------------------------------------------------------------------ */
+/* 7. Global behaviour                                                */
+/* ------------------------------------------------------------------ */
+
 html {
   scroll-behavior: smooth;
 }
@@ -172,32 +572,20 @@ html {
   }
 }
 
+
 /* ------------------------------------------------------------------ */
-/* Print-friendly utilities                                            */
+/* 8. Print styles                                                    */
 /* ------------------------------------------------------------------ */
 
-/*
- * Elements marked `.no-print` are hidden when the page is printed.
- * On screen they render normally — the rule below is a no-op marker
- * so components can opt-out of printing without inline styles.
- */
 .no-print {
-  /* hidden in print via @media print rule below */
+  /* Marker class — hidden in print via @media print below */
 }
 
-/*
- * Elements marked `.print-only` are invisible on screen and only
- * revealed when printing (e.g. a print header showing the site URL).
- */
 .print-only {
   display: none;
 }
 
-/* ------------------------------------------------------------------ */
-/* Print styles                                                        */
-/* ------------------------------------------------------------------ */
 @media print {
-  /* 1. Hide non-essential UI elements */
   header[role="banner"],
   footer[role="contentinfo"],
   .no-print,
@@ -208,13 +596,11 @@ html {
     display: none !important;
   }
 
-  /* 2. White background, black text for legibility */
   body {
     background: #ffffff !important;
     color: #000000 !important;
   }
 
-  /* 3. Expand constrained content to full width */
   .max-w-7xl {
     max-width: none !important;
     margin-left: 0 !important;
@@ -223,25 +609,18 @@ html {
     padding-right: 1rem !important;
   }
 
-  /* 4. Force all text to black for print legibility */
   * {
     color: #000000 !important;
-  }
-
-  /* 5. Remove shadows and rounded corners (they don't print well) */
-  * {
     box-shadow: none !important;
     border-radius: 0 !important;
   }
 
-  /* 6. Show external link URLs in parentheses after the link text */
   a[href^="http"]::after {
     content: " (" attr(href) ")";
     font-size: 0.8em;
     color: #555555 !important;
   }
 
-  /* 7. Page break control for major sections */
   section {
     page-break-inside: avoid;
   }
@@ -249,19 +628,10 @@ html {
     page-break-after: avoid;
   }
 
-  /* 8. Reveal print-only header (e.g. site URL) */
   .print-only {
     display: block !important;
   }
 
-  /* 9. Expand collapsed accordions / tabs for print.
-     NOTE: Forcing `[data-state="collapsed"]` to behave as
-     `[data-state="open"]` is not possible in pure CSS — `data-state`
-     is an HTML attribute, not a CSS property, and Radix UI typically
-     unmounts collapsed content from the DOM rather than just hiding
-     it. The rule below reveals any descendants of a collapsed container
-     that DO remain in the DOM, but fully unmounted content will still
-     be condensed in the printed output. */
   [data-state="collapsed"] > * {
     display: block !important;
   }
