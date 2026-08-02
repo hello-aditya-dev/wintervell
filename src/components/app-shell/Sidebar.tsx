@@ -77,9 +77,9 @@ const navigation: NavGroup[] = [
     title: 'Configuration',
     items: [
       { label: 'Services', href: '/app/services', icon: Wrench },
-      { label: 'Branding', href: '/app/branding', icon: Palette },
-      { label: 'Team', href: '/app/team', icon: UserPlus },
-      { label: 'Integrations', href: '/app/integrations', icon: Plug },
+      { label: 'Branding', href: '/app/settings/branding', icon: Palette },
+      { label: 'Team', href: '/app/settings/team', icon: UserPlus },
+      { label: 'Integrations', href: '/app/settings/integrations', icon: Plug },
     ],
   },
 ];
