@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, notFound } from 'next/navigation';
 import {
   ArrowLeft,
   Eye,
@@ -12,7 +12,6 @@ import {
   ToggleRight,
   Check,
   GripVertical,
-  FileQuestion,
 } from 'lucide-react';
 
 import { useDemoStore } from '@/demo/state/demo-store';
@@ -70,20 +69,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
   const [editText, setEditText] = React.useState('');
 
   if (!report) {
-    return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="flex size-12 items-center justify-center rounded-full bg-muted">
-          <FileQuestion className="size-6 text-muted-foreground" aria-hidden="true" />
-        </div>
-        <h2 className="mt-4 text-lg font-semibold text-foreground">Report not found</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          The report you are looking for does not exist or has been removed.
-        </p>
-        <Button variant="outline" size="sm" className="mt-4" asChild>
-          <Link href="/app/reports">Back to Reports</Link>
-        </Button>
-      </div>
-    );
+    notFound();
   }
 
   const audit = audits.find((a) => a.id === report.auditId);
@@ -138,7 +124,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
 
   const handleSaveEdit = () => {
     setEditingSection(null);
-    toast.success('Section copy updated');
+    toast.success('Section copy updated in demonstration workspace');
   };
 
   function getSectionContent(section: ReportSection): string {

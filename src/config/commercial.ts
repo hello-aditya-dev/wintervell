@@ -50,7 +50,7 @@ export const commercial = {
       plannedPrice: 799,
       description: "One legal business, one production deployment, complete source code.",
       bestFor: "Single-agency operators",
-      cta: "Join the founding release",
+      cta: "View licence details",
       includes: [
         "One legal business",
         "One production deployment",
@@ -76,7 +76,7 @@ export const commercial = {
       plannedPrice: 1499,
       description: "Everything in Agency, plus five deployments and multiple brands.",
       bestFor: "Multi-brand operators",
-      cta: "Join the founding release",
+      cta: "View licence details",
       includes: [
         "Everything in Agency",
         "Up to five production deployments",
@@ -90,9 +90,8 @@ export const commercial = {
     },
     enterprise: {
       name: "Enterprise",
-      fromPrice: 4000,
       description: "Extended deployment rights, custom implementation, and structured handover.",
-      cta: "Discuss an enterprise arrangement",
+      cta: "Contact us",
       includes: [
         "Extended deployment rights",
         "Custom implementation",

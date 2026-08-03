@@ -31,7 +31,6 @@ const TIERS = [
     clarifications: [],
     cta: "View licence details",
     href: "/license",
-    featured: true,
   },
   {
     name: "Enterprise",
@@ -66,35 +65,21 @@ export default function PricingPage() {
           {TIERS.map((tier) => (
             <div
               key={tier.name}
-              className={`flex flex-col rounded-lg border bg-card p-6 shadow-xs ${
-                "featured" in tier && tier.featured
-                  ? "border-primary"
-                  : "border-border"
-              }`}
+              className="flex flex-col rounded-lg border border-border bg-card p-6 shadow-xs"
             >
-              {"featured" in tier && tier.featured && (
-                <span className="mb-3 inline-flex w-fit rounded-md bg-primary-subtle px-2 py-0.5 text-xs font-medium text-primary">
-                  Best for multi-brand operators
-                </span>
-              )}
               <h2 className="text-h3 text-foreground">{tier.name}</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 {tier.description}
               </p>
               <div className="mt-4">
                 {tier.price !== null ? (
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-display text-foreground tabular-nums">
-                      ${tier.price}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      planned
-                    </span>
-                  </div>
+                  <p className="text-h4 font-semibold text-foreground">
+                    Planned founding price: ${tier.price.toLocaleString()}
+                  </p>
                 ) : (
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-h3 text-foreground">Custom</span>
-                  </div>
+                  <p className="text-h4 font-semibold text-foreground">
+                    Custom arrangement
+                  </p>
                 )}
               </div>
               <p className="mt-1 text-xs text-[var(--text-tertiary)]">
@@ -133,9 +118,7 @@ export default function PricingPage() {
 
               <div className="mt-6">
                 <Button
-                  variant={
-                    "featured" in tier && tier.featured ? "default" : "outline"
-                  }
+                  variant="outline"
                   className="w-full"
                   asChild
                 >

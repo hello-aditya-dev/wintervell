@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import {
   Search,
   FileSearch,
@@ -197,24 +198,34 @@ export default function ProductPreview() {
             const Icon = preview.icon;
             const PreviewComponent = PREVIEW_RENDERERS[i];
             return (
-              <Link
-                key={preview.label}
-                href={preview.href}
-                className="group rounded-lg border border-border bg-card p-4 shadow-xs transition-colors hover:border-primary/30"
-              >
-                <div className="flex items-center gap-2">
-                  <Icon className="size-4 text-muted-foreground" />
-                  <span className="text-sm font-medium text-foreground">
-                    {preview.label}
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {preview.description}
-                </p>
-                <div className="mt-3 rounded-md border border-border bg-surface-muted p-2.5">
-                  <PreviewComponent mockData={preview.mockData as any} />
-                </div>
-              </Link>
+              <div key={preview.label}>
+                <Link
+                  href={preview.href}
+                  className="group relative flex h-full flex-col rounded-lg border border-border bg-card p-4 shadow-xs"
+                >
+                  {/* Interactive demo badge */}
+                  <div className="mb-2 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Icon className="size-4 text-muted-foreground" />
+                      <span className="text-sm font-medium text-foreground">
+                        {preview.label}
+                      </span>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className="gap-1 border-primary/20 bg-primary-subtle/50 text-[10px] text-primary"
+                    >
+                      Demo
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {preview.description}
+                  </p>
+                  <div className="mt-3 flex-1 rounded-md border border-border bg-surface-muted p-2.5 shadow-inner">
+                    <PreviewComponent mockData={preview.mockData as any} />
+                  </div>
+                </Link>
+              </div>
             );
           })}
         </div>

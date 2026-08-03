@@ -1138,3 +1138,188 @@ Stage Summary:
 - 10 unused dependencies removed
 - Documentation updated to reflect current state
 - QA screenshots captured
+
+---
+Task ID: 5-b
+Agent: New Features Agent
+Task: Create InteractiveAuditDemo, FAQSection, and ROICalculator components
+
+Work Log:
+- Read worklog.md to understand previous agent work and the existing project structure
+- Reviewed globals.css design system (paper, ink, navy, glacier, action-blue, pine, severity colors, CSS variables)
+- Reviewed existing components (PricingPreview, CoreWorkflow, ProductPreview, Differentiators, HeroSection) for design patterns
+- Reviewed shadcn/ui components (Slider, Accordion, Progress, Badge, Input) for API compatibility
+- Created InteractiveAuditDemo.tsx with simulated audit scanning (idle → scanning → results states), 9 categories with animated scores, color-coded scoring (red < 40, amber 40-70, green > 70), progress bar, overall score counter, "Try another site" button, and clear disclaimer
+- Created FAQSection.tsx with 18 FAQ questions across 6 categories (Product, Pricing, Licensing, Deployment, Security, White-label), real-time search filtering, category filter buttons, result count display, empty state with clear button, and Accordion-based expandable answers
+- Created ROICalculator.tsx with 4 input sliders (clients/month, avg audit value, close rate %, monthly audits), real-time projected results (monthly revenue, annual revenue, ROI %), animated counters, reset button, and estimate disclaimer
+- Updated page.tsx to include all 3 new sections in the specified order
+- Fixed lint error in InteractiveAuditDemo (setState in effect) by using ref-based guard pattern
+- Ran lint successfully (0 errors, 8 pre-existing warnings from other files)
+
+Stage Summary:
+- 3 new section components created and integrated into the page
+- InteractiveAuditDemo: Simulated live audit experience with 3 states, 9 categories, animated scores
+- FAQSection: 18 questions across 6 categories with search, filter, and accordion
+- ROICalculator: 4 sliders with real-time revenue/ROI projections
+- All components use WinterVell design system, framer-motion animations, shadcn/ui components
+- Lint passes with 0 errors (only pre-existing warnings from other files)
+
+---
+Task ID: 5-a
+Agent: Styling Enhancement Agent
+Task: Enhance existing section components with visual polish
+
+Work Log:
+- Enhanced CoreWorkflow.tsx: Added "use client", framer-motion scroll-reveal with useInView, staggered entrance animations, step number badges with gradient backgrounds (from-primary to primary-hover), SVG path drawing animations for connecting lines between steps, hover effects (lift, border glow, icon color change), responsive mobile layout with vertical timeline
+- Enhanced ProductPreview.tsx: Added "use client", framer-motion scroll-reveal with staggered card entrance, hover effects (card lift, border-primary/30, shadow-md-wv), subtle gradient background (from primary-subtle), "Interactive demo" badge on each card with Sparkles icon, inner shadow on mock data areas
+- Enhanced Differentiators.tsx: Added "use client", framer-motion scroll-reveal with staggered entrance, color-coded icons per differentiator (primary/success/warning), badge labels (Verified/Connected/Traceable), hover effects on cards, "Technical pillars" strip below main cards with Code2/ShieldCheck/Database icons
+- Enhanced PricingPreview.tsx: Added "use client", framer-motion scroll-reveal with staggered entrance, "Recommended" badge on Studio tier, hover effects on pricing cards, check icons (Check from lucide) replacing dots, "Planned" badge on prices, pulse animation on founding pricing badge, primary button variant for recommended tier
+- Enhanced DueDiligencePreview.tsx: Added "use client", framer-motion scroll-reveal with staggered entrance, status badges with color coding (Available=green/success, In preparation=amber/warning), hover effects on cards (lift, border glow, shadow), icon container with hover scale, better visual depth with flex-1
+- Enhanced FinalCTA.tsx: Added "use client", gradient navy background (from-primary via primary-hover to #0F1923), framer-motion scroll-reveal animation, animated accent line (scaleX animation), white button hierarchy (primary=white bg, secondary=outline with white border), trust line below CTAs (self-hosted, source code included, no data leaves server)
+- All components use WinterVell design system CSS variables (paper, ink, navy, primary, success, warning, etc.)
+- All 6 components are responsive with proper mobile/tablet/desktop layouts
+- Lint passes with 0 errors (8 pre-existing warnings unrelated to changes)
+
+Stage Summary:
+- All 6 section components enhanced with framer-motion scroll-reveal animations, hover micro-interactions, gradient badges, color-coded status indicators, and visual polish
+- Consistent use of WinterVell design system variables throughout
+- No lint errors introduced
+- All components properly marked as "use client" for hooks
+
+---
+Task ID: 5-c
+Agent: Features Agent
+Task: Add dark mode toggle, scroll progress, back-to-top, ContactSection
+
+Work Log:
+- Read worklog.md and existing project files (Header.tsx, ThemeProvider.tsx, ContactSection.tsx, page.tsx, globals.css, SiteLayout.tsx)
+- Feature 1: Added dark mode toggle to Header.tsx — imported useTheme from next-themes and Sun/Moon from lucide-react, added ghost icon button between "Open demo" and "Join the founding release" on desktop, added labeled toggle button in mobile sheet menu
+- Feature 2: Created ScrollProgress.tsx — thin gradient progress bar fixed at top with z-[60], uses framer-motion useSpring/useTransform for smooth animation, respects prefers-reduced-motion via useSyncExternalStore, has no-print class and data-scroll-progress attribute, proper ARIA progressbar role
+- Feature 3: Created BackToTop.tsx — floating button at bottom-right, appears after 600px scroll, uses framer-motion AnimatePresence for enter/exit, ArrowUp icon, smooth scroll to top, respects prefers-reduced-motion, has no-print class and data-back-to-top attribute, size-10 rounded-full with bg-card border and shadow
+- Feature 4: Updated page.tsx — added ContactSection import and placed it between FAQSection and FinalCTA, added ScrollProgress at top of children, added BackToTop at end of children
+- Fixed lint errors: replaced useEffect-based prefers-reduced-motion detection with useSyncExternalStore to avoid "set-state-in-effect" errors
+- Ran lint: 0 errors, 8 pre-existing warnings (all react-hooks/incompatible-library from TanStack Table)
+- Dev server compiling successfully with all pages returning 200
+
+Stage Summary:
+- Dark mode toggle fully functional in both desktop and mobile header
+- Scroll progress indicator with gradient bar and smooth animation
+- Back-to-top floating button with AnimatePresence transitions
+- ContactSection added between FAQ and FinalCTA
+- All new components use WinterVell design system CSS variables
+- Zero lint errors introduced
+
+---
+Task ID: 5
+Agent: Main Agent (Round 5)
+Task: QA testing, styling improvements, new features, and dark mode
+
+Current Project Status:
+- 9 original sections on homepage (HeroSection, CoreWorkflow, ProductPreview, Differentiators, WhiteLabelPreview, OwnershipDeployment, PricingPreview, DueDiligencePreview, FinalCTA)
+- VLM rated existing design 8.5-9/10 (desktop), 9/10 (mobile)
+- 0 lint errors, 8 pre-existing warnings (TanStack Table incompatibility)
+- Dev server returning 200 consistently
+
+Work Log:
+- Read worklog.md to understand previous progress (6+ rounds of development)
+- Performed comprehensive QA with agent-browser + VLM across 22+ screenshots
+- VLM rated hero section 8.5/10, mobile 9/10, overall professional quality
+- Identified improvement areas: missing scroll animations, need interactive audit demo, need FAQ, need ROI calculator, need dark mode toggle, need scroll progress, need back-to-top
+- Launched 3 parallel subagents for enhancements
+
+Styling Enhancements (Task 5-a):
+- CoreWorkflow: Added framer-motion scroll-reveal, SVG path drawing animation for connectors, hover effects, gradient step number badges, mobile vertical timeline
+- ProductPreview: Added framer-motion staggered entrance, gradient background, hover lift effects, "Interactive demo" badge with Sparkles icon
+- Differentiators: Added scroll-reveal, color-coded icons per differentiator, badge labels (Verified/Connected/Traceable), hover effects, "Technical pillars" strip
+- PricingPreview: Added scroll-reveal, "Recommended" badge on Studio tier, hover effects, check icons, "Planned" badge on prices, pulse animation
+- DueDiligencePreview: Added scroll-reveal, status badges with color coding, hover effects, better visual depth
+- FinalCTA: Added gradient navy background, scroll-reveal, animated accent line, better button hierarchy, trust line
+
+New Features (Task 5-b):
+- InteractiveAuditDemo: URL input with simulated scanning animation, 9 audit categories with color-coded scores, overall score counter, "Simulated demonstration" disclaimer
+- FAQSection: 18 questions across 6 categories, real-time search filtering, category filter buttons, Accordion UI, result count, empty state
+- ROICalculator: 4 input sliders (clients/month, avg audit value, close rate %, monthly audits), real-time projected results, animated counters, reset button
+
+Additional Features (Task 5-c):
+- Dark mode toggle: Added Sun/Moon icon button in Header (desktop + mobile), uses next-themes useTheme hook
+- ScrollProgress: Thin gradient progress bar at top, framer-motion useSpring/useTransform, reduced-motion support, ARIA progressbar role
+- BackToTop: Floating button at bottom-right, appears after 600px scroll, AnimatePresence enter/exit, smooth scroll
+- ContactSection: Added to page between FAQSection and FinalCTA
+
+Page order (13 sections):
+1. HeroSection
+2. CoreWorkflow
+3. InteractiveAuditDemo
+4. ProductPreview
+5. Differentiators
+6. WhiteLabelPreview
+7. OwnershipDeployment
+8. PricingPreview
+9. ROICalculator
+10. DueDiligencePreview
+11. FAQSection
+12. ContactSection
+13. FinalCTA
+
+Plus fixed-position elements: ScrollProgress, BackToTop
+
+Verification:
+- Lint: 0 errors, 8 pre-existing warnings
+- Dev server: HTTP 200 consistently
+- No console errors
+- Dark mode toggle works correctly
+- InteractiveAuditDemo scanning animation works
+- FAQ search and filtering works
+- ROI calculator sliders work
+- Back-to-top button works
+- Scroll progress indicator works
+- All sections render correctly on desktop and mobile
+- VLM rated final mobile view 8.5/10
+
+Stage Summary:
+- 6 existing components significantly enhanced with visual polish
+- 5 new components created (InteractiveAuditDemo, FAQSection, ROICalculator, ScrollProgress, BackToTop)
+- 2 components modified (Header with dark mode toggle, page.tsx with new sections)
+- Dark mode fully functional with toggle
+- Interactive audit demo with scanning animation
+- FAQ with search and category filtering
+- ROI calculator with real-time projections
+- Scroll progress and back-to-top navigation
+- Contact form integrated into page
+- Total: 13 sections + 2 fixed-position elements
+
+Unresolved issues / next phase priorities:
+- Could add more micro-interactions (cursor effects, parallax)
+- Could add a "Compare licences" interactive tool
+- Could add a "View sample report" dedicated modal
+- Could add a changelog/roadmap section
+- Could add Open Graph image generation
+- Could add sitemap.xml and robots.txt
+- Could add a cookie consent banner
+- Could add more keyboard shortcuts
+- Could add more accessibility features
+
+---
+Task ID: 4-a
+Agent: Motion Removal Agent
+Task: Remove excessive motion from all site components
+
+Work Log:
+- Read all 8 site component files to assess current state
+- Found WhiteLabelPreview.tsx and OwnershipDeployment.tsx already static (no framer-motion, no "use client")
+- Rewrote CoreWorkflow.tsx: removed "use client", framer-motion, useRef, useInView, motion, containerVariants, stepVariants, lineVariants; replaced animated SVG lines with static lines; removed hover elevation/translate on cards
+- Rewrote ProductPreview.tsx: removed "use client", framer-motion, useRef, useInView, motion, cardVariants; removed gradient background overlay; removed Sparkles icon import; removed hover elevation on cards; removed stagger animation
+- Rewrote Differentiators.tsx: removed "use client", framer-motion, useRef, useInView, motion, cardVariants, pillarVariants; removed hover elevation on cards; removed stagger animation
+- Rewrote DueDiligencePreview.tsx: removed "use client", framer-motion, useRef, useInView, motion, cardVariants; removed hover elevation/translate on cards; removed hover scale on icons
+- Rewrote FinalCTA.tsx: removed "use client", framer-motion, useRef, useInView, motion; removed animated accent line; removed decorative radial gradient overlay; updated trust line to honest label: "No website is crawled, no email is sent and no payment is processed."
+- Rewrote PricingPreview.tsx: removed "use client", framer-motion, useRef, useInView, motion, cardVariants; removed "Recommended" badge; removed pulse animation; removed hover elevation; changed subtitle to "Planned pricing. Purchasing is not yet open."; removed recommended tier visual distinction
+- Ran npx tsc --noEmit — passed with zero errors
+
+Stage Summary:
+- 6 of 8 files were rewritten to remove all framer-motion animations and decorative motion
+- 2 files (WhiteLabelPreview.tsx, OwnershipDeployment.tsx) were already static and required no changes
+- All components now render as static HTML without client-side hooks
+- All "use client" directives removed where no longer needed
+- Content structure, data, and navigation preserved in all files
+- Honest labels applied: FinalCTA trust line, PricingPreview subtitle
+- TypeScript compilation passes with no errors

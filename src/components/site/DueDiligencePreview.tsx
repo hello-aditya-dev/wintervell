@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import {
   FileSearch,
   Scale,
@@ -50,6 +51,17 @@ const DUE_DILIGENCE_CARDS = [
   },
 ] as const;
 
+const statusConfig = {
+  Available: {
+    badgeClass: "bg-[var(--success-subtle)] text-[var(--success)] border-[var(--success)]/20",
+    dotClass: "bg-[var(--success)]",
+  },
+  "In preparation": {
+    badgeClass: "bg-[var(--warning-subtle)] text-[var(--warning)] border-[var(--warning)]/20",
+    dotClass: "bg-[var(--warning)]",
+  },
+} as const;
+
 export default function DueDiligencePreview() {
   return (
     <section className="border-y border-border bg-surface-muted">
@@ -64,29 +76,35 @@ export default function DueDiligencePreview() {
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {DUE_DILIGENCE_CARDS.map((card) => {
             const Icon = card.icon;
+            const config = statusConfig[card.status];
             return (
-              <Link
-                key={card.title}
-                href={card.href}
-                className="group rounded-lg border border-border bg-card p-4 shadow-xs transition-colors hover:border-primary/30"
-              >
-                <Icon className="size-5 text-muted-foreground transition-colors group-hover:text-primary" />
-                <h3 className="mt-3 text-sm font-medium text-foreground">
-                  {card.title}
-                </h3>
-                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-                  {card.description}
-                </p>
-                <span
-                  className={`mt-3 inline-block rounded px-1.5 py-0.5 text-[10px] font-medium ${
-                    card.status === "Available"
-                      ? "bg-[var(--success-subtle)] text-[var(--success)]"
-                      : "bg-surface-muted text-muted-foreground"
-                  }`}
+              <div key={card.title}>
+                <Link
+                  href={card.href}
+                  className="group flex h-full flex-col rounded-lg border border-border bg-card p-4 shadow-xs"
                 >
-                  {card.status}
-                </span>
-              </Link>
+                  {/* Icon */}
+                  <div className="flex size-9 items-center justify-center rounded-lg bg-primary-subtle">
+                    <Icon className="size-4 text-primary" />
+                  </div>
+
+                  <h3 className="mt-3 text-sm font-medium text-foreground">
+                    {card.title}
+                  </h3>
+                  <p className="mt-1 flex-1 text-xs text-muted-foreground leading-relaxed">
+                    {card.description}
+                  </p>
+
+                  {/* Status badge with color coding */}
+                  <Badge
+                    variant="outline"
+                    className={`mt-3 w-fit gap-1.5 border text-[10px] ${config.badgeClass}`}
+                  >
+                    <span className={`size-1.5 rounded-full ${config.dotClass}`} />
+                    {card.status}
+                  </Badge>
+                </Link>
+              </div>
             );
           })}
         </div>

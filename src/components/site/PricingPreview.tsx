@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react";
 import { commercial } from "@/config/commercial";
 
 const TIERS = [
@@ -39,15 +41,20 @@ export default function PricingPreview() {
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-h2 text-foreground">Pricing preview</h2>
           <p className="mt-3 text-body text-muted-foreground">
-            Planned founding pricing. Purchasing is not yet open.
+            Planned pricing. Purchasing is not yet open.
           </p>
+          <div className="mt-4 inline-flex items-center">
+            <Badge className="bg-primary text-primary-foreground">
+              Founding pricing
+            </Badge>
+          </div>
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
           {TIERS.map((tier) => (
             <div
               key={tier.name}
-              className="flex flex-col rounded-lg border border-border bg-card p-6 shadow-xs"
+              className="relative flex flex-col rounded-lg border border-border bg-card p-6 shadow-xs"
             >
               <h3 className="text-h4 text-foreground">{tier.name}</h3>
               <p className="mt-1 text-sm text-muted-foreground">
@@ -59,9 +66,12 @@ export default function PricingPreview() {
                     <span className="text-display text-foreground tabular-nums">
                       ${tier.price}
                     </span>
-                    <span className="text-sm text-muted-foreground">
-                      planned
-                    </span>
+                    <Badge
+                      variant="outline"
+                      className="border-[var(--warning)]/30 text-[var(--warning)]"
+                    >
+                      Planned
+                    </Badge>
                   </div>
                 ) : (
                   <div className="flex items-baseline gap-1">
@@ -72,19 +82,23 @@ export default function PricingPreview() {
               <p className="mt-1 text-xs text-[var(--text-tertiary)]">
                 {tier.bestFor}
               </p>
-              <ul className="mt-4 flex-1 space-y-2">
+              <ul className="mt-4 flex-1 space-y-2.5">
                 {tier.includes.map((item) => (
                   <li
                     key={item}
                     className="flex items-start gap-2 text-sm text-muted-foreground"
                   >
-                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
-                    {item}
+                    <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <div className="mt-6">
-                <Button variant="outline" className="w-full" asChild>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  asChild
+                >
                   <Link href={tier.href}>{tier.cta}</Link>
                 </Button>
               </div>
