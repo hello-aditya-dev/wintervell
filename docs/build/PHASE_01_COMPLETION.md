@@ -6,7 +6,11 @@
 
 ## Final commit
 
-TBD
+`90720a2e8985439a204d0bebbf3bb10e2e1acef2`
+
+## Preview URL
+
+https://wintervell-r6goevz4o-witejackel-4928s-projects.vercel.app
 
 ## PR
 
@@ -233,8 +237,8 @@ None beyond existing configuration.
 
 ## Phase 1 status
 
-In progress. Vercel preview URL pending after push and deploy.
+Complete. All acceptance gate criteria verified. Vercel preview READY.
 
 ## PR #2 readiness
 
-Ready for review with current implementation. Final commit SHA: TBD.
+Ready for owner review. Final commit SHA: 90720a2e8985439a204d0bebbf3bb10e2e1acef2.
