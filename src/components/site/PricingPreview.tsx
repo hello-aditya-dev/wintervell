@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react";
 import { commercial } from "@/config/commercial";
 
 const TIERS = [
@@ -20,6 +22,7 @@ const TIERS = [
     includes: commercial.pricing.studio.includes.slice(0, 5),
     cta: "View details",
     href: "/pricing",
+    featured: true,
   },
   {
     name: "Enterprise",
@@ -44,52 +47,67 @@ export default function PricingPreview() {
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-3">
-          {TIERS.map((tier) => (
-            <div
-              key={tier.name}
-              className="flex flex-col rounded-lg border border-border bg-card p-6 shadow-xs"
-            >
-              <h3 className="text-h4 text-foreground">{tier.name}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {tier.description}
-              </p>
-              <div className="mt-4">
-                {tier.price !== null ? (
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-display text-foreground tabular-nums">
-                      ${tier.price}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      planned
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-h3 text-foreground">Custom</span>
-                  </div>
+          {TIERS.map((tier) => {
+            const isFeatured = "featured" in tier && tier.featured;
+            return (
+              <div
+                key={tier.name}
+                className={`relative flex flex-col rounded-lg border bg-card p-6 shadow-xs transition-shadow duration-200 hover:shadow-md ${
+                  isFeatured ? "border-primary" : "border-border"
+                }`}
+              >
+                {isFeatured && (
+                  <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[11px]">
+                    Recommended
+                  </Badge>
                 )}
-              </div>
-              <p className="mt-1 text-xs text-[var(--text-tertiary)]">
-                {tier.bestFor}
-              </p>
-              <ul className="mt-4 flex-1 space-y-2">
-                {tier.includes.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-2 text-sm text-muted-foreground"
+
+                <h3 className="text-h4 text-foreground">{tier.name}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {tier.description}
+                </p>
+                <div className="mt-4">
+                  {tier.price !== null ? (
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-display text-foreground tabular-nums">
+                        ${tier.price}
+                      </span>
+                      <Badge variant="secondary" className="text-[10px]">
+                        Planned
+                      </Badge>
+                    </div>
+                  ) : (
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-h3 text-foreground">Custom</span>
+                    </div>
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-[var(--text-tertiary)]">
+                  {tier.bestFor}
+                </p>
+                <ul className="mt-4 flex-1 space-y-2">
+                  {tier.includes.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                    >
+                      <Check className="mt-0.5 size-3.5 shrink-0 text-[#24584F]" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6">
+                  <Button
+                    variant={isFeatured ? "default" : "outline"}
+                    className="w-full"
+                    asChild
                   >
-                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6">
-                <Button variant="outline" className="w-full" asChild>
-                  <Link href={tier.href}>{tier.cta}</Link>
-                </Button>
+                    <Link href={tier.href}>{tier.cta}</Link>
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

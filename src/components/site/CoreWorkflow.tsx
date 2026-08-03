@@ -15,6 +15,8 @@ const STEPS = [
     description: "Add a website and company details to your pipeline.",
     icon: UserPlus,
     href: "/app",
+    color: "text-primary",
+    bg: "bg-primary-subtle",
   },
   {
     number: 2,
@@ -22,6 +24,8 @@ const STEPS = [
     description: "Select categories and parameters for the review.",
     icon: Settings,
     href: "/app",
+    color: "text-[var(--info)]",
+    bg: "bg-[var(--info-subtle)]",
   },
   {
     number: 3,
@@ -29,6 +33,8 @@ const STEPS = [
     description: "Examine evidence, edit, and approve each finding.",
     icon: Search,
     href: "/app",
+    color: "text-[#24584F]",
+    bg: "bg-[#24584F]/10",
   },
   {
     number: 4,
@@ -36,6 +42,8 @@ const STEPS = [
     description: "Generate a branded client report with approved findings.",
     icon: FileText,
     href: "/app",
+    color: "text-[var(--success)]",
+    bg: "bg-[var(--success-subtle)]",
   },
   {
     number: 5,
@@ -43,6 +51,8 @@ const STEPS = [
     description: "Turn approved findings into a scoped proposal.",
     icon: FileCheck,
     href: "/app",
+    color: "text-[var(--severity-medium-text)]",
+    bg: "bg-[var(--severity-medium-bg)]",
   },
   {
     number: 6,
@@ -50,6 +60,8 @@ const STEPS = [
     description: "Follow the opportunity through the sales pipeline.",
     icon: TrendingUp,
     href: "/app",
+    color: "text-primary",
+    bg: "bg-primary-subtle",
   },
 ] as const;
 
@@ -74,8 +86,8 @@ export default function CoreWorkflow() {
                     href={step.href}
                     className="group flex w-[140px] flex-col items-center text-center"
                   >
-                    <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-card shadow-xs transition-colors group-hover:border-primary/30 group-hover:bg-primary-subtle">
-                      <Icon className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
+                    <div className={`flex size-10 items-center justify-center rounded-lg ${step.bg} shadow-xs transition-all duration-200 group-hover:scale-110 group-hover:shadow-md`}>
+                      <Icon className={`size-4 ${step.color} transition-transform duration-200`} />
                     </div>
                     <span className="mt-2 text-xs font-medium text-[var(--text-tertiary)]">
                       Step {step.number}

@@ -23,8 +23,8 @@ const NAV_COLUMNS = [
     title: "Legal",
     links: [
       { label: "Commercial licence", href: "/license" },
-      { label: "Privacy", href: "/license" },
-      { label: "Terms", href: "/license" },
+      { label: "Privacy", href: "/privacy" },
+      { label: "Terms", href: "/terms" },
     ],
   },
 ] as const;

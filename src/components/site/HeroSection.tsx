@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ArrowRight, FileText } from "lucide-react";
 
 const WORKFLOW_CARDS = [
@@ -41,11 +42,30 @@ const WORKFLOW_CARDS = [
   },
 ] as const;
 
+const TRUST_METRICS = [
+  { value: "9", label: "Audit categories" },
+  { value: "11", label: "Pipeline stages" },
+  { value: "6", label: "Product modules" },
+  { value: "1", label: "Source code licence" },
+];
+
 export default function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-background">
-      <div className="mx-auto max-w-7xl px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28 lg:px-8 lg:pb-24 lg:pt-32">
+      {/* Subtle dot grid background */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `radial-gradient(circle, currentColor 1px, transparent 1px)`,
+          backgroundSize: "24px 24px",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28 lg:px-8 lg:pb-24 lg:pt-32">
         <div className="mx-auto max-w-3xl text-center">
+          <Badge variant="secondary" className="mb-6 text-xs">
+            Product in development · Interactive demo available
+          </Badge>
           <h1 className="text-h1 sm:text-display text-foreground">
             Turn website evidence into agency work.
           </h1>
@@ -79,7 +99,7 @@ export default function HeroSection() {
           <div className="mx-auto flex min-w-[720px] max-w-5xl items-stretch gap-3">
             {WORKFLOW_CARDS.map((card, i) => (
               <div key={card.label} className="flex items-stretch">
-                <div className="flex w-[160px] flex-col rounded-lg border border-border bg-card p-3 shadow-xs">
+                <div className="flex w-[160px] flex-col rounded-lg border border-border bg-card p-3 shadow-xs transition-shadow duration-200 hover:shadow-md">
                   <span
                     className={`inline-flex w-fit rounded-md px-1.5 py-0.5 text-[11px] font-medium ${card.accent}`}
                   >
@@ -101,6 +121,16 @@ export default function HeroSection() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Trust metrics strip */}
+        <div className="mt-16 mx-auto grid max-w-2xl grid-cols-4 gap-4">
+          {TRUST_METRICS.map((metric) => (
+            <div key={metric.label} className="text-center">
+              <div className="text-h2 text-foreground tabular-nums">{metric.value}</div>
+              <div className="mt-1 text-xs text-muted-foreground">{metric.label}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

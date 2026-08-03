@@ -200,7 +200,7 @@ export default function ProductPreview() {
               <Link
                 key={preview.label}
                 href={preview.href}
-                className="group rounded-lg border border-border bg-card p-4 shadow-xs transition-colors hover:border-primary/30"
+                className="group rounded-lg border border-border bg-card p-4 shadow-xs transition-all duration-200 hover:border-primary/30 hover:shadow-md"
               >
                 <div className="flex items-center gap-2">
                   <Icon className="size-4 text-muted-foreground" />
