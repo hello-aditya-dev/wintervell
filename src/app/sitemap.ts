@@ -5,13 +5,11 @@ import type { MetadataRoute } from "next";
  *
  * Next.js 16 MetadataRoute.Sitemap — served at `/sitemap.xml`.
  *
- * The commercial config in `src/config/commercial.ts` does not currently
- * export a site URL, so a placeholder is used here. Update this constant
- * (or centralize it in the commercial config) before deploying to production.
+ * Uses the production domain from the commercial config.
+ * Update SITE_URL if the production domain changes.
  */
 
-// TODO: update to the production WinterVell domain (or move into commercial config).
-const SITE_URL = "https://wintervell.example";
+const SITE_URL = "https://wintervell.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

@@ -45,9 +45,12 @@ export async function POST(request: NextRequest) {
 
     const { name, email, subject, message } = result.data;
 
+    // IMPORTANT: This contact form does not persist data or send emails.
+    // The submission is logged to the server console only.
     // In production, this would send an email via a transactional email service
     // (e.g., Resend, SendGrid, Postmark) or store the message in a database.
-    // For now, we log the submission and return success.
+    // Until email integration is implemented, do not imply that the message
+    // has been delivered or will receive a response.
     console.log("[Contact Form Submission]", {
       name,
       email,
@@ -57,7 +60,11 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { success: true, message: "Message received. We will respond via email." },
+      {
+        success: true,
+        message:
+          "Thank you for your interest. Email delivery is not yet configured — your message was logged but not sent. Please contact us directly at the email address listed on this page.",
+      },
       { status: 200 }
     );
   } catch (error) {

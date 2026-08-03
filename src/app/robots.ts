@@ -6,12 +6,10 @@ import type { MetadataRoute } from "next";
  * Next.js 16 MetadataRoute.Robots — served at `/robots.txt`.
  *
  * Allows all crawlers access to the homepage and references the sitemap.
- * The site URL is shared with `src/app/sitemap.ts` — update both (or move
- * into the commercial config) before deploying to production.
+ * Uses the production domain consistent with sitemap.ts.
  */
 
-// TODO: update to the production WinterVell domain (or move into commercial config).
-const SITE_URL = "https://wintervell.example";
+const SITE_URL = "https://wintervell.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {

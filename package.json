@@ -1,5 +1,5 @@
 {
-  "name": "nextjs_tailwind_shadcn_ts",
+  "name": "wintervell",
   "version": "0.2.1",
   "private": true,
   "scripts": {
@@ -7,6 +7,9 @@
     "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
     "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'No test runner configured yet. Install vitest and add tests.' && exit 1",
+    "test:e2e": "echo 'No E2E test runner configured yet. Install playwright and add tests.' && exit 1",
     "db:push": "prisma db push --accept-data-loss",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

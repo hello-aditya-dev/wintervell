@@ -108,6 +108,11 @@ export default function ContactPage() {
               Ask a product question, request a licence clarification, or
               discuss an enterprise arrangement.
             </p>
+            <p className="mt-2 text-small text-[var(--text-tertiary)]">
+              Email delivery is not yet configured. Your message will be logged
+              but not sent. For urgent inquiries, contact us directly at the
+              email address listed in the footer.
+            </p>
 
             {formState === "success" ? (
               <div className="mt-8 rounded-lg border border-border bg-card p-6 shadow-xs">
@@ -115,10 +120,12 @@ export default function ContactPage() {
                   <CheckCircle2 className="size-5 text-[var(--success)]" />
                   <div>
                     <h2 className="text-h4 text-foreground">
-                      Message received
+                      Submission logged
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      We will respond via email.
+                      Email delivery is not yet configured. Your message was
+                      logged but not sent. Please contact us directly at the
+                      email address in the footer.
                     </p>
                   </div>
                 </div>

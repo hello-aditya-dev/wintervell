@@ -18,36 +18,39 @@ const SITE_URL = "https://wintervell.com";
 const SITE_NAME = "WinterVell";
 
 /* ─── JSON-LD Structured Data ─── */
-/* Only the SoftwareApplication schema is included. Product and FAQ schemas */
-/* were removed because they made availability claims ("InStock") that could */
-/* be dishonest — licence availability depends on current stock and terms.   */
+/* The SoftwareApplication schema describes the product honestly. */
+/* Features listed are only those that are currently implemented. */
+/* Planned features are not listed as featureList entries. */
+/* The offer uses "PreOrder" availability to reflect that purchasing */
+/* is not yet open. */
 
 const softwareApplicationSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "WinterVell",
   description:
-    "Website audit and agency sales platform. White-label audit engine, report builder, proposal generator, and prospect pipeline for agencies.",
+    "Website audit and agency sales platform — currently in development. Interactive product demo available.",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Self-hosted (Node.js)",
   offers: {
-    "@type": "AggregateOffer",
+    "@type": "Offer",
     priceCurrency: "USD",
-    lowPrice: "799",
-    highPrice: "4000",
-    offerCount: "3",
+    price: "799",
+    availability: "https://schema.org/PreOrder",
+    description: "Planned founding pricing. Purchasing is not yet open.",
   },
   featureList: [
-    "White-label audit engine",
-    "Branded report builder",
-    "Proposal generator",
-    "Prospect pipeline management",
-    "9 audit categories",
-    "11-stage sales pipeline",
-    "Multi-tenant architecture",
-    "Bring-your-own API keys",
-    "PDF rendering with selectable text",
-    "Full source code included",
+    "Interactive product demonstration",
+    "Deterministic demo data",
+    "Prospect management interface",
+    "Audit workflow interface",
+    "Finding review workspace",
+    "Report builder interface",
+    "Proposal builder interface",
+    "Pipeline kanban interface",
+    "White-label branding settings",
+    "Service catalogue",
+    "Task management",
   ],
   url: SITE_URL,
   provider: {
@@ -57,9 +60,9 @@ const softwareApplicationSchema = {
 };
 
 export const metadata: Metadata = {
-  title: "WinterVell — Website Audit and Agency Sales Platform",
+  title: "WinterVell — Website Audit and Agency Sales Platform (In Development)",
   description:
-    "Turn any website into a sales-ready audit. White-label audit engine, report builder, proposal generator, and prospect pipeline for agencies.",
+    "WinterVell is a website audit and agency sales platform in development. Explore the interactive product demo, view sample reports, and review the planned pricing.",
   keywords: [
     "WinterVell",
     "website audit",
@@ -79,9 +82,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "WinterVell — Website Audit and Agency Sales Platform",
+    title: "WinterVell — Website Audit and Agency Sales Platform (In Development)",
     description:
-      "Turn any website into a sales-ready audit. White-label audit engine, report builder, proposal generator, and prospect pipeline.",
+      "WinterVell is a website audit and agency sales platform in development. Explore the interactive demo and view sample reports.",
     type: "website",
     url: SITE_URL,
     siteName: "WinterVell",
@@ -90,15 +93,15 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "WinterVell — Website Audit and Agency Sales Platform",
+        alt: "WinterVell — Website Audit and Agency Sales Platform (In Development)",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "WinterVell — Website Audit and Agency Sales Platform",
+    title: "WinterVell — Website Audit and Agency Sales Platform (In Development)",
     description:
-      "Turn any website into a sales-ready audit. White-label audit engine, report builder, proposal generator, and prospect pipeline.",
+      "WinterVell is a website audit and agency sales platform in development. Explore the interactive demo and view sample reports.",
     images: ["/opengraph-image"],
   },
 };
