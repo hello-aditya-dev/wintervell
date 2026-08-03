@@ -6,10 +6,10 @@ const DIFFERENTIATORS = [
     icon: ClipboardCheck,
     title: "Evidence before explanation",
     description:
-      "Findings include structured evidence instead of unsupported AI text. Every finding references specific pages, elements, or data points.",
+      "Findings include structured evidence instead of unsupported AI text. The demonstration models findings with page, element and evidence references. Real evidence collection begins with the audit-engine phase.",
     colorClass: "bg-primary-subtle",
     iconColorClass: "text-primary",
-    badgeLabel: "Verified",
+    badgeLabel: "Evidence model",
     badgeVariant: "default" as const,
     badgeClassName: "bg-primary text-primary-foreground",
   },
@@ -20,7 +20,7 @@ const DIFFERENTIATORS = [
       "Approved findings can become scope and proposal items. The proposal is derived from the audit, not written separately.",
     colorClass: "bg-[var(--success-subtle)]",
     iconColorClass: "text-[var(--success)]",
-    badgeLabel: "Connected",
+    badgeLabel: "Workflow demo",
     badgeVariant: "outline" as const,
     badgeClassName: "border-[var(--success)]/30 text-[var(--success)]",
   },
@@ -31,7 +31,7 @@ const DIFFERENTIATORS = [
       "The sales pipeline retains the audit, report and proposal context. You can trace any opportunity back to the original findings.",
     colorClass: "bg-[var(--warning-subtle)]",
     iconColorClass: "text-[var(--warning)]",
-    badgeLabel: "Traceable",
+    badgeLabel: "Traceability design",
     badgeVariant: "outline" as const,
     badgeClassName: "border-[var(--warning)]/30 text-[var(--warning)]",
   },
@@ -44,11 +44,11 @@ const TECHNICAL_PILLARS = [
   },
   {
     icon: ShieldCheck,
-    label: "Self-hosted, your infrastructure",
+    label: "Planned self-hosted deployment",
   },
   {
     icon: Database,
-    label: "Data never leaves your server",
+    label: "Designed for customer-controlled infrastructure",
   },
 ];
 

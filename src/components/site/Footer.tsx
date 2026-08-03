@@ -16,6 +16,7 @@ const NAV_COLUMNS = [
     links: [
       { label: "Due diligence", href: "/due-diligence" },
       { label: "Licence", href: "/license" },
+      { label: "Product status", href: "/product-status" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -89,11 +90,10 @@ export default function Footer() {
             </p>
             <div className="flex flex-col gap-1 sm:items-end">
               <p className="text-xs text-[#56616C]">
-                Proprietary software &mdash; WinterVell Commercial Source License
-                (WV-CSL) v1.0
+                Planned commercial source licence &mdash; draft terms under preparation
               </p>
               <p className="text-[10px] text-[#56616C]/60">
-                Self-hosted &middot; Source code &middot; Bring-your-own AI keys
+                Planned self-hosted &middot; Source code &middot; BYOK AI integration planned
               </p>
             </div>
           </div>

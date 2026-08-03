@@ -17,6 +17,12 @@ import {
   Plug,
   ChevronLeft,
   Shield,
+  Activity,
+  Headphones,
+  Phone,
+  LayoutList,
+  Megaphone,
+  Monitor,
 } from 'lucide-react';
 
 import {
@@ -36,6 +42,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { useDemoStore } from '@/demo/state/demo-store';
 
 // ── Navigation definition ──────────────────────────────────────────────────
 
@@ -50,7 +57,7 @@ interface NavGroup {
   items: NavItem[];
 }
 
-const navigation: NavGroup[] = [
+const baseNavigation: NavGroup[] = [
   {
     title: 'Overview',
     items: [
@@ -77,6 +84,7 @@ const navigation: NavGroup[] = [
     title: 'Configuration',
     items: [
       { label: 'Services', href: '/app/services', icon: Wrench },
+      { label: 'Product status', href: '/app/product-status', icon: Activity },
       { label: 'Branding', href: '/app/settings/branding', icon: Palette },
       { label: 'Team', href: '/app/settings/team', icon: UserPlus },
       { label: 'Integrations', href: '/app/settings/integrations', icon: Plug },
@@ -84,11 +92,29 @@ const navigation: NavGroup[] = [
   },
 ];
 
+const callCentreGroup: NavGroup = {
+  title: 'Call centre',
+  items: [
+    { label: 'Dashboard', href: '/app/call-centre', icon: Headphones },
+    { label: 'Calls', href: '/app/call-centre/calls', icon: Phone },
+    { label: 'Agents', href: '/app/call-centre/agents', icon: Users },
+    { label: 'Queues', href: '/app/call-centre/queues', icon: LayoutList },
+    { label: 'Campaigns', href: '/app/call-centre/campaigns', icon: Megaphone },
+    { label: 'Supervisor', href: '/app/call-centre/supervisor', icon: Monitor },
+  ],
+};
+
 // ── Sidebar component ──────────────────────────────────────────────────────
 
 export default function AppSidebar() {
   const pathname = usePathname();
   const { state } = useSidebar();
+  const scenario = useDemoStore((s) => s.scenario);
+
+  const navigation =
+    scenario === 'call-centre-crm'
+      ? [...baseNavigation.slice(0, 3), callCentreGroup, ...baseNavigation.slice(3)]
+      : baseNavigation;
 
   function isActive(href: string): boolean {
     if (href === '/app') {

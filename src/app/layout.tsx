@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://wintervell.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://wintervell.com";
 const SITE_NAME = "WinterVell";
 
 /* ─── JSON-LD Structured Data ─── */

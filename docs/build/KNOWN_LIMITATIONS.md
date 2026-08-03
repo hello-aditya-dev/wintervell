@@ -1,6 +1,6 @@
 # WinterVell — Known Limitations
 
-**Date:** 2026-08-04
+**Date:** 2026-08-05
 **Branch:** agent/wintervell-phase-01-frontend
 
 ## Product Limitations
@@ -62,10 +62,36 @@
 - No custom domain configuration exists
 - No report-level branding is applied
 
+### No Call-Centre Backend
+
+- Call-centre pages are frontend-only demonstration with demo data
+- No telephony (SIP/PSTN) connection exists
+- No real call recording or storage exists
+- No real agent session management exists
+- No real queue routing exists
+- Campaign auto-dialler is labelled as planned; no auto-dialler exists
+- Call detail view includes a recording placeholder; no recording playback
+- Supervisor dashboard shows static demo metrics; no real-time monitoring
+- No WebSocket feed for real-time call-centre metrics
+
+### No Product-Status Backend Validation
+
+- Product-status readiness scores are calculated from the capability registry (`src/config/capabilities.ts`)
+- Scores do not reflect actual system test results or runtime verification
+- Readiness percentages are based on weighted capability statuses, not measured outcomes
+- The capability registry is a static configuration file, not auto-discovered
+
+### Demo Scenario Selector Is UI-Only
+
+- The scenario selector (Agency audit, Sales CRM, Call-centre CRM) changes the active scenario state in the UI
+- It does not change the underlying demo data or route behaviour
+- All product data remains the same regardless of selected scenario
+- Scenario selection is reset on page reload (no persistence)
+
 ### No AI Integration
 
 - No AI provider abstraction exists
-- No bring-your-own-key support exists
+- No bring-your-own-key support exists (planned, not implemented)
 - No AI-assisted features exist
 
 ### No Email Integration
@@ -147,8 +173,8 @@
 
 ### Limited Test Scope
 
-- Unit tests cover demo store behaviour (6 tests in 1 file)
-- E2E tests cover route smoke tests, critical interactions, overflow, and accessibility (58 tests in 7 spec files)
+- Unit tests cover demo store, capability registry, readiness calculation, and component behaviour (94 tests across 7 test files)
+- E2E tests cover route smoke tests, critical interactions, overflow, accessibility, product-status, and call-centre (9 spec files)
 - No integration tests between frontend and backend (no backend exists)
 - No authorization tests (no auth exists)
 - No tenant-isolation tests (no tenancy exists)
@@ -157,10 +183,12 @@
 
 ### React Compiler Warnings
 
-- 8 warnings from React Compiler's `react-hooks/incompatible-library` rule
+- 11 warnings from React Compiler's `react-hooks/incompatible-library` rule
 - 7 from TanStack Table `useReactTable()` (v8.21.3)
 - 1 from React Hook Form `form.watch()` (v7.60.0)
+- 3 additional warnings from call-centre and product-status components using TanStack Table
 - These are not bugs and do not affect functionality; React Compiler correctly skips memoization
+- 0 lint errors; all 11 warnings are documented and safe to carry forward
 
 ## Legal Limitations
 
@@ -191,5 +219,8 @@ The following are true statements about the current product:
 6. No real audits, reports, or proposals can be generated.
 7. No authentication or authorization exists.
 8. The product is a frontend prototype only.
-9. Unit tests (6) and E2E tests (7 spec files, 58 tests) exist for the frontend demo.
+9. Unit tests (94 across 7 files) and E2E tests (9 spec files) exist for the frontend demo.
 10. All invalid detail IDs fail safely with not-found pages.
+11. Call-centre pages are frontend-only demonstration; no telephony connection exists.
+12. Product-status readiness scores are derived from a static capability registry, not from actual system tests.
+13. The demo scenario selector changes UI state only; it does not alter underlying data.

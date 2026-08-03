@@ -4,6 +4,7 @@ import * as React from 'react';
 import { X, Info } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { DemoScenarioSelector } from '@/components/shared/DemoScenarioSelector';
 import { cn } from '@/lib/utils';
 
 const SESSION_KEY = 'wv-demo-banner-dismissed';
@@ -48,10 +49,11 @@ export default function DemoBanner() {
       aria-live="polite"
     >
       <Info className="size-3.5 shrink-0" aria-hidden="true" />
-      <p className="flex-1 text-xs leading-relaxed">
+      <p className="text-xs leading-relaxed">
         Frontend demonstration — fictional data; no live audit, email or payment
         actions occur.
       </p>
+      <DemoScenarioSelector className="shrink-0" />
       <Button
         variant="ghost"
         size="icon"

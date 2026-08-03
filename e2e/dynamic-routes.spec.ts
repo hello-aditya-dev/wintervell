@@ -96,4 +96,19 @@ test.describe('Dynamic routes', () => {
       await expect(body).toBeVisible();
     });
   });
+
+  // ── Call Centre ──────────────────────────────────────────────────────────
+  test.describe('Call Centre', () => {
+    test('call detail - valid ID', async ({ page }) => {
+      await page.goto('/app/call-centre/calls/call-1');
+      // Should show the call detail page
+      await expect(page.locator('text=Elena Vasquez').or(page.locator('text=call-1')).first()).toBeVisible();
+    });
+
+    test('call detail - invalid ID', async ({ page }) => {
+      await page.goto('/app/call-centre/calls/nonexistent-call');
+      // Should show not found
+      await expect(page.getByText(/not found/i)).toBeVisible();
+    });
+  });
 });

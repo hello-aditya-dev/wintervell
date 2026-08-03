@@ -4,13 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 
 const OWNERSHIP_ITEMS = [
-  "Complete source code included",
-  "Deploy on your own infrastructure",
+  "Complete source code included (planned)",
+  "Planned self-hosted deployment model",
   "Your domain, your branding",
   "No vendor lock-in",
   "No recurring platform fees",
   "Client revenue is yours",
-  "Data stays on your servers",
+  "Designed for customer-controlled infrastructure",
   "Modify for your business needs",
 ];
 
@@ -36,7 +36,7 @@ export default function OwnershipDeployment() {
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-h2 text-foreground">Ownership and current release state</h2>
           <p className="mt-3 text-body text-muted-foreground">
-            Purchase the source code. Deploy on your infrastructure. Keep the client revenue.
+            Source-code commercial model planned. Deploy on your infrastructure. Keep the client revenue.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export default function OwnershipDeployment() {
           <div className="rounded-lg border border-border bg-card p-6 shadow-xs">
             <h3 className="text-h4 text-foreground">Source-code ownership</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              The WinterVell Commercial Source Licence (WV-CSL) grants you the complete source code for internal business use.
+              A planned commercial source licence (WV-CSL) is in preparation. Draft terms are available for review. Purchasing is not yet open and final terms require professional legal review.
             </p>
             <ul className="mt-4 space-y-2.5">
               {OWNERSHIP_ITEMS.map((item) => (

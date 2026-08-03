@@ -31,4 +31,10 @@ test.describe('Public routes', () => {
       await expect(heading).toBeVisible();
     });
   }
+
+  test('product status page', async ({ page }) => {
+    await page.goto('/product-status');
+    await expect(page).toHaveTitle(/WinterVell/);
+    await expect(page.getByRole('heading', { name: /product status/i })).toBeVisible();
+  });
 });

@@ -1,6 +1,6 @@
 # WinterVell — Feature Matrix
 
-**Date:** 2026-08-04
+**Date:** 2026-08-05
 **Branch:** agent/wintervell-phase-01-frontend
 
 ## Classification Key
@@ -10,6 +10,8 @@
 | Working | Implemented and verified |
 | Partially working | Exists but incomplete or unreliable |
 | Frontend only | UI exists but no backend or data persistence |
+| Frontend preview | UI preview with demo data, no backend connectivity |
+| Interactive demo | UI with interactive demo workflow, not production |
 | Simulated | Uses deterministic demo data, no real processing |
 | Planned | Intended but not yet started |
 | Missing | Not implemented at all |
@@ -139,7 +141,7 @@
 | Report builder | Frontend only | Demo data; labelled as demo |
 | Report versioning | Missing | — |
 | Report sharing | Missing | — |
-| PDF generation | Missing | — |
+| PDF generation | Planned | Planned, not implemented |
 | White labelling | Frontend only | Brand settings UI exists |
 | Share links | Missing | — |
 | View tracking | Missing | — |
@@ -175,12 +177,48 @@
 | Custom domain | Missing | — |
 | Report footer | Missing | — |
 
+### Call Centre
+
+| Feature | Status | Notes |
+|---|---|---|
+| Call-centre dashboard | Frontend preview | Demo data, no telephony connection |
+| Call list | Frontend preview | Demo data with filters and status |
+| Call detail view | Frontend preview | Demo data, recording placeholder |
+| Agent list | Frontend preview | Demo data, no real agent sessions |
+| Queue management | Frontend preview | Demo data, no real queue routing |
+| Campaign management | Frontend preview | Demo data, auto-dialler labelled as planned |
+| Supervisor dashboard | Frontend preview | Demo data, no real monitoring |
+| Telephony integration | Planned | No SIP/PSTN connection |
+| Call recording | Planned | No recording storage |
+| Auto-dialler | Planned | Labelled as planned in UI |
+| Real-time metrics | Planned | No WebSocket metrics feed |
+
+### Product Status
+
+| Feature | Status | Notes |
+|---|---|---|
+| Public readiness page | Interactive demo | /product-status route with readiness scores |
+| App readiness page | Interactive demo | /app/product-status route with detailed breakdown |
+| Readiness score calculation | Working | Based on capability registry, 6 dimensions |
+| Capability registry | Working | 35 capabilities in src/config/capabilities.ts |
+| Readiness dimensions | Working | Demo, Frontend workflow, CRM server, Call-centre, Audit, Commercial |
+
+### Demo Scenarios
+
+| Feature | Status | Notes |
+|---|---|---|
+| Scenario selector | Working | 3 scenarios: Agency audit, Sales CRM, Call-centre CRM |
+| Agency audit scenario | Working | Highlights audit/report/proposal workflow |
+| Sales CRM scenario | Working | Highlights prospect/pipeline/tasks workflow |
+| Call-centre CRM scenario | Working | Highlights call-centre dashboard and operations |
+| Scenario data switching | Working | UI-only, does not change underlying data |
+
 ### AI
 
 | Feature | Status | Notes |
 |---|---|---|
-| AI provider abstraction | Missing | — |
-| BYOK (bring your own key) | Missing | — |
+| AI provider abstraction | Planned | — |
+| BYOK (bring your own key) | Planned | Planned, not implemented |
 | AI-assisted explanations | Missing | — |
 | AI-assisted drafting | Missing | — |
 | AI usage logging | Missing | — |
@@ -235,9 +273,9 @@
 
 | Feature | Status | Notes |
 |---|---|---|
-| Unit tests | Working | Vitest configured, 6 tests in 1 file |
+| Unit tests | Working | Vitest configured, 94 tests across 7 test files |
 | Integration tests | Missing | — |
-| E2E tests | Working | Playwright configured, 7 spec files, 58 tests |
+| E2E tests | Working | Playwright configured, 9 spec files |
 | Authorization tests | Missing | — |
 | Tenant-isolation tests | Missing | — |
 | SSRF tests | Missing | — |
@@ -270,31 +308,36 @@
 | No fake social proof | Working | Removed in Phase 0 |
 | Contact form honesty | Working | Returns honest message about email not being configured |
 | Invalid ID handling | Working | not-found pages for all dynamic routes |
+| Call-centre demo disclaimer | Working | Demo disclaimer on every call-centre page |
+| Readiness scores from registry | Working | Calculated from capability registry, not from actual system tests |
 
 ## Summary
 
-| Category | Working | Partially working | Frontend only | Simulated | Planned | Missing | Broken | Unverified |
-|---|---|---|---|---|---|---|---|---|
-| Authentication | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 0 |
-| Organisations | 0 | 0 | 0 | 0 | 0 | 7 | 0 | 0 |
-| Roles | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
-| Prospects/CRM | 0 | 0 | 13 | 0 | 0 | 2 | 0 | 0 |
-| Tasks | 0 | 0 | 9 | 0 | 0 | 2 | 0 | 0 |
-| Pipeline | 0 | 0 | 6 | 0 | 0 | 5 | 0 | 0 |
-| Audits | 0 | 0 | 4 | 0 | 0 | 7 | 0 | 0 |
-| Findings | 0 | 0 | 5 | 0 | 0 | 4 | 0 | 0 |
-| Reports | 0 | 0 | 6 | 0 | 0 | 5 | 0 | 0 |
-| Proposals | 0 | 0 | 4 | 0 | 0 | 3 | 0 | 0 |
-| Services | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 |
-| White labelling | 0 | 0 | 4 | 0 | 0 | 2 | 0 | 0 |
-| AI | 0 | 0 | 0 | 0 | 0 | 6 | 0 | 0 |
-| Notifications | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
-| Licensing | 0 | 0 | 1 | 0 | 0 | 5 | 0 | 0 |
-| Security | 0 | 1 | 0 | 0 | 0 | 9 | 0 | 0 |
-| Deployment | 2 | 1 | 0 | 0 | 0 | 2 | 0 | 0 |
-| Tests | 3 | 0 | 0 | 0 | 0 | 5 | 0 | 0 |
-| Accessibility | 10 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Demo Honesty | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **21** | **3** | **55** | **0** | **0** | **76** | **0** | **0** |
+| Category | Working | Partially working | Frontend only | Frontend preview | Interactive demo | Planned | Missing | Broken | Unverified |
+|---|---|---|---|---|---|---|---|---|---|
+| Authentication | 0 | 0 | 0 | 0 | 0 | 0 | 9 | 0 | 0 |
+| Organisations | 0 | 0 | 0 | 0 | 0 | 0 | 7 | 0 | 0 |
+| Roles | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 0 | 0 |
+| Prospects/CRM | 0 | 0 | 13 | 0 | 0 | 0 | 2 | 0 | 0 |
+| Tasks | 0 | 0 | 9 | 0 | 0 | 0 | 2 | 0 | 0 |
+| Pipeline | 0 | 0 | 6 | 0 | 0 | 0 | 5 | 0 | 0 |
+| Audits | 0 | 0 | 4 | 0 | 0 | 0 | 7 | 0 | 0 |
+| Findings | 0 | 0 | 5 | 0 | 0 | 0 | 4 | 0 | 0 |
+| Reports | 0 | 0 | 5 | 0 | 0 | 1 | 4 | 0 | 0 |
+| Proposals | 0 | 0 | 4 | 0 | 0 | 0 | 3 | 0 | 0 |
+| Services | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 |
+| White labelling | 0 | 0 | 4 | 0 | 0 | 0 | 2 | 0 | 0 |
+| Call Centre | 0 | 0 | 0 | 7 | 0 | 4 | 0 | 0 | 0 |
+| Product Status | 2 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 |
+| Demo Scenarios | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| AI | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 0 | 0 |
+| Notifications | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
+| Licensing | 0 | 0 | 1 | 0 | 0 | 0 | 5 | 0 | 0 |
+| Security | 0 | 1 | 0 | 0 | 0 | 0 | 9 | 0 | 0 |
+| Deployment | 2 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
+| Tests | 3 | 0 | 0 | 0 | 0 | 0 | 5 | 0 | 0 |
+| Accessibility | 10 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Demo Honesty | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **Total** | **29** | **3** | **54** | **7** | **2** | **8** | **72** | **0** | **0** |
 
-**Phase 1 progress:** Verification complete — 6 unit tests, 58 E2E tests (7 spec files), 23 routes × 3 viewports overflow pass, 26 accessibility checks pass, demo honesty labels in place, invalid ID handling fixed, 10 unused dependencies removed, CI workflow created. The product remains overwhelmingly in the "Frontend only" and "Missing" categories. No real backend functionality exists. The interactive demo is the only functional aspect of the product.
+**Phase 1.1 progress:** Verification complete — 94 unit tests (7 test files), 9 E2E spec files, call-centre demonstration (6 routes, frontend preview), product-status pages (public + app), capability registry (35 capabilities), 6 readiness dimensions, demo scenario selector (3 scenarios), claims corrected (PDF export → planned, evidence → demo-modelled, self-hosting → planned, licensing → draft, AI BYOK → planned, WV-CSL v1.0 → draft), 11 lint warnings (0 errors). The product remains predominantly in the "Frontend only" and "Missing" categories. No real backend functionality exists. The interactive demo is the only functional aspect of the product.

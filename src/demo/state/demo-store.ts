@@ -9,6 +9,10 @@ import type { Opportunity } from '../types/opportunity';
 import type { Task } from '../types/task';
 import type { Service } from '../types/service';
 import type { DemoUser } from '../fixtures/users';
+import type { CallCentreAgent } from '../types/call-centre';
+import type { DemoCall } from '../types/call-centre';
+import type { DemoQueue } from '../types/call-centre';
+import type { DemoCampaign } from '../types/call-centre';
 
 import defaultProspects from '../fixtures/prospects';
 import defaultAudits from '../fixtures/audits';
@@ -19,6 +23,13 @@ import defaultOpportunities from '../fixtures/opportunities';
 import defaultTasks from '../fixtures/tasks';
 import defaultServices from '../fixtures/services';
 import defaultUsers from '../fixtures/users';
+import defaultAgents from '../fixtures/agents';
+import defaultCalls from '../fixtures/calls';
+import defaultQueues from '../fixtures/queues';
+import defaultCampaigns from '../fixtures/campaigns';
+
+// ── Demo scenario ─────────────────────────────────────────────────────────
+export type DemoScenario = 'agency-audit' | 'sales-crm' | 'call-centre-crm';
 
 // ── State shape ──────────────────────────────────────────────────────────
 export interface DemoState {
@@ -36,6 +47,15 @@ export interface DemoState {
   services: Service[];
   users: DemoUser[];
 
+  // Call-centre entities
+  agents: CallCentreAgent[];
+  calls: DemoCall[];
+  queues: DemoQueue[];
+  campaigns: DemoCampaign[];
+
+  // Demo scenario
+  scenario: DemoScenario;
+
   // Setters (used by repositories)
   setProspects: (prospects: Prospect[]) => void;
   setAudits: (audits: Audit[]) => void;
@@ -45,6 +65,11 @@ export interface DemoState {
   setOpportunities: (opportunities: Opportunity[]) => void;
   setTasks: (tasks: Task[]) => void;
   setServices: (services: Service[]) => void;
+  setAgents: (agents: CallCentreAgent[]) => void;
+  setCalls: (calls: DemoCall[]) => void;
+  setQueues: (queues: DemoQueue[]) => void;
+  setCampaigns: (campaigns: DemoCampaign[]) => void;
+  setScenario: (scenario: DemoScenario) => void;
 
   // Actions
   resetDemoData: () => void;
@@ -62,6 +87,10 @@ function getDefaultData() {
     tasks: structuredClone(defaultTasks),
     services: structuredClone(defaultServices),
     users: structuredClone(defaultUsers),
+    agents: structuredClone(defaultAgents),
+    calls: structuredClone(defaultCalls),
+    queues: structuredClone(defaultQueues),
+    campaigns: structuredClone(defaultCampaigns),
   };
 }
 
@@ -71,6 +100,9 @@ export const useDemoStore = create<DemoState>()(
     (set) => ({
       // Flag
       demoMode: true,
+
+      // Demo scenario
+      scenario: 'agency-audit' as DemoScenario,
 
       // Entities - initialized from defaults
       ...getDefaultData(),
@@ -84,11 +116,17 @@ export const useDemoStore = create<DemoState>()(
       setOpportunities: (opportunities) => set({ opportunities }),
       setTasks: (tasks) => set({ tasks }),
       setServices: (services) => set({ services }),
+      setAgents: (agents) => set({ agents }),
+      setCalls: (calls) => set({ calls }),
+      setQueues: (queues) => set({ queues }),
+      setCampaigns: (campaigns) => set({ campaigns }),
+      setScenario: (scenario) => set({ scenario }),
 
       // Reset
       resetDemoData: () =>
         set({
           demoMode: true,
+          scenario: 'agency-audit',
           ...getDefaultData(),
         }),
     }),
@@ -97,6 +135,7 @@ export const useDemoStore = create<DemoState>()(
       // Only persist entity data, not setters or actions
       partialize: (state) => ({
         demoMode: state.demoMode,
+        scenario: state.scenario,
         prospects: state.prospects,
         audits: state.audits,
         findings: state.findings,
@@ -106,6 +145,10 @@ export const useDemoStore = create<DemoState>()(
         tasks: state.tasks,
         services: state.services,
         users: state.users,
+        agents: state.agents,
+        calls: state.calls,
+        queues: state.queues,
+        campaigns: state.campaigns,
       }),
     }
   )
@@ -125,6 +168,10 @@ export function getStoreSnapshot(): {
   tasks: Task[];
   services: Service[];
   users: DemoUser[];
+  agents: CallCentreAgent[];
+  calls: DemoCall[];
+  queues: DemoQueue[];
+  campaigns: DemoCampaign[];
   setProspects: (prospects: Prospect[]) => void;
   setAudits: (audits: Audit[]) => void;
   setFindings: (findings: Finding[]) => void;
@@ -133,6 +180,10 @@ export function getStoreSnapshot(): {
   setOpportunities: (opportunities: Opportunity[]) => void;
   setTasks: (tasks: Task[]) => void;
   setServices: (services: Service[]) => void;
+  setAgents: (agents: CallCentreAgent[]) => void;
+  setCalls: (calls: DemoCall[]) => void;
+  setQueues: (queues: DemoQueue[]) => void;
+  setCampaigns: (campaigns: DemoCampaign[]) => void;
 } {
   return useDemoStore.getState();
 }

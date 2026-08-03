@@ -58,7 +58,7 @@ export const commercial = {
         "Full client-facing white labelling",
         "Unlimited internal users",
         "Commercial client-report use",
-        "Bring-your-own AI keys",
+        "BYOK AI integration planned",
         "Deployment documentation",
         "Purchased-version access",
         "Installation support",
@@ -194,7 +194,7 @@ export const commercial = {
     { label: "Audit workers", value: "Isolated audit execution — in development", status: "inDevelopment" as const },
     { label: "AI-provider abstraction", value: "OpenAI-compatible, Anthropic — planned", status: "planned" as const },
     { label: "PDF rendering", value: "Server-side with selectable text — planned", status: "planned" as const },
-    { label: "Self-hosting", value: "Deploy on your own infrastructure", status: "available" as const },
+    { label: "Self-hosting", value: "Planned self-hosted deployment model", status: "planned" as const },
   ],
 
   // FAQ
@@ -229,7 +229,7 @@ export const commercial = {
     },
     {
       q: "Are AI costs included?",
-      a: "No. WinterVell uses a bring-your-own-key model. You provide your own AI provider API keys, and you pay your AI provider directly for usage.",
+      a: "No. BYOK (bring-your-own-key) AI integration is planned for a future phase. AI provider integration is not yet implemented.",
     },
     {
       q: "Is the audit fully automated?",
@@ -257,7 +257,7 @@ export const commercial = {
     },
     {
       q: "How is customer data handled?",
-      a: "WinterVell is self-hosted. Customer data remains on your infrastructure. No client or audit data is transmitted externally.",
+      a: "WinterVell is designed for self-hosted deployment. In the current demonstration, data is stored locally in the browser. Production deployment will store data on your infrastructure with no external transmission.",
     },
   ],
 } as const;

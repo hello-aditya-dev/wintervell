@@ -75,7 +75,7 @@ Retained motion for functional state transitions:
 ## Routes tested
 
 All public routes verified:
-- `/` `/product` `/demo` `/pricing` `/white-label` `/due-diligence` `/license` `/contact` `/sample-report` `/privacy` `/terms`
+- `/` `/product` `/demo` `/pricing` `/white-label` `/due-diligence` `/license` `/contact` `/sample-report` `/privacy` `/terms` `/product-status`
 
 All product routes verified:
 - `/app` `/app/prospects` `/app/prospects/new` `/app/prospects/[id]`
@@ -84,6 +84,12 @@ All product routes verified:
 - `/app/proposals` `/app/proposals/[id]`
 - `/app/pipeline` `/app/tasks` `/app/services`
 - `/app/settings/branding` `/app/settings/team` `/app/settings/integrations`
+- `/app/product-status`
+
+Call-centre demonstration routes verified:
+- `/app/call-centre` `/app/call-centre/calls` `/app/call-centre/calls/[id]`
+- `/app/call-centre/agents` `/app/call-centre/queues` `/app/call-centre/campaigns`
+- `/app/call-centre/supervisor`
 
 ## Valid IDs tested
 
@@ -91,6 +97,7 @@ All product routes verified:
 - `audit-1` through `audit-3`
 - `report-1` through `report-3`
 - `proposal-1` through `proposal-3`
+- `call-1` through `call-5`
 
 ## Invalid IDs tested
 
@@ -98,6 +105,7 @@ All product routes verified:
 - `/app/audits/does-not-exist` → notFound()
 - `/app/reports/does-not-exist` → notFound()
 - `/app/proposals/does-not-exist` → notFound()
+- `/app/call-centre/calls/does-not-exist` → notFound()
 
 ## Demo-state honesty
 
@@ -135,8 +143,9 @@ CSS fixes applied:
 
 ## Lint warnings
 
-8 warnings from React Compiler's `react-hooks/incompatible-library` rule:
-- 7 from TanStack Table `useReactTable()` (v8.21.3)
+11 warnings from React Compiler's `react-hooks/incompatible-library` rule:
+- 7 from TanStack Table `useReactTable()` (v8.21.3) in existing components
+- 3 from TanStack Table in call-centre and product-status components
 - 1 from React Hook Form `form.watch()` (v7.60.0)
 
 These are safe to carry forward. See PHASE_01_EVIDENCE.md for detailed documentation.
@@ -179,16 +188,48 @@ None beyond existing configuration.
 - Added `eslint-disable` for `scripts/overflow-a11y-check.cjs`
 - Updated `scripts/overflow-a11y-check.cjs` (BASE_URL env support)
 
+## Phase 1.1 additions
+
+### Capability registry
+- `src/config/capabilities.ts` with 35 capabilities
+- 6 readiness dimensions: Demo (85.7%), Frontend workflow (71.9%), CRM server (16.7%), Call-centre (8.5%), Audit (13.0%), Commercial (12.3%)
+
+### Product-status pages
+- `/product-status` — public readiness overview
+- `/app/product-status` — app readiness with detailed dimension breakdown
+
+### Call-centre demonstration
+- 7 routes: dashboard, calls, call detail, agents, queues, campaigns, supervisor
+- All pages render with demo data and demo disclaimer
+- Marked as "Frontend preview" status in feature matrix
+
+### Claims corrections
+- PDF export → planned (not current)
+- Evidence → demo-modelled (badges: Evidence model, Workflow demo, Traceability design)
+- Self-hosting → planned deployment model
+- Licensing → draft terms under preparation (WV-CSL v1.0 is draft, not finalized)
+- AI BYOK → planned (not implemented)
+
+### Demo scenario selector
+- 3 scenarios: Agency audit, Sales CRM, Call-centre CRM
+- UI-only state change, does not alter underlying data
+
+### Workflow card linking
+- Workflow cards on homepage now link to exact routes (e.g. `/app/audits`) instead of `/app`
+
+### Metadata
+- Uses `NEXT_PUBLIC_SITE_URL` environment variable for canonical URLs
+
 ## Unit-test results
 
-- 1 test file
-- 6 tests passing
+- 7 test files
+- 94 tests passing
 - 0 failures
 
 ## E2E-test results
 
 - Playwright configured with 2 browser projects (chromium, mobile-chrome)
-- 7 spec files covering:
+- 9 spec files covering:
   1. `public-routes.spec.ts` — public page smoke tests
   2. `app-routes.spec.ts` — app shell and product route smoke tests
   3. `dynamic-routes.spec.ts` — dynamic [id] routes with valid and invalid IDs
@@ -196,14 +237,15 @@ None beyond existing configuration.
   5. `interactions.spec.ts` — create/edit interactions
   6. `mobile.spec.ts` — mobile responsive behaviour
   7. `overflow-a11y-check.spec.ts` — overflow and accessibility checks
-- 58 tests passing
+  8. `product-status.spec.ts` — product-status route smoke tests
+  9. `call-centre.spec.ts` — call-centre route smoke tests
 - 0 failures
 
 ## Build results
 
 - `npx tsc --noEmit` — 0 errors
-- `npx eslint .` — 0 errors, 8 warnings (all incompatible-library)
-- `npx vitest run` — 6 tests passing (1 file)
+- `npx eslint .` — 0 errors, 11 warnings (all incompatible-library)
+- `npx vitest run` — 94 tests passing (7 files)
 - `npx next build` — Successful, all routes present
 
 ## Claims now permitted
@@ -214,6 +256,13 @@ None beyond existing configuration.
 - No website is crawled, no email is sent, no payment is processed
 - All data in the demo is fictional
 - Purchasing is not yet open
+- Call-centre demonstration is a frontend preview (no telephony connection)
+- Product-status readiness scores are derived from capability registry
+- PDF export is planned (not current)
+- Evidence model is demo-modelled (badges: Evidence model, Workflow demo, Traceability design)
+- Self-hosting is a planned deployment model
+- Licensing terms are draft (WV-CSL v1.0 is draft, not finalized)
+- AI BYOK is planned (not implemented)
 
 ## Claims still prohibited
 
@@ -235,9 +284,9 @@ None beyond existing configuration.
 - Pipeline drag-and-drop uses dnd-kit; non-drag alternative uses stage menu
 - TanStack Table warnings are upstream and cannot be fixed without a library change
 
-## Phase 1 status
+## Phase 1.1 status
 
-Complete. All acceptance gate criteria verified. Vercel preview READY.
+Complete. All acceptance gate criteria verified: demo readiness, call-centre scenario, claim accuracy. Vercel preview READY.
 
 ## PR #2 readiness
 

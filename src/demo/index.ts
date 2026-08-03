@@ -135,3 +135,58 @@ export { default as opportunityFixtures } from './fixtures/opportunities';
 export { default as taskFixtures } from './fixtures/tasks';
 export { default as serviceFixtures } from './fixtures/services';
 export { default as userFixtures } from './fixtures/users';
+export { default as agentFixtures } from './fixtures/agents';
+export { default as callFixtures } from './fixtures/calls';
+export { default as queueFixtures } from './fixtures/queues';
+export { default as campaignFixtures } from './fixtures/campaigns';
+
+// ── Call-centre types ────────────────────────────────────────────────────
+export type {
+  AgentPresence,
+  CallDirection,
+  DemoCallStatus,
+  CallDisposition,
+  CallCentreAgent,
+  DemoCall,
+  DemoQueue,
+  DemoCampaign,
+  CreateCallInput,
+  UpdateCallInput,
+  UpdateAgentInput,
+} from './types/call-centre';
+
+// ── Call-centre repository interfaces ────────────────────────────────────
+export type {
+  CallFilters,
+  CallRepository,
+} from './repositories/call-repository';
+
+export type {
+  AgentFilters,
+  AgentRepository,
+} from './repositories/agent-repository';
+
+export type {
+  QueueRepository,
+} from './repositories/queue-repository';
+
+export type {
+  CampaignRepository,
+} from './repositories/campaign-repository';
+
+// ── Call-centre repository implementations ───────────────────────────────
+export {
+  DemoCallRepository,
+} from './repositories/call-repository';
+
+export {
+  DemoAgentRepository,
+} from './repositories/agent-repository';
+
+export {
+  DemoQueueRepository,
+} from './repositories/queue-repository';
+
+export {
+  DemoCampaignRepository,
+} from './repositories/campaign-repository';

@@ -15,3 +15,4 @@ export { default as CurrencyValue } from './CurrencyValue';
 export { default as DateValue } from './DateValue';
 export { default as PersonAvatar } from './PersonAvatar';
 export { default as Breadcrumbs } from './Breadcrumbs';
+export { DemoScenarioSelector } from './DemoScenarioSelector';

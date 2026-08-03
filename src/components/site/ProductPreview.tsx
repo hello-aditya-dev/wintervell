@@ -21,7 +21,7 @@ const PREVIEWS = [
         { category: "Performance", score: "81/100", status: "Approved" },
       ],
     },
-    href: "/app",
+    href: "/app/audits/audit-1",
   },
   {
     label: "Finding evidence",
@@ -36,11 +36,11 @@ const PREVIEWS = [
         "Identified in /about, /services, /contact…",
       ],
     },
-    href: "/app",
+    href: "/app/audits/audit-1",
   },
   {
     label: "Client report",
-    description: "Branded, exported PDF report with findings.",
+    description: "Branded client-report preview designed for future PDF export.",
     icon: FileText,
     mockData: {
       title: "Website Audit Report",
@@ -48,7 +48,7 @@ const PREVIEWS = [
       pages: "24 pages · 37 findings",
       status: "Published (Demo)",
     },
-    href: "/app",
+    href: "/app/reports/report-1",
   },
   {
     label: "Proposal",
@@ -60,7 +60,7 @@ const PREVIEWS = [
       value: "$4,800",
       status: "Sent (Demo)",
     },
-    href: "/app",
+    href: "/app/proposals/proposal-1",
   },
   {
     label: "Pipeline",
@@ -75,7 +75,7 @@ const PREVIEWS = [
         { name: "Proposal sent (Demo)", count: 1 },
       ],
     },
-    href: "/app",
+    href: "/app/pipeline",
   },
 ] as const;
 
