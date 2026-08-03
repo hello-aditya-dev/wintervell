@@ -1,6 +1,6 @@
 # WinterVell — Feature Matrix
 
-**Date:** 2026-08-03
+**Date:** 2026-08-04
 **Branch:** agent/wintervell-phase-01-frontend
 
 ## Classification Key
@@ -228,34 +228,36 @@
 | Vercel deployment | Working | Live at wintervell-nu.vercel.app |
 | Docker deployment | Missing | — |
 | Worker deployment | Missing | — |
-| CI/CD pipeline | Missing | — |
+| CI/CD pipeline | Working | GitHub Actions workflow runs typecheck, lint, unit, build, E2E |
 | Health checks | Partially working | `/api` endpoint exists |
 
 ### Tests
 
 | Feature | Status | Notes |
 |---|---|---|
-| Unit tests | Working | Vitest configured, 160 tests across 5 files |
+| Unit tests | Working | Vitest configured, 6 tests in 1 file |
 | Integration tests | Missing | — |
-| E2E tests | Working | Playwright configured, 6 spec files |
+| E2E tests | Working | Playwright configured, 7 spec files, 58 tests |
 | Authorization tests | Missing | — |
 | Tenant-isolation tests | Missing | — |
 | SSRF tests | Missing | — |
 | Scoring tests | Missing | — |
-| Accessibility checks | Partially working | Focus-visible, aria labels, reduced motion — no automated axe tests |
+| Accessibility checks | Working | 26 Playwright-based checks (skip link, focus, landmarks, H1, labels, reduced motion, lang, alt); no axe-core |
 
 ### Accessibility
 
 | Feature | Status | Notes |
 |---|---|---|
-| Skip link | Working | Added in Phase 1 |
+| Skip link | Working | Skip-to-content targets main |
 | Visible keyboard focus | Working | Focus-visible styles added in Phase 1 |
 | Aria-current navigation | Working | Added to sidebar in Phase 1 |
-| Form labels | Working | All inputs labelled in Phase 1 |
+| Form labels | Working | All inputs labelled; verified in E2E |
 | Reduced motion | Working | MotionProvider + CSS prefers-reduced-motion |
 | Touch targets | Partially working | Sidebar and pipeline cards; not all controls |
 | Semantic landmarks | Working | nav, header, footer, main |
-| Heading hierarchy | Working | h1 on every page |
+| Heading hierarchy | Working | Single h1 on every page |
+| Language attribute | Working | html lang=en |
+| Alt text | Working | All img elements have alt text |
 | No colour-only status | Working | StatusBadge and SeverityBadge include text labels |
 
 ### Demo Honesty
@@ -289,10 +291,10 @@
 | Notifications | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | Licensing | 0 | 0 | 1 | 0 | 0 | 5 | 0 | 0 |
 | Security | 0 | 1 | 0 | 0 | 0 | 9 | 0 | 0 |
-| Deployment | 1 | 1 | 0 | 0 | 0 | 3 | 0 | 0 |
-| Tests | 2 | 1 | 0 | 0 | 0 | 5 | 0 | 0 |
-| Accessibility | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Deployment | 2 | 1 | 0 | 0 | 0 | 2 | 0 | 0 |
+| Tests | 3 | 0 | 0 | 0 | 0 | 5 | 0 | 0 |
+| Accessibility | 10 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Demo Honesty | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **15** | **4** | **55** | **0** | **0** | **81** | **0** | **0** |
+| **Total** | **21** | **3** | **55** | **0** | **0** | **76** | **0** | **0** |
 
-**Phase 1 progress:** Test infrastructure established (160 unit tests, 6 E2E spec files), demo honesty labels in place across all routes, invalid ID handling fixed, accessibility improvements applied. The product remains overwhelmingly in the "Frontend only" and "Missing" categories. No real backend functionality exists. The interactive demo is the only functional aspect of the product.
+**Phase 1 progress:** Verification complete — 6 unit tests, 58 E2E tests (7 spec files), 23 routes × 3 viewports overflow pass, 26 accessibility checks pass, demo honesty labels in place, invalid ID handling fixed, 10 unused dependencies removed, CI workflow created. The product remains overwhelmingly in the "Frontend only" and "Missing" categories. No real backend functionality exists. The interactive demo is the only functional aspect of the product.

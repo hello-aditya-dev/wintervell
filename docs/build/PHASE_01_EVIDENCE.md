@@ -63,22 +63,52 @@
 | Product preview badges | "Demonstration" | Yes |
 | Pipeline preview | "Audit running (Demo)" | Yes |
 
-## Console warnings
+## Overflow verification
 
-### TanStack Table / React Hook Form warnings (8 total)
+23 routes × 3 viewports tested. All pass.
 
-| # | File | Line | API | Trigger |
-|---|------|------|-----|---------|
-| 1 | src/app/app/audits/page.tsx | 204 | useReactTable() | React Compiler memoization analysis |
-| 2 | src/app/app/proposals/page.tsx | 170 | useReactTable() | React Compiler memoization analysis |
-| 3 | src/app/app/prospects/new/page.tsx | 387 | form.watch() | React Compiler memoization analysis |
-| 4 | src/app/app/prospects/page.tsx | 226 | useReactTable() | React Compiler memoization analysis |
-| 5 | src/app/app/reports/page.tsx | 175 | useReactTable() | React Compiler memoization analysis |
-| 6 | src/app/app/services/page.tsx | 170 | useReactTable() | React Compiler memoization analysis |
-| 7 | src/app/app/settings/team/page.tsx | 69 | useReactTable() | React Compiler memoization analysis |
-| 8 | src/app/app/tasks/page.tsx | 243 | useReactTable() | React Compiler memoization analysis |
+| Viewport | Dimensions | Result |
+|----------|------------|--------|
+| Mobile | 375 × 812 | All 23 routes pass — no horizontal overflow |
+| Tablet/Desktop | 1280 × 800 | All 23 routes pass — no horizontal overflow |
+| Desktop | 1440 × 900 | All 23 routes pass — no horizontal overflow |
 
-**Justification**: All 8 warnings originate from the React Compiler's `react-hooks/incompatible-library` rule. The `useReactTable()` API from `@tanstack/react-table@8.21.3` returns functions that cannot be statically memoized. The `form.watch()` API from `react-hook-form@7.60.0` returns a function that changes on every render. These are not bugs, not accessibility issues, and do not affect production behavior. The React Compiler correctly skips memoization of these components, which is the expected behavior. These warnings are safe to carry forward.
+**CSS fixes applied:**
+- Added `overflow-x-hidden` to `<body>` in `src/app/layout.tsx`
+- Added `overflow-x-hidden` to `.sidebar-wrapper` in `src/components/sidebar.tsx`
+
+## Accessibility verification
+
+26 tests pass across all routes.
+
+| Category | Tests | Result |
+|----------|-------|--------|
+| Skip link | Skip-to-content link present and targets main | Pass |
+| Main target | `<main id="main-content">` present on all pages | Pass |
+| Focus indicators | Focus-visible styles on interactive elements | Pass |
+| Landmarks | nav, header, footer, main landmarks present | Pass |
+| Single H1 | Exactly one `<h1>` per page | Pass |
+| Form labels | All form inputs have associated labels | Pass |
+| Reduced motion | `prefers-reduced-motion` respected via MotionProvider | Pass |
+| Language | `<html lang="en">` present | Pass |
+| Alt text | All `<img>` elements have alt text | Pass |
+
+## Lint warnings
+
+### React Compiler / incompatible-library warnings (8 total)
+
+| # | File | Line | API | Justification |
+|---|------|------|-----|---------------|
+| 1 | src/app/app/audits/page.tsx | 204 | useReactTable() | TanStack Table returns non-memoizable functions; React Compiler correctly skips |
+| 2 | src/app/app/proposals/page.tsx | 170 | useReactTable() | Same as above |
+| 3 | src/app/app/prospects/new/page.tsx | 387 | form.watch() | React Hook Form returns render-varying function; React Compiler correctly skips |
+| 4 | src/app/app/prospects/page.tsx | 226 | useReactTable() | Same as #1 |
+| 5 | src/app/app/reports/page.tsx | 175 | useReactTable() | Same as #1 |
+| 6 | src/app/app/services/page.tsx | 170 | useReactTable() | Same as #1 |
+| 7 | src/app/app/settings/team/page.tsx | 69 | useReactTable() | Same as #1 |
+| 8 | src/app/app/tasks/page.tsx | 243 | useReactTable() | Same as #1 |
+
+**Summary**: All 8 warnings originate from the React Compiler's `react-hooks/incompatible-library` rule. The `useReactTable()` API from `@tanstack/react-table@8.21.3` returns functions that cannot be statically memoized. The `form.watch()` API from `react-hook-form@7.60.0` returns a function that changes on every render. These are not bugs, not accessibility issues, and do not affect production behavior. The React Compiler correctly skips memoization of these components, which is the expected behavior. These warnings are safe to carry forward.
 
 ## Build verification
 
@@ -86,8 +116,21 @@
 |-------|--------|
 | `npx tsc --noEmit` | 0 errors |
 | `npx eslint .` | 0 errors, 8 warnings (all from incompatible-library rule) |
-| `npx vitest run` | 160 tests passing, 5 test files |
+| `npx vitest run` | 6 tests passing, 1 test file |
 | `npx next build` | Successful, all routes present |
+| E2E (Playwright) | 58 tests passing, 7 spec files (chromium + mobile-chrome) |
+
+## E2E spec files
+
+| # | Spec file | Coverage |
+|---|-----------|----------|
+| 1 | public-routes.spec.ts | Public page smoke tests |
+| 2 | app-routes.spec.ts | App shell and product route smoke tests |
+| 3 | dynamic-routes.spec.ts | Dynamic [id] routes with valid and invalid IDs |
+| 4 | navigation.spec.ts | Sidebar and header navigation |
+| 5 | interactions.spec.ts | Create/edit interactions (audit, prospect) |
+| 6 | mobile.spec.ts | Mobile responsive behaviour |
+| 7 | overflow-a11y-check.spec.ts | Overflow and accessibility checks |
 
 ## Homepage section count
 

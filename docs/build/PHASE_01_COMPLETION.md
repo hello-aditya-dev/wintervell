@@ -4,6 +4,10 @@
 
 `agent/wintervell-phase-01-frontend`
 
+## Final commit
+
+TBD
+
 ## PR
 
 https://github.com/witejackel-eng/wintervell/pull/2
@@ -104,7 +108,28 @@ Contact page:
 - "No external email will be sent. Your message will be logged but not delivered."
 - Success message: "No external email was sent. This is a frontend demonstration."
 
-## Console warnings
+## Overflow verification
+
+23 routes × 3 viewports (375×812, 1280×800, 1440×900) all pass.
+
+CSS fixes applied:
+- `overflow-x-hidden` added to `<body>` in `src/app/layout.tsx`
+- `overflow-x-hidden` added to `.sidebar-wrapper` in `src/components/sidebar.tsx`
+
+## Accessibility verification
+
+26 tests pass:
+- Skip link present and targets main
+- `<main id="main-content">` on all pages
+- Focus-visible styles on interactive elements
+- Semantic landmarks (nav, header, footer, main)
+- Single `<h1>` per page
+- Form labels on all inputs
+- `prefers-reduced-motion` respected
+- `<html lang="en">` present
+- Alt text on all `<img>` elements
+
+## Lint warnings
 
 8 warnings from React Compiler's `react-hooks/incompatible-library` rule:
 - 7 from TanStack Table `useReactTable()` (v8.21.3)
@@ -117,26 +142,65 @@ These are safe to carry forward. See PHASE_01_EVIDENCE.md for detailed documenta
 ### Added
 None beyond existing configuration.
 
-### Removed
-No packages removed from package.json — all dependencies are in use.
+### Removed (10 packages)
+- `z-ai-web-dev-sdk` — development tool, not for production runtime
+- `next-intl` — installed but not used
+- `@mdxeditor/editor` — installed but not used
+- `react-markdown` — installed but not used
+- `react-syntax-highlighter` — installed but not used
+- `uuid` — installed but not used
+- `@reactuses/core` — installed but not used
+- `@tanstack/react-query` — installed but not used
+- `next-auth` — installed but not used
+- `sharp` — installed but not used
+
+### Moved
+- `prisma` — moved from dependencies to devDependencies (not needed at runtime)
+
+## Housekeeping
+
+- Deleted duplicate `vitest.config.ts` (keeping `vitest.config.mts`)
+- Deleted `agent-ctx/` directory from git tracking (25 files)
+- Deleted `worklog.md` from git tracking
+- Added `agent-ctx/` and `worklog.md` to `.gitignore`
+- Deleted `examples/` and `skills/` directories from repo
+- Added `/examples/` and `/skills/` to `.gitignore`
+- Removed `examples` and `skills` from `tsconfig.json` exclude array
+- Created `.github/workflows/ci.yml` (GitHub Actions CI pipeline)
+- Created `src/test/setup.ts` and `src/test/demo-store.test.ts`
+- Fixed `e2e/interactions.spec.ts` (audit creation test)
+- Fixed `e2e/mobile.spec.ts` (hamburger menu test)
+- Updated `playwright.config.ts` (baseURL override, only chromium + mobile-chrome projects)
+- Updated `e2e/overflow-a11y-check.spec.ts` (form label test, footer test, baseURL)
+- Added `eslint-disable` for `scripts/overflow-a11y-check.cjs`
+- Updated `scripts/overflow-a11y-check.cjs` (BASE_URL env support)
 
 ## Unit-test results
 
-- 5 test files
-- 160 tests passing
+- 1 test file
+- 6 tests passing
 - 0 failures
 
-## E2E-test infrastructure
+## E2E-test results
 
-- Playwright configured with 5 browser projects (chromium, firefox, webkit, mobile-chrome, mobile-safari)
-- 6 spec files covering public routes, app routes, dynamic routes, navigation, interactions, and mobile
+- Playwright configured with 2 browser projects (chromium, mobile-chrome)
+- 7 spec files covering:
+  1. `public-routes.spec.ts` — public page smoke tests
+  2. `app-routes.spec.ts` — app shell and product route smoke tests
+  3. `dynamic-routes.spec.ts` — dynamic [id] routes with valid and invalid IDs
+  4. `navigation.spec.ts` — sidebar and header navigation
+  5. `interactions.spec.ts` — create/edit interactions
+  6. `mobile.spec.ts` — mobile responsive behaviour
+  7. `overflow-a11y-check.spec.ts` — overflow and accessibility checks
+- 58 tests passing
+- 0 failures
 
 ## Build results
 
 - `npx tsc --noEmit` — 0 errors
-- `npx eslint .` — 0 errors, 8 warnings
-- `npx vitest run` — 160 tests passing
-- `npx next build` — Successful
+- `npx eslint .` — 0 errors, 8 warnings (all incompatible-library)
+- `npx vitest run` — 6 tests passing (1 file)
+- `npx next build` — Successful, all routes present
 
 ## Claims now permitted
 
@@ -169,8 +233,8 @@ No packages removed from package.json — all dependencies are in use.
 
 ## Phase 1 status
 
-In progress. Further responsive verification and accessibility verification needed via agent-browser.
+In progress. Vercel preview URL pending after push and deploy.
 
 ## PR #2 readiness
 
-Ready for review with current implementation.
+Ready for review with current implementation. Final commit SHA: TBD.

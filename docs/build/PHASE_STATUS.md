@@ -17,16 +17,21 @@
 - Invalid-record handling with notFound() on all detail pages
 - Demo-state honesty labels corrected
 - Privacy and Terms pages created
-- 160 unit tests passing
-- E2E test infrastructure in place
+- 6 unit tests passing (1 test file)
+- E2E tests: 58 tests passing across 7 spec files (chromium + mobile-chrome)
+- Overflow verification: 23 routes × 3 viewports all pass (2 CSS fixes applied)
+- A11y verification: 26 tests pass (skip link, main target, focus indicators, landmarks, single H1, form labels, reduced motion, lang, alt text)
 - Build passes with 0 errors
+- Typecheck passes with 0 errors
 - Lint passes with 0 errors (8 upstream warnings documented)
+- Dependency cleanup: 10 unused packages removed, prisma moved to devDependencies
+- CI workflow created (.github/workflows/ci.yml)
+- Duplicate vitest.config.ts deleted (keeping vitest.config.mts)
+- agent-ctx/ and worklog.md added to .gitignore
+- examples/ and skills/ directories removed and gitignored
 
 ### Remaining
-- Responsive verification across all viewports (via agent-browser)
-- Accessibility verification (via agent-browser)
-- E2E test execution (requires running dev server)
-- Vercel preview URL
+- Vercel preview URL (pending push and deploy)
 
 ## Preview URL
 Pending Vercel deployment of Phase 1 branch.

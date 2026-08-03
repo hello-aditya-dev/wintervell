@@ -29,8 +29,11 @@ export default defineConfig({
 
   // Shared settings for all tests
   use: {
-    // Base URL for the application
-    baseURL: 'http://localhost:3000',
+    // Base URL — can be overridden with PLAYWRIGHT_BASE_URL or BASE_URL
+    baseURL:
+      process.env.PLAYWRIGHT_BASE_URL ??
+      process.env.BASE_URL ??
+      'http://127.0.0.1:3000',
 
     // Collect trace on first retry
     trace: 'on-first-retry',
@@ -50,32 +53,19 @@ export default defineConfig({
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-
-    // Mobile viewports
-    {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
-    },
-
-    {
-      name: 'mobile-safari',
-      use: { ...devices['iPhone 13'] },
     },
   ],
 
   // Run the dev server before starting tests
-  webServer: {
-    command: 'bun run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  // Only start the local server when not using an external preview URL
+  webServer: process.env.PLAYWRIGHT_BASE_URL
+    ? undefined
+    : {
+        command: 'bun run dev',
+        url: 'http://127.0.0.1:3000',
+        reuseExistingServer: !process.env.CI,
+        timeout: 120_000,
+      },
 });

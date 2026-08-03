@@ -1,6 +1,6 @@
 # WinterVell — Known Limitations
 
-**Date:** 2026-08-03
+**Date:** 2026-08-04
 **Branch:** agent/wintervell-phase-01-frontend
 
 ## Product Limitations
@@ -113,11 +113,12 @@
 - The application has many dynamic components that increase compilation memory usage
 - This may affect CI/CD environments with limited memory
 
-### No CI/CD Pipeline
+### CI/CD Pipeline
 
-- No automated build, test, or deployment pipeline exists
-- All deploys are manual pushes to Vercel
-- No branch protection or required checks exist
+- GitHub Actions workflow created (`.github/workflows/ci.yml`)
+- Workflow runs typecheck, lint, unit tests, build, and E2E tests
+- No branch protection or required checks configured in GitHub
+- Vercel deployment is still a manual push (no preview deploy integration)
 
 ## Data Limitations
 
@@ -146,18 +147,20 @@
 
 ### Limited Test Scope
 
-- Unit tests cover demo data, repositories, store, presentation logic, and form validation
-- E2E tests cover route smoke tests and critical interactions
+- Unit tests cover demo store behaviour (6 tests in 1 file)
+- E2E tests cover route smoke tests, critical interactions, overflow, and accessibility (58 tests in 7 spec files)
 - No integration tests between frontend and backend (no backend exists)
 - No authorization tests (no auth exists)
 - No tenant-isolation tests (no tenancy exists)
-- No automated accessibility testing (e.g., axe-core)
-- E2E tests require a running dev server and have not been executed against a deployed build
+- Accessibility tests are Playwright-based (26 checks), not axe-core automated scans
+- E2E tests run against a local dev server (Playwright); not yet executed against a deployed build
 
 ### React Compiler Warnings
 
-- 8 harmless warnings from TanStack Table (`react-hooks/incompatible-library`)
-- These are pre-existing and do not affect functionality
+- 8 warnings from React Compiler's `react-hooks/incompatible-library` rule
+- 7 from TanStack Table `useReactTable()` (v8.21.3)
+- 1 from React Hook Form `form.watch()` (v7.60.0)
+- These are not bugs and do not affect functionality; React Compiler correctly skips memoization
 
 ## Legal Limitations
 
@@ -188,5 +191,5 @@ The following are true statements about the current product:
 6. No real audits, reports, or proposals can be generated.
 7. No authentication or authorization exists.
 8. The product is a frontend prototype only.
-9. Unit tests (160) and E2E tests (6 spec files) exist for the frontend demo.
+9. Unit tests (6) and E2E tests (7 spec files, 58 tests) exist for the frontend demo.
 10. All invalid detail IDs fail safely with not-found pages.

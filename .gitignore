@@ -50,13 +50,15 @@ test
 prompt
 
 server.log
-# Skills directory
-/skills/qa-*.png
 tool-results/
-*.log
-
-# QA screenshots (root level)
 /qa-*.png
+
+# Agent process artifacts (not part of product source)
+agent-ctx/
+worklog.md
 
 # Skills directory (development environment, not part of project)
 /skills/
+
+# Examples directory (agent tooling, not part of product)
+/examples/
