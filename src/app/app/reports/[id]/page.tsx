@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter, notFound } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   Eye,
@@ -12,6 +12,7 @@ import {
   ToggleRight,
   Check,
   GripVertical,
+  FileQuestion,
 } from 'lucide-react';
 
 import { useDemoStore } from '@/demo/state/demo-store';
@@ -69,7 +70,20 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
   const [editText, setEditText] = React.useState('');
 
   if (!report) {
-    notFound();
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="flex size-12 items-center justify-center rounded-full bg-muted">
+          <FileQuestion className="size-6 text-muted-foreground" aria-hidden="true" />
+        </div>
+        <h2 className="mt-4 text-lg font-semibold text-foreground">Report not found</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          The report you are looking for does not exist or has been removed.
+        </p>
+        <Button variant="outline" size="sm" className="mt-4" asChild>
+          <Link href="/app/reports">Back to Reports</Link>
+        </Button>
+      </div>
+    );
   }
 
   const audit = audits.find((a) => a.id === report.auditId);
@@ -112,8 +126,8 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
         : r
     );
     setReports(updated);
-    toast.success('Demonstration report state updated', {
-      description: 'No real public share was created. Share-link backend is not connected.',
+    toast.success('Demonstration report published', {
+      description: 'Published in demonstration workspace.',
     });
   };
 
@@ -248,7 +262,6 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
                         value={editText}
                         onChange={(e) => setEditText(e.target.value)}
                         className="text-sm"
-                        aria-label={`Edit ${sectionLabels[s.section]}`}
                       />
                       <div className="flex gap-2">
                         <Button size="sm" onClick={handleSaveEdit}>Save</Button>
@@ -443,7 +456,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
             <Separator />
 
             <Button size="sm" className="w-full" onClick={handlePublish}>
-              Update Demo Report State
+              Publish Demo Report
             </Button>
           </CardContent>
         </Card>
@@ -473,7 +486,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
               ))}
             </div>
             <Button size="sm" className="w-full" onClick={handlePublish}>
-              Update Demo Report State
+              Publish Demo Report
             </Button>
           </CardContent>
         </Card>

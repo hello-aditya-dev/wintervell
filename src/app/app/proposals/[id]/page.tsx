@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter, notFound } from 'next/navigation';
-import { ArrowLeft, Save, Link as LinkIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Save, Link as LinkIcon, FileQuestion } from 'lucide-react';
 
 import { useDemoStore } from '@/demo/state/demo-store';
 import type { Proposal, ProposalStatus, UpdateProposalInput } from '@/demo/types/proposal';
@@ -87,7 +87,20 @@ export default function ProposalDetailPage({ params }: { params: Promise<{ id: s
   }, [proposal]);
 
   if (!proposal) {
-    notFound();
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="flex size-12 items-center justify-center rounded-full bg-muted">
+          <FileQuestion className="size-6 text-muted-foreground" aria-hidden="true" />
+        </div>
+        <h2 className="mt-4 text-lg font-semibold text-foreground">Proposal not found</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          The proposal you are looking for does not exist or has been removed.
+        </p>
+        <Button variant="outline" size="sm" className="mt-4" asChild>
+          <Link href="/app/proposals">Back to Proposals</Link>
+        </Button>
+      </div>
+    );
   }
 
   const prospect = prospects.find((p) => p.id === proposal.prospectId);
@@ -191,7 +204,6 @@ export default function ProposalDetailPage({ params }: { params: Promise<{ id: s
                       value={localData[key] ?? ''}
                       onChange={(e) => updateLocalField(key, e.target.value)}
                       className="text-sm"
-                      aria-label={sectionLabels[key]}
                     />
                   </div>
                 ) : key === 'pricing' ? (
@@ -236,7 +248,6 @@ export default function ProposalDetailPage({ params }: { params: Promise<{ id: s
                     value={localData[key] ?? ''}
                     onChange={(e) => updateLocalField(key, e.target.value)}
                     className="text-sm"
-                    aria-label={sectionLabels[key]}
                   />
                 )}
               </CardContent>
