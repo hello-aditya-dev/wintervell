@@ -102,9 +102,8 @@
 
 ### Placeholder Domains
 
-- `sitemap.ts` uses `wintervell.example`
-- `robots.ts` uses `wintervell.example`
-- These must be updated before production
+- ~~`sitemap.ts` uses `wintervell.example`~~ Fixed in Phase 0 — now uses `wintervell.com`
+- ~~`robots.ts` uses `wintervell.example`~~ Fixed in Phase 0 — now uses `wintervell.com`
 
 ### Unused Dependencies
 

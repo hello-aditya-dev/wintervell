@@ -11,7 +11,7 @@
 
 | Phase | Name | Status | Branch | Pull request | Preview | Gate |
 |---|---|---|---|---|---|---|
-| 0 | Baseline and truth | In progress | `agent/wintervell-phase-00-baseline` | — | — | — |
+| 0 | Baseline and truth | Complete | `agent/wintervell-phase-00-baseline` | #1 (draft) | wintervell-nu.vercel.app | ✅ Passed |
 | 1 | Frontend product experience | Not started | — | — | — | — |
 | 2 | Data platform | Not started | — | — | — | — |
 | 3 | Auth, tenancy and RBAC | Not started | — | — | — | — |
@@ -48,16 +48,15 @@
 
 ## Next required action
 
-Complete Phase 0 — Baseline, Truth and Architecture:
-1. Create all Phase 0 documentation
-2. Implement honesty hotfix (remove misleading JSON-LD claims, fix placeholder domains)
-3. Add baseline commands (typecheck, lint, build, test)
-4. Create .env.example
-5. Verify typecheck, lint, and build pass
-6. Push branch and open draft PR
+Begin Phase 1 — Frontend Product Experience:
+1. Replace the oversized marketing prototype with a credible public website
+2. Refine the application frontend with coherent UX
+3. Build demo data architecture with deterministic IDs
+4. Ensure all simulated actions are labelled
+5. Create Phase 1 branch and open draft PR
 
 ## Last verified
 
 - Date: 2025-08-03
-- Commit: `55d318f`
+- Commit: `9610285`
 - Verified by: Z.ai Phase 0 agent
