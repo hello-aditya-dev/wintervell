@@ -76,7 +76,7 @@ export default function TeamPage() {
     <div>
       <PageHeader
         title="Team"
-        description="Demo team members in the demonstration workspace."
+        description="Demonstration team members in the demonstration workspace."
         actions={
           <div className="flex items-center gap-2">
             <DemoLabel />
@@ -84,7 +84,7 @@ export default function TeamPage() {
         }
       />
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -112,7 +112,7 @@ export default function TeamPage() {
       </div>
 
       <p className="mt-4 text-xs text-muted-foreground">
-        These are demonstration team members. No invitations have been sent. Team management is a demonstration feature.
+        These are demonstration team members. Invitation delivery is not connected. Team management is a demonstration feature.
       </p>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, notFound } from 'next/navigation';
 import { ArrowLeft, Save, Link as LinkIcon } from 'lucide-react';
 
 import { useDemoStore } from '@/demo/state/demo-store';
@@ -87,7 +87,7 @@ export default function ProposalDetailPage({ params }: { params: Promise<{ id: s
   }, [proposal]);
 
   if (!proposal) {
-    return <div className="py-16 text-center text-muted-foreground">Proposal not found.</div>;
+    notFound();
   }
 
   const prospect = prospects.find((p) => p.id === proposal.prospectId);
@@ -191,6 +191,7 @@ export default function ProposalDetailPage({ params }: { params: Promise<{ id: s
                       value={localData[key] ?? ''}
                       onChange={(e) => updateLocalField(key, e.target.value)}
                       className="text-sm"
+                      aria-label={sectionLabels[key]}
                     />
                   </div>
                 ) : key === 'pricing' ? (
@@ -235,6 +236,7 @@ export default function ProposalDetailPage({ params }: { params: Promise<{ id: s
                     value={localData[key] ?? ''}
                     onChange={(e) => updateLocalField(key, e.target.value)}
                     className="text-sm"
+                    aria-label={sectionLabels[key]}
                   />
                 )}
               </CardContent>

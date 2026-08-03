@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, notFound } from 'next/navigation';
 import { ExternalLink, Globe, Mail, Phone, ArrowLeft } from 'lucide-react';
 
 import { useDemoStore } from '@/demo/state/demo-store';
@@ -36,11 +36,7 @@ export default function ProspectDetailPage({ params }: { params: Promise<{ id: s
   const prospect = prospects.find((p) => p.id === id);
 
   if (!prospect) {
-    return (
-      <div className="py-16 text-center text-muted-foreground">
-        Prospect not found.
-      </div>
-    );
+    notFound();
   }
 
   const userMap = new Map(users.map((u) => [u.id, u]));
@@ -122,7 +118,7 @@ export default function ProspectDetailPage({ params }: { params: Promise<{ id: s
                     <SelectItem value="new">New</SelectItem>
                     <SelectItem value="contacted">Contacted</SelectItem>
                     <SelectItem value="qualified">Qualified</SelectItem>
-                    <SelectItem value="proposal_sent">Proposal Sent</SelectItem>
+                    <SelectItem value="proposal_sent">Proposal Sent (Demo)</SelectItem>
                     <SelectItem value="won">Won</SelectItem>
                     <SelectItem value="lost">Lost</SelectItem>
                   </SelectContent>

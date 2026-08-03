@@ -19,7 +19,7 @@ import { Badge } from '@/components/ui/badge';
 
 // ── Integration definitions ──────────────────────────────────────────────
 
-type IntegrationStatus = 'not_configured' | 'demo_only' | 'planned' | 'available_later';
+type IntegrationStatus = 'not_configured' | 'demo_only' | 'planned' | 'unavailable_in_release';
 
 interface Integration {
   name: string;
@@ -62,7 +62,7 @@ const integrations: Integration[] = [
     name: 'Stripe',
     description: 'Accept payments for proposals and manage billing within the platform.',
     icon: CreditCard,
-    status: 'available_later',
+    status: 'unavailable_in_release',
     category: 'Payments',
   },
   {
@@ -76,7 +76,7 @@ const integrations: Integration[] = [
     name: 'HubSpot CRM',
     description: 'Sync prospect and pipeline data with your HubSpot CRM.',
     icon: Shield,
-    status: 'available_later',
+    status: 'unavailable_in_release',
     category: 'CRM',
   },
   {
@@ -103,8 +103,8 @@ const statusConfig: Record<IntegrationStatus, { label: string; className: string
     label: 'Planned',
     className: 'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-400',
   },
-  available_later: {
-    label: 'Available Later',
+  unavailable_in_release: {
+    label: 'Unavailable in this release',
     className: 'border-muted bg-muted text-muted-foreground',
   },
 };
@@ -156,7 +156,7 @@ export default function IntegrationsPage() {
       </div>
 
       <p className="mt-6 text-xs text-muted-foreground">
-        No third-party providers are connected. Integrations marked &ldquo;Demo Only&rdquo; use simulated data. &ldquo;Planned&rdquo; integrations are on the roadmap. &ldquo;Available Later&rdquo; will be released in future updates.
+        No third-party providers are connected. Integrations marked &ldquo;Demo Only&rdquo; use simulated data. &ldquo;Planned&rdquo; integrations are on the roadmap. &ldquo;Unavailable in this release&rdquo; will not be available in the initial release.
       </p>
     </div>
   );

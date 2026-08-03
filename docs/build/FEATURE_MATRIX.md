@@ -1,7 +1,7 @@
 # WinterVell — Feature Matrix
 
-**Date:** 2025-08-03
-**Branch:** agent/wintervell-phase-00-baseline
+**Date:** 2026-08-03
+**Branch:** agent/wintervell-phase-01-frontend
 
 ## Classification Key
 
@@ -22,7 +22,7 @@
 
 | Feature | Status | Notes |
 |---|---|---|
-| Email/password login | Missing | next-auth installed but not configured |
+| Email/password login | Missing | next-auth removed in Phase 1 (was unused) |
 | Magic link | Missing | — |
 | OAuth providers | Missing | — |
 | Session management | Missing | — |
@@ -106,7 +106,7 @@
 | Feature | Status | Notes |
 |---|---|---|
 | Audit list | Frontend only | Demo data, no backend |
-| Create audit | Frontend only | Form renders, no crawl |
+| Create audit | Frontend only | Form renders, no crawl; labelled as demo |
 | Audit detail | Frontend only | Demo data |
 | Crawling | Missing | No crawl engine exists |
 | Rules engine | Missing | — |
@@ -136,7 +136,7 @@
 | Feature | Status | Notes |
 |---|---|---|
 | Report list | Frontend only | Demo data |
-| Report builder | Frontend only | Demo data |
+| Report builder | Frontend only | Demo data; labelled as demo |
 | Report versioning | Missing | — |
 | Report sharing | Missing | — |
 | PDF generation | Missing | — |
@@ -150,7 +150,7 @@
 | Feature | Status | Notes |
 |---|---|---|
 | Proposal list | Frontend only | Demo data |
-| Proposal builder | Frontend only | Demo data |
+| Proposal builder | Frontend only | Demo data; labelled as demo |
 | Finding-to-service mapping | Missing | — |
 | Proposal versioning | Missing | — |
 | Opportunity connection | Missing | — |
@@ -235,14 +235,39 @@
 
 | Feature | Status | Notes |
 |---|---|---|
-| Unit tests | Missing | — |
+| Unit tests | Working | Vitest configured, 160 tests across 5 files |
 | Integration tests | Missing | — |
-| E2E tests | Missing | — |
+| E2E tests | Working | Playwright configured, 6 spec files |
 | Authorization tests | Missing | — |
 | Tenant-isolation tests | Missing | — |
 | SSRF tests | Missing | — |
 | Scoring tests | Missing | — |
-| Accessibility checks | Missing | — |
+| Accessibility checks | Partially working | Focus-visible, aria labels, reduced motion — no automated axe tests |
+
+### Accessibility
+
+| Feature | Status | Notes |
+|---|---|---|
+| Skip link | Working | Added in Phase 1 |
+| Visible keyboard focus | Working | Focus-visible styles added in Phase 1 |
+| Aria-current navigation | Working | Added to sidebar in Phase 1 |
+| Form labels | Working | All inputs labelled in Phase 1 |
+| Reduced motion | Working | MotionProvider + CSS prefers-reduced-motion |
+| Touch targets | Partially working | Sidebar and pipeline cards; not all controls |
+| Semantic landmarks | Working | nav, header, footer, main |
+| Heading hierarchy | Working | h1 on every page |
+| No colour-only status | Working | StatusBadge and SeverityBadge include text labels |
+
+### Demo Honesty
+
+| Feature | Status | Notes |
+|---|---|---|
+| Demo banner | Working | Persistent banner in app shell |
+| Simulated action labels | Working | All create/update/publish/send actions labelled as demo |
+| No fabricated proof | Working | No fake testimonials, scarcity, or customer logos |
+| No fake social proof | Working | Removed in Phase 0 |
+| Contact form honesty | Working | Returns honest message about email not being configured |
+| Invalid ID handling | Working | not-found pages for all dynamic routes |
 
 ## Summary
 
@@ -265,7 +290,9 @@
 | Licensing | 0 | 0 | 1 | 0 | 0 | 5 | 0 | 0 |
 | Security | 0 | 1 | 0 | 0 | 0 | 9 | 0 | 0 |
 | Deployment | 1 | 1 | 0 | 0 | 0 | 3 | 0 | 0 |
-| Tests | 0 | 0 | 0 | 0 | 0 | 8 | 0 | 0 |
-| **Total** | **1** | **2** | **58** | **0** | **0** | **84** | **0** | **0** |
+| Tests | 2 | 1 | 0 | 0 | 0 | 5 | 0 | 0 |
+| Accessibility | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Demo Honesty | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **Total** | **15** | **4** | **55** | **0** | **0** | **81** | **0** | **0** |
 
-**The product is overwhelmingly in the "Frontend only" and "Missing" categories.** No real backend functionality exists. The interactive demo is the only functional aspect of the product.
+**Phase 1 progress:** Test infrastructure established (160 unit tests, 6 E2E spec files), demo honesty labels in place across all routes, invalid ID handling fixed, accessibility improvements applied. The product remains overwhelmingly in the "Frontend only" and "Missing" categories. No real backend functionality exists. The interactive demo is the only functional aspect of the product.

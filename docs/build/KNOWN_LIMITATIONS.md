@@ -1,7 +1,7 @@
 # WinterVell — Known Limitations
 
-**Date:** 2025-08-03
-**Branch:** agent/wintervell-phase-00-baseline
+**Date:** 2026-08-03
+**Branch:** agent/wintervell-phase-01-frontend
 
 ## Product Limitations
 
@@ -10,7 +10,7 @@
 - The application has no server-side data persistence beyond the contact form
 - All product routes render with deterministic demo data
 - No real API endpoints exist for creating, reading, updating, or deleting data
-- The contact form returns a success message but does not save or send data
+- The contact form returns an honest success message but does not save or send data
 
 ### No Database
 
@@ -26,6 +26,7 @@
 - No organisation membership exists
 - No role-based access control exists
 - The application is entirely unauthenticated
+- `next-auth` was removed in Phase 1 (was installed but unused)
 
 ### No Audit Engine
 
@@ -90,33 +91,33 @@
 - No audit logging
 - No tenant isolation
 
-### No Test Coverage
-
-- No unit tests
-- No integration tests
-- No E2E tests
-- No authorization tests
-- No tenant-isolation tests
-
 ## Infrastructure Limitations
 
-### Placeholder Domains
+### Dependency Cleanup (Completed)
 
-- ~~`sitemap.ts` uses `wintervell.example`~~ Fixed in Phase 0 — now uses `wintervell.com`
-- ~~`robots.ts` uses `wintervell.example`~~ Fixed in Phase 0 — now uses `wintervell.com`
+- ~~`next-intl` — installed but not used~~ Removed in Phase 1
+- ~~`@mdxeditor/editor` — installed but not used~~ Removed in Phase 1
+- ~~`react-syntax-highlighter` — installed but not used~~ Removed in Phase 1
+- ~~`react-markdown` — installed but not used~~ Removed in Phase 1
+- ~~`z-ai-web-dev-sdk` — must not be used in production runtime~~ Removed in Phase 1
+- ~~`uuid` — installed but not used~~ Removed in Phase 1
+- ~~`@reactuses/core` — installed but not used~~ Removed in Phase 1
+- ~~`@tanstack/react-query` — installed but not used~~ Removed in Phase 1
+- ~~`next-auth` — installed but not used~~ Removed in Phase 1
+- ~~`sharp` — installed but not used~~ Removed in Phase 1
+- `prisma` — moved to devDependencies (not needed at runtime)
 
-### Unused Dependencies
+### Build Memory Requirements
 
-- `next-intl` — installed but not used
-- `@mdxeditor/editor` — installed but not used
-- `react-syntax-highlighter` — installed but not used
-- `react-markdown` — installed but not used
-- These should be removed or justified
+- Production build requires `NODE_OPTIONS="--max-old-space-size=256"` to avoid OOM
+- The application has many dynamic components that increase compilation memory usage
+- This may affect CI/CD environments with limited memory
 
-### Development-Only Dependencies
+### No CI/CD Pipeline
 
-- `z-ai-web-dev-sdk` — must not be used in production runtime
-- Should be removed from production dependencies or moved to devDependencies
+- No automated build, test, or deployment pipeline exists
+- All deploys are manual pushes to Vercel
+- No branch protection or required checks exist
 
 ## Data Limitations
 
@@ -132,6 +133,31 @@
 - No user accounts exist
 - No organisation membership exists
 - The team settings page shows demo data
+
+## State Quality Limitations
+
+### Incomplete State Coverage
+
+- Not all principal screens have been verified for loading, empty, error, and success states
+- Some screens may lack graceful error handling for edge cases
+- Confirmation dialogs for destructive demo actions are not yet systematically implemented
+
+## Test Limitations
+
+### Limited Test Scope
+
+- Unit tests cover demo data, repositories, store, presentation logic, and form validation
+- E2E tests cover route smoke tests and critical interactions
+- No integration tests between frontend and backend (no backend exists)
+- No authorization tests (no auth exists)
+- No tenant-isolation tests (no tenancy exists)
+- No automated accessibility testing (e.g., axe-core)
+- E2E tests require a running dev server and have not been executed against a deployed build
+
+### React Compiler Warnings
+
+- 8 harmless warnings from TanStack Table (`react-hooks/incompatible-library`)
+- These are pre-existing and do not affect functionality
 
 ## Legal Limitations
 
@@ -156,8 +182,11 @@ The following are true statements about the current product:
 
 1. WinterVell is a source-code product in development.
 2. The interactive frontend demonstration shows the planned product interface using fictional data.
-3. The backend implementation has not been started.
-4. Purchasing is not yet open.
-5. No real audits, reports, or proposals can be generated.
-6. No authentication or authorization exists.
-7. The product is a frontend prototype only.
+3. All simulated actions are labelled as demo — no simulated action implies an external action occurred.
+4. The backend implementation has not been started.
+5. Purchasing is not yet open.
+6. No real audits, reports, or proposals can be generated.
+7. No authentication or authorization exists.
+8. The product is a frontend prototype only.
+9. Unit tests (160) and E2E tests (6 spec files) exist for the frontend demo.
+10. All invalid detail IDs fail safely with not-found pages.

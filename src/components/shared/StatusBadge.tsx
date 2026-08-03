@@ -58,17 +58,17 @@ const statusConfigs: Record<string, StatusConfig> = {
   excluded: { label: 'Excluded', className: 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-700' },
 
   // Proposal statuses
-  sent_demo: { label: 'Sent', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
-  accepted_demo: { label: 'Accepted', className: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800' },
-  rejected_demo: { label: 'Rejected', className: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800' },
+  sent_demo: { label: 'Sent (Demo)', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
+  accepted_demo: { label: 'Accepted (Demo)', className: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800' },
+  rejected_demo: { label: 'Rejected (Demo)', className: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800' },
 
   // Opportunity stages
   new_prospect: { label: 'New', className: 'bg-muted text-muted-foreground border-border' },
   audit_planned: { label: 'Audit Planned', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
   audit_review: { label: 'Audit Review', className: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800' },
-  report_sent: { label: 'Report Sent', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
+  report_sent: { label: 'Report Sent (Demo)', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
   follow_up_due: { label: 'Follow-up', className: 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800' },
-  proposal_sent: { label: 'Proposal Sent', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
+  proposal_sent: { label: 'Proposal Sent (Demo)', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
   negotiation: { label: 'Negotiation', className: 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-400 dark:border-purple-800' },
   won: { label: 'Won', className: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800' },
   lost: { label: 'Lost', className: 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800' },
@@ -77,7 +77,7 @@ const statusConfigs: Record<string, StatusConfig> = {
   new: { label: 'New', className: 'bg-muted text-muted-foreground border-border' },
   contacted: { label: 'Contacted', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
   qualified: { label: 'Qualified', className: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800' },
-  proposal_sent_prospect: { label: 'Proposal Sent', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
+  proposal_sent_prospect: { label: 'Proposal Sent (Demo)', className: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800' },
 
   // Task statuses
   pending: { label: 'Pending', className: 'bg-muted text-muted-foreground border-border' },
@@ -89,7 +89,7 @@ const statusConfigs: Record<string, StatusConfig> = {
   archived: { label: 'Archived', className: 'bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-700' },
 
   // Report statuses
-  published_demo: { label: 'Published', className: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800' },
+  published_demo: { label: 'Published (Demo)', className: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800' },
 };
 
 // ── StatusBadge component ──────────────────────────────────────────────────

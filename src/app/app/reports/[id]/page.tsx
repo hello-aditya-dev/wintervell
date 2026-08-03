@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, notFound } from 'next/navigation';
 import {
   ArrowLeft,
   Eye,
@@ -69,7 +69,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
   const [editText, setEditText] = React.useState('');
 
   if (!report) {
-    return <div className="py-16 text-center text-muted-foreground">Report not found.</div>;
+    notFound();
   }
 
   const audit = audits.find((a) => a.id === report.auditId);
@@ -112,8 +112,8 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
         : r
     );
     setReports(updated);
-    toast.success('Demonstration report published', {
-      description: 'Published in demonstration workspace.',
+    toast.success('Demonstration report state updated', {
+      description: 'No real public share was created. Share-link backend is not connected.',
     });
   };
 
@@ -248,6 +248,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
                         value={editText}
                         onChange={(e) => setEditText(e.target.value)}
                         className="text-sm"
+                        aria-label={`Edit ${sectionLabels[s.section]}`}
                       />
                       <div className="flex gap-2">
                         <Button size="sm" onClick={handleSaveEdit}>Save</Button>
@@ -442,7 +443,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
             <Separator />
 
             <Button size="sm" className="w-full" onClick={handlePublish}>
-              Publish Demo Report
+              Update Demo Report State
             </Button>
           </CardContent>
         </Card>
@@ -472,7 +473,7 @@ export default function ReportDetailPage({ params }: { params: Promise<{ id: str
               ))}
             </div>
             <Button size="sm" className="w-full" onClick={handlePublish}>
-              Publish Demo Report
+              Update Demo Report State
             </Button>
           </CardContent>
         </Card>

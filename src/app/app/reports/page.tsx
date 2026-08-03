@@ -37,7 +37,7 @@ const statusOptions: FilterSelect = {
   options: [
     { label: 'Draft', value: 'draft' },
     { label: 'Ready', value: 'ready' },
-    { label: 'Published', value: 'published_demo' },
+    { label: 'Published (Demo)', value: 'published_demo' },
   ],
 };
 
@@ -208,7 +208,7 @@ export default function ReportsPage() {
         ]}
       />
 
-      <div className="mt-4 rounded-md border">
+      <div className="mt-4 rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -109,8 +109,8 @@ export default function ContactPage() {
               discuss an enterprise arrangement.
             </p>
             <p className="mt-2 text-small text-[var(--text-tertiary)]">
-              Email delivery is not yet configured. Your message will be logged
-              but not sent. For urgent inquiries, contact us directly at the
+              No external email will be sent. Your message will be logged but
+              not delivered. For urgent inquiries, contact us directly at the
               email address listed in the footer.
             </p>
 
@@ -120,12 +120,12 @@ export default function ContactPage() {
                   <CheckCircle2 className="size-5 text-[var(--success)]" />
                   <div>
                     <h2 className="text-h4 text-foreground">
-                      Submission logged
+                      Message received
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Email delivery is not yet configured. Your message was
-                      logged but not sent. Please contact us directly at the
-                      email address in the footer.
+                      Your message was received. No external email was sent.
+                      This is a frontend demonstration. Please contact us
+                      directly at the email address in the footer.
                     </p>
                   </div>
                 </div>
@@ -235,7 +235,7 @@ export default function ContactPage() {
                   {formState === "submitting" ? (
                     <>
                       <Loader2 className="mr-2 size-4 animate-spin" />
-                      Sending…
+                      Logging…
                     </>
                   ) : (
                     "Send message"

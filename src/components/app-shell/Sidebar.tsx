@@ -124,9 +124,10 @@ export default function AppSidebar() {
 
       {/* ── Navigation ── */}
       <SidebarContent className="scrollbar-wv">
-        {navigation.map((group) => (
-          <SidebarGroup key={group.title}>
-            <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+        <nav aria-label="Main navigation">
+          {navigation.map((group) => (
+            <SidebarGroup key={group.title}>
+              <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => (
@@ -135,6 +136,7 @@ export default function AppSidebar() {
                       asChild
                       isActive={isActive(item.href)}
                       tooltip={item.label}
+                      className="touch-target"
                     >
                       <Link href={item.href}>
                         <item.icon className="size-4" aria-hidden="true" />
@@ -146,7 +148,8 @@ export default function AppSidebar() {
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
-        ))}
+          ))}
+        </nav>
       </SidebarContent>
 
       <Separator className="bg-sidebar-border" />
@@ -155,7 +158,7 @@ export default function AppSidebar() {
       <SidebarFooter className="p-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Collapse sidebar">
+            <SidebarMenuButton asChild tooltip="Collapse sidebar" className="touch-target">
               <button
                 type="button"
                 className="w-full"

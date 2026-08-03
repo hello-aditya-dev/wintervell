@@ -44,9 +44,9 @@ const stages: { key: OpportunityStage; label: string }[] = [
   { key: 'new_prospect', label: 'New Prospect' },
   { key: 'audit_planned', label: 'Audit Planned' },
   { key: 'audit_review', label: 'Audit Review' },
-  { key: 'report_sent', label: 'Report Sent' },
+  { key: 'report_sent', label: 'Report Sent (Demo)' },
   { key: 'follow_up_due', label: 'Follow-up Due' },
-  { key: 'proposal_sent', label: 'Proposal Sent' },
+  { key: 'proposal_sent', label: 'Proposal Sent (Demo)' },
   { key: 'negotiation', label: 'Negotiation' },
   { key: 'won', label: 'Won' },
   { key: 'lost', label: 'Lost' },
@@ -126,13 +126,13 @@ function PipelineCardMenu({ opportunity }: { opportunity: Opportunity }) {
       o.id === opportunity.id ? { ...o, stage: newStage, updatedAt: new Date().toISOString() } : o
     );
     setOpportunities(updated);
-    toast.success(`Moved to ${stages.find((s) => s.key === newStage)?.label ?? newStage}`);
+    toast.success(`Demonstration: moved to ${stages.find((s) => s.key === newStage)?.label ?? newStage}`);
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 touch-target">
           <MoreHorizontal className="size-3.5" />
         </Button>
       </DropdownMenuTrigger>
@@ -216,7 +216,7 @@ export default function PipelinePage() {
       o.id === activeIdStr ? { ...o, stage: targetStage!, updatedAt: new Date().toISOString() } : o
     );
     setOpportunities(updated);
-    toast.success(`Moved to ${stages.find((s) => s.key === targetStage)?.label ?? targetStage}`);
+    toast.success(`Demonstration: moved to ${stages.find((s) => s.key === targetStage)?.label ?? targetStage}`);
   };
 
   // Calculate total pipeline value

@@ -175,7 +175,7 @@ export default function NewAuditPage() {
     setFindings([...findings, ...newFindings]);
 
     toast.success('Demonstration audit created', {
-      description: 'Demonstration audit created from fictional rule results. No website was crawled.',
+      description: 'No website was crawled. This is a frontend demonstration using fictional data.',
       duration: 6000,
     });
 
@@ -321,6 +321,7 @@ export default function NewAuditPage() {
                 rows={4}
                 value={businessContext}
                 onChange={(e) => setBusinessContext(e.target.value)}
+                aria-label="Business context"
               />
             </div>
           )}

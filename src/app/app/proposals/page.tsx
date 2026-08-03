@@ -37,9 +37,9 @@ const statusOptions: FilterSelect = {
   options: [
     { label: 'Draft', value: 'draft' },
     { label: 'Ready', value: 'ready' },
-    { label: 'Sent', value: 'sent_demo' },
-    { label: 'Accepted', value: 'accepted_demo' },
-    { label: 'Rejected', value: 'rejected_demo' },
+    { label: 'Sent (Demo)', value: 'sent_demo' },
+    { label: 'Accepted (Demo)', value: 'accepted_demo' },
+    { label: 'Rejected (Demo)', value: 'rejected_demo' },
   ],
 };
 
@@ -203,7 +203,7 @@ export default function ProposalsPage() {
         ]}
       />
 
-      <div className="mt-4 rounded-md border">
+      <div className="mt-4 rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

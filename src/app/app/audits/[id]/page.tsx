@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, notFound } from 'next/navigation';
 import {
   ArrowLeft,
   Check,
@@ -188,9 +188,7 @@ export default function AuditDetailPage({ params }: { params: Promise<{ id: stri
   }, [setSearch, setCategoryFilter, setSeverityFilter, setStatusFilter, setReportFilter, setReviewFilter]);
 
   if (!audit) {
-    return (
-      <div className="py-16 text-center text-muted-foreground">Audit not found.</div>
-    );
+    notFound();
   }
 
   const prospect = prospects.find((p) => p.id === audit.prospectId);
@@ -695,6 +693,7 @@ function FindingDetail({
                 value={noteText}
                 onChange={(e) => onNoteTextChange(e.target.value)}
                 className="text-sm"
+                aria-label="Finding notes"
               />
               <div className="flex gap-2">
                 <Button size="sm" onClick={onSaveNote}>Save Note</Button>

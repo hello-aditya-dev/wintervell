@@ -86,31 +86,35 @@ export default function BrandingPage() {
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               <div>
-                <Label className="text-xs">Agency Name</Label>
+                <Label htmlFor="branding-agencyName" className="text-xs">Agency Name</Label>
                 <Input
+                  id="branding-agencyName"
                   value={branding.agencyName}
                   onChange={(e) => updateField('agencyName', e.target.value)}
                   className="mt-1"
                 />
               </div>
               <div>
-                <Label className="text-xs">Logo Placeholder</Label>
+                <Label htmlFor="branding-logoPlaceholder" className="text-xs">Logo Placeholder</Label>
                 <Input
+                  id="branding-logoPlaceholder"
                   value={branding.logoPlaceholder}
                   onChange={(e) => updateField('logoPlaceholder', e.target.value)}
                   className="mt-1"
                 />
               </div>
               <div>
-                <Label className="text-xs">Primary Colour</Label>
+                <Label htmlFor="branding-primaryColour" className="text-xs">Primary Colour</Label>
                 <div className="flex gap-2 mt-1">
                   <input
                     type="color"
                     value={branding.primaryColour}
                     onChange={(e) => updateField('primaryColour', e.target.value)}
                     className="h-8 w-8 rounded border cursor-pointer"
+                    aria-label="Primary colour picker"
                   />
                   <Input
+                    id="branding-primaryColour"
                     value={branding.primaryColour}
                     onChange={(e) => updateField('primaryColour', e.target.value)}
                     className="flex-1"
@@ -118,15 +122,17 @@ export default function BrandingPage() {
                 </div>
               </div>
               <div>
-                <Label className="text-xs">Secondary Colour</Label>
+                <Label htmlFor="branding-secondaryColour" className="text-xs">Secondary Colour</Label>
                 <div className="flex gap-2 mt-1">
                   <input
                     type="color"
                     value={branding.secondaryColour}
                     onChange={(e) => updateField('secondaryColour', e.target.value)}
                     className="h-8 w-8 rounded border cursor-pointer"
+                    aria-label="Secondary colour picker"
                   />
                   <Input
+                    id="branding-secondaryColour"
                     value={branding.secondaryColour}
                     onChange={(e) => updateField('secondaryColour', e.target.value)}
                     className="flex-1"
@@ -134,15 +140,17 @@ export default function BrandingPage() {
                 </div>
               </div>
               <div>
-                <Label className="text-xs">Report Accent</Label>
+                <Label htmlFor="branding-reportAccent" className="text-xs">Report Accent</Label>
                 <div className="flex gap-2 mt-1">
                   <input
                     type="color"
                     value={branding.reportAccent}
                     onChange={(e) => updateField('reportAccent', e.target.value)}
                     className="h-8 w-8 rounded border cursor-pointer"
+                    aria-label="Report accent colour picker"
                   />
                   <Input
+                    id="branding-reportAccent"
                     value={branding.reportAccent}
                     onChange={(e) => updateField('reportAccent', e.target.value)}
                     className="flex-1"
@@ -159,24 +167,24 @@ export default function BrandingPage() {
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               <div>
-                <Label className="text-xs">Sender Name</Label>
-                <Input value={branding.senderName} onChange={(e) => updateField('senderName', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-senderName" className="text-xs">Sender Name</Label>
+                <Input id="branding-senderName" value={branding.senderName} onChange={(e) => updateField('senderName', e.target.value)} className="mt-1" />
               </div>
               <div>
-                <Label className="text-xs">Reply-to Address</Label>
-                <Input value={branding.replyToAddress} onChange={(e) => updateField('replyToAddress', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-replyToAddress" className="text-xs">Reply-to Address</Label>
+                <Input id="branding-replyToAddress" value={branding.replyToAddress} onChange={(e) => updateField('replyToAddress', e.target.value)} className="mt-1" />
               </div>
               <div>
-                <Label className="text-xs">Website</Label>
-                <Input value={branding.website} onChange={(e) => updateField('website', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-website" className="text-xs">Website</Label>
+                <Input id="branding-website" value={branding.website} onChange={(e) => updateField('website', e.target.value)} className="mt-1" />
               </div>
               <div>
-                <Label className="text-xs">Phone</Label>
-                <Input value={branding.phone} onChange={(e) => updateField('phone', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-phone" className="text-xs">Phone</Label>
+                <Input id="branding-phone" value={branding.phone} onChange={(e) => updateField('phone', e.target.value)} className="mt-1" />
               </div>
               <div className="sm:col-span-2">
-                <Label className="text-xs">Address</Label>
-                <Input value={branding.address} onChange={(e) => updateField('address', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-address" className="text-xs">Address</Label>
+                <Input id="branding-address" value={branding.address} onChange={(e) => updateField('address', e.target.value)} className="mt-1" />
               </div>
             </CardContent>
           </Card>
@@ -188,24 +196,24 @@ export default function BrandingPage() {
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               <div>
-                <Label className="text-xs">Terms URL</Label>
-                <Input value={branding.termsUrl} onChange={(e) => updateField('termsUrl', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-termsUrl" className="text-xs">Terms URL</Label>
+                <Input id="branding-termsUrl" value={branding.termsUrl} onChange={(e) => updateField('termsUrl', e.target.value)} className="mt-1" />
               </div>
               <div>
-                <Label className="text-xs">Privacy URL</Label>
-                <Input value={branding.privacyUrl} onChange={(e) => updateField('privacyUrl', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-privacyUrl" className="text-xs">Privacy URL</Label>
+                <Input id="branding-privacyUrl" value={branding.privacyUrl} onChange={(e) => updateField('privacyUrl', e.target.value)} className="mt-1" />
               </div>
               <div>
-                <Label className="text-xs">Currency</Label>
-                <Input value={branding.currency} onChange={(e) => updateField('currency', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-currency" className="text-xs">Currency</Label>
+                <Input id="branding-currency" value={branding.currency} onChange={(e) => updateField('currency', e.target.value)} className="mt-1" />
               </div>
               <div>
-                <Label className="text-xs">Tax Label</Label>
-                <Input value={branding.taxLabel} onChange={(e) => updateField('taxLabel', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-taxLabel" className="text-xs">Tax Label</Label>
+                <Input id="branding-taxLabel" value={branding.taxLabel} onChange={(e) => updateField('taxLabel', e.target.value)} className="mt-1" />
               </div>
               <div className="sm:col-span-2">
-                <Label className="text-xs">Report Footer</Label>
-                <Input value={branding.reportFooter} onChange={(e) => updateField('reportFooter', e.target.value)} className="mt-1" />
+                <Label htmlFor="branding-reportFooter" className="text-xs">Report Footer</Label>
+                <Input id="branding-reportFooter" value={branding.reportFooter} onChange={(e) => updateField('reportFooter', e.target.value)} className="mt-1" />
               </div>
             </CardContent>
           </Card>

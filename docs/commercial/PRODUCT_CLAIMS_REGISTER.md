@@ -1,7 +1,7 @@
 # WinterVell — Product Claims Register
 
-**Date:** 2025-08-03
-**Branch:** agent/wintervell-phase-00-baseline
+**Date:** 2026-08-03
+**Branch:** agent/wintervell-phase-01-frontend
 
 ## Purpose
 
@@ -24,55 +24,60 @@ This document tracks every public claim about WinterVell's capabilities. Each cl
 
 | # | Claim | Location | Status | Notes |
 |---|---|---|---|---|
-| 1 | "Turn website evidence into agency work" | HeroSection | Misleading | No evidence is actually collected; no real audit engine exists |
-| 2 | "White-label workspace for reviewing websites" | HeroSection | Misleading | White-label settings UI exists but no real reviewing capability |
-| 3 | "Organizing findings" | HeroSection | Misleading | Demo findings only, no real findings |
-| 4 | "Producing client reports" | HeroSection | Misleading | Report builder UI exists but no real report generation |
-| 5 | "Preparing proposals" | HeroSection | Misleading | Proposal builder UI exists but no real proposal generation |
-| 6 | "Tracking the resulting opportunity" | HeroSection | Misleading | Pipeline UI exists but no real opportunity tracking |
-| 7 | "Source-code product in development" | HeroSection | Verified | Accurate |
-| 8 | "Interactive frontend demo" | HeroSection | Verified | Accurate |
-| 9 | "Self-hosting planned" | HeroSection | Verified | Accurate |
-| 10 | "Commercial licensing planned" | HeroSection | Verified | Accurate |
-| 11 | "Planned founding pricing. Purchasing is not yet open." | PricingPreview | Verified | Accurate |
+| 1 | "Source-code product in development" | HeroSection | Verified | Accurate |
+| 2 | "Interactive frontend demo" | HeroSection | Verified | Accurate |
+| 3 | "Self-hosting planned" | HeroSection | Verified | Accurate |
+| 4 | "Commercial licensing planned" | HeroSection | Verified | Accurate |
+| 5 | "Planned founding pricing. Purchasing is not yet open." | PricingPreview | Verified | Accurate |
+| 6 | Workflow visualization labels | HeroSection | Verified | All workflow steps labelled as demo (e.g., "Proposal sent (Demo)") |
 
 ### JSON-LD Structured Data (layout.tsx)
 
 | # | Claim | Status | Notes |
 |---|---|---|---|
-| 12 | "White-label audit engine" | Misleading | No engine exists, only UI |
-| 13 | "Branded report builder" | Misleading | UI exists but no real building |
-| 14 | "Proposal generator" | Misleading | UI exists but no real generation |
-| 15 | "Prospect pipeline management" | Misleading | UI exists but no real management |
-| 16 | "9 audit categories" | Misleading | Categories defined but no engine |
-| 17 | "11-stage sales pipeline" | Misleading | Stages defined but no real pipeline |
-| 18 | "Multi-tenant architecture" | False | No multi-tenancy exists |
-| 19 | "Bring-your-own API keys" | False | No AI integration exists |
-| 20 | "PDF rendering with selectable text" | False | No PDF rendering exists |
-| 21 | "Full source code included" | False | Not delivered yet |
-| 22 | AggregateOffer with lowPrice $799 | Unverified | Pricing is planned but not active |
+| 7 | "Interactive product demonstration" | Verified | Accurate — demo exists at /app |
+| 8 | "Deterministic demo data" | Verified | Accurate — demo fixtures with stable IDs |
+| 9 | "Prospect management interface" | Verified | Accurate — UI exists at /app/prospects |
+| 10 | "Audit workflow interface" | Verified | Accurate — UI exists at /app/audits |
+| 11 | "Finding review workspace" | Verified | Accurate — UI exists at /app/audits/[id] |
+| 12 | "Report builder interface" | Verified | Accurate — UI exists at /app/reports/[id] |
+| 13 | "Proposal builder interface" | Verified | Accurate — UI exists at /app/proposals/[id] |
+| 14 | "Pipeline kanban interface" | Verified | Accurate — UI exists at /app/pipeline |
+| 15 | "White-label branding settings" | Verified | Accurate — UI exists at /app/settings/branding |
+| 16 | "Service catalogue" | Verified | Accurate — UI exists at /app/services |
+| 17 | "Task management" | Verified | Accurate — UI exists at /app/tasks |
+| 18 | PreOrder availability | Verified | Accurate — purchasing is not open |
 
 ### Contact Information
 
 | # | Claim | Status | Notes |
 |---|---|---|---|
-| 23 | support@wintervell.com | Unverified | Domain may not have email configured |
-| 24 | sales@wintervell.com | Unverified | Domain may not have email configured |
-| 25 | security@wintervell.com | Unverified | Domain may not have email configured |
-| 26 | legal@wintervell.com | Unverified | Domain may not have email configured |
+| 19 | support@wintervell.com | Unverified | Domain may not have email configured |
+| 20 | sales@wintervell.com | Unverified | Domain may not have email configured |
+| 21 | security@wintervell.com | Unverified | Domain may not have email configured |
+| 22 | legal@wintervell.com | Unverified | Domain may not have email configured |
 
 ### Sitemap and Robots
 
 | # | Claim | Status | Notes |
 |---|---|---|---|
-| 27 | sitemap.xml uses wintervell.example | False | Placeholder domain, must be updated |
-| 28 | robots.txt uses wintervell.example | False | Placeholder domain, must be updated |
+| 23 | sitemap.xml uses wintervell.com | Verified | Fixed in Phase 0 — uses production domain |
+| 24 | robots.txt uses wintervell.com | Verified | Fixed in Phase 0 — uses production domain |
 
 ### Contact Form
 
 | # | Claim | Status | Notes |
 |---|---|---|---|
-| 29 | Contact form "sends" message | Misleading | Form validates but does not persist or notify |
+| 25 | Contact form returns honest message | Verified | Returns message about email not being configured; no external email sent |
+
+### Demo Honesty
+
+| # | Claim | Status | Notes |
+|---|---|---|---|
+| 26 | All simulated actions are labelled as demo | Verified | Create, update, publish, send, export, audit, payment, and integration actions all labelled |
+| 27 | No fabricated proof or scarcity | Verified | No fake testimonials, customer logos, live-counts, or scarcity claims |
+| 28 | Invalid detail IDs fail safely | Verified | not-found pages for all dynamic routes |
+| 29 | Demo banner is persistent | Verified | Banner visible in app shell on all product routes |
 
 ### Previously Removed Claims
 
@@ -85,18 +90,40 @@ This document tracks every public claim about WinterVell's capabilities. Each cl
 | 34 | InStock schema.org availability | Removed | agent/frontend-rebuild |
 | 35 | Anchor pricing ($1199/$2199) | Removed | agent/frontend-rebuild |
 | 36 | Interactive audit demo (arbitrary URL) | Removed | agent/frontend-rebuild |
+| 37 | Misleading JSON-LD featureList claims | Removed | agent/wintervell-phase-00-baseline |
+
+### Previously Fixed Claims (Phase 0)
+
+| # | Claim | Previous Status | Current Status | Fix |
+|---|---|---|---|---|
+| 38 | "White-label audit engine" (JSON-LD) | Misleading | Removed | Replaced with honest feature list |
+| 39 | "Branded report builder" (JSON-LD) | Misleading | Removed | Replaced with honest feature list |
+| 40 | "Proposal generator" (JSON-LD) | Misleading | Removed | Replaced with honest feature list |
+| 41 | "Prospect pipeline management" (JSON-LD) | Misleading | Removed | Replaced with honest feature list |
+| 42 | "9 audit categories" (JSON-LD) | Misleading | Removed | Replaced with honest feature list |
+| 43 | "11-stage sales pipeline" (JSON-LD) | Misleading | Removed | Replaced with honest feature list |
+| 44 | "Multi-tenant architecture" (JSON-LD) | False | Removed | Not in feature list |
+| 45 | "Bring-your-own API keys" (JSON-LD) | False | Removed | Not in feature list |
+| 46 | "PDF rendering with selectable text" (JSON-LD) | False | Removed | Not in feature list |
+| 47 | "Full source code included" (JSON-LD) | False | Removed | Not in feature list |
+| 48 | Placeholder domains (sitemap/robots) | False | Verified | Updated to wintervell.com |
 
 ## Action Required
 
-### Immediate (Phase 0)
+### Completed (Phase 0 + Phase 1)
 
-1. **JSON-LD featureList** — Remove or rephrase claims #12-21 to accurately reflect the product state
-2. **Placeholder domains** — Update sitemap.ts and robots.ts to use the production domain or remove them
-3. **Contact form** — Add a clear disclaimer that the form is for demonstration purposes only, or implement persistence
-4. **Tagline** — Consider rephrasing claim #1 to "Turn website evidence into agency work" → "Planned: Turn website evidence into agency work" on the homepage
+1. ~~**JSON-LD featureList** — Remove or rephrase claims #12-21 to accurately reflect the product state~~ ✅ Done — replaced with honest feature list
+2. ~~**Placeholder domains** — Update sitemap.ts and robots.ts to use the production domain or remove them~~ ✅ Done — now uses wintervell.com
+3. ~~**Contact form** — Add a clear disclaimer that the form is for demonstration purposes only, or implement persistence~~ ✅ Done — returns honest message
+4. ~~**Testimonials** — Remove fictional testimonials, star ratings, and customer logos~~ ✅ Done — removed in frontend-rebuild
+5. ~~**Demo honesty labels** — Label all simulated actions as demo~~ ✅ Done — all create/update/publish/send actions labelled
+6. ~~**Invalid ID handling** — Fix not-found behavior for invalid dynamic IDs~~ ✅ Done — not-found pages for all dynamic routes
 
-### Future (Phase 1+)
+### Remaining (Phase 1+)
 
-5. **Contact emails** — Verify email delivery before publishing
-6. **AggregateOffer** — Remove or update when checkout is active
-7. **Feature claims** — Update as each feature is verified
+7. **Contact emails** — Verify email delivery before publishing (currently unverified)
+8. **AggregateOffer** — Update when checkout is active (currently PreOrder)
+9. **Feature claims** — Update as each feature is verified with real backend
+10. ~~**Unused dependencies** — Remove next-intl, @mdxeditor/editor, react-syntax-highlighter, react-markdown; move z-ai-web-dev-sdk to devDependencies~~ ✅ Done — 10 unused dependencies removed, prisma moved to devDependencies
+11. **State quality** — Verify loading, empty, error, and success states across all principal screens
+12. **CI/CD** — Establish automated build, test, and deployment pipeline

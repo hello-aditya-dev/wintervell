@@ -40,7 +40,7 @@ const stageOptions: FilterSelect = {
     { label: 'New', value: 'new' },
     { label: 'Contacted', value: 'contacted' },
     { label: 'Qualified', value: 'qualified' },
-    { label: 'Proposal Sent', value: 'proposal_sent' },
+    { label: 'Proposal Sent (Demo)', value: 'proposal_sent' },
     { label: 'Won', value: 'won' },
     { label: 'Lost', value: 'lost' },
   ],
@@ -272,7 +272,7 @@ export default function ProspectsPage() {
         ]}
       />
 
-      <div className="mt-4 rounded-md border">
+      <div className="mt-4 rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
